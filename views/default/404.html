@@ -2,12 +2,12 @@
 <html lang="en" class="has-aside-left has-aside-mobile-transition has-navbar-fixed-top has-aside-expanded">
 <head>
   <%~ includeFile('partial-head-main.html', it) %>
-  <title>404 Not Found - Bulma Admin Dashboard</title>
+  <title>404 Not Found - <%=it.siteName%></title>
   <%~ includeFile('partial-head-meta.html', it) %>
 </head>
 <body>
 <div id="app">
-  <nav id="navbar-main" class="navbar is-fixed-top">
+  <nav id="navbar-main" class="navbar is-fixed-top is-dark">
     <%~ includeFile('partial-menu-navbar.html', it) %>
   </nav>
   <aside class="aside is-placed-left is-expanded">
@@ -18,8 +18,8 @@
       <div class="level-left">
         <div class="level-item">
           <ul>
-            <li>Admin</li>
-            <li>Blank page</li>
+            <li><a href="<%=it.baseUrl%>" class="has-text-dark">Home</a></li>
+            <li>404</li>
           </ul>
         </div>
       </div>
@@ -40,7 +40,7 @@
       <div class="level">
         <div class="level-left">
           <div class="level-item"><h1 class="title">
-            Blank page
+            404 Not Found
           </h1></div>
         </div>
         <div class="level-right" style="display: none;">
@@ -50,7 +50,24 @@
     </div>
   </section>
   <section class="section is-main-section">
-    <!-- content here -->
+    <div class="card">
+      <div class="card-content">
+        <div class="columns">
+          <div class="column">
+            <img src="<%=it.baseAssetsUrl%>/assets/img/404.jpg">
+          </div>
+          <div class="column">
+              <p class="title">404 - Not Found</p>
+              <hr>
+              <p>Sorry, we can not find the document you are looking for.<br>Maybe it was removed or deleted.</p>
+              <br>
+              <p>
+                  <a class="button is-info" href="<%=it.baseUrl%>">Back to Home</a>
+              </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
   <footer class="footer">
     <%~ includeFile('partial-footer.html', it) %>

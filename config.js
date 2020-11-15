@@ -24,9 +24,9 @@ const config = {
   // Example : https://imgproxify.com
   baseUrl: 'http://localhost:3000',
   baseAssetsUrl: 'http://localhost:3000',
-  siteName: 'Mangafoo',
-  siteTitle: 'Read manga or manhwa for free',
-  siteDescription: 'Read manga or manhwa for free.',
+  siteName: 'Fastify Boilerplate',
+  siteTitle: 'Fastify Boilerplate with JWT, Mongoose and Bulma',
+  siteDescription: 'Fastify Boilerplate with JWT, Mongoose and Bulma.',
   authorName: 'M ABD AZIZ ALFIAN',
   authorWebsite: 'https://aalfiann.github.io',
   authorEmail: 'aalfiann@gmail.com',

@@ -24,11 +24,12 @@ Fastify Boilerplate with JWT, Mongoose and Bulma
 - Mongoose v5
 - ETA Template Engine
 - Bulma CSS Framework
+- Material Design Icons v5
 - Asynchronous designed
 - HTML auto minified
 
 ### Requirement
-- NodeJS v10
+- NodeJS v10++
 - MongoDB v4
 
 ### Usage

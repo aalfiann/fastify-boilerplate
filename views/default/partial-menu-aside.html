@@ -1,6 +1,6 @@
   <div class="aside-tools">
     <div class="aside-tools-label">
-      <span><b>Admin</b> One HTML</span>
+      <span><b><%=it.siteName%></span>
     </div>
   </div>
   <div class="menu is-menu-main">
@@ -15,6 +15,12 @@
     </ul>
     <p class="menu-label">Examples</p>
     <ul class="menu-list">
+      <li>
+        <a href="<%=it.baseUrl%>" class="has-icon">
+          <span class="icon"><i class="mdi mdi-file"></i></span>
+          <span class="menu-item-label">Blank page</span>
+        </a>
+      </li>
       <li>
         <a href="tables.html" class="has-icon">
           <span class="icon has-update-mark"><i class="mdi mdi-table"></i></span>
@@ -44,12 +50,12 @@
         <ul>
           <li>
             <a href="#void">
-              <span>Sub-item One</span>
+              <span><i class="mdi mdi-arrow-right mr-2"></i>Sub-item One</span>
             </a>
           </li>
           <li>
             <a href="#void">
-              <span>Sub-item Two</span>
+              <span><i class="mdi mdi-arrow-right mr-2"></i>Sub-item Two</span>
             </a>
           </li>
         </ul>

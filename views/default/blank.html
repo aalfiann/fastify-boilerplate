@@ -2,12 +2,12 @@
 <html lang="en" class="has-aside-left has-aside-mobile-transition has-navbar-fixed-top has-aside-expanded">
 <head>
   <%~ includeFile('partial-head-main.html', it) %>
-  <title>Admin One HTML - Bulma Admin Dashboard</title>
+  <title>Blank page - <%=it.siteName%></title>
   <%~ includeFile('partial-head-meta.html', it) %>
 </head>
 <body>
 <div id="app">
-  <nav id="navbar-main" class="navbar is-fixed-top">
+  <nav id="navbar-main" class="navbar is-fixed-top is-dark">
     <%~ includeFile('partial-menu-navbar.html', it) %>
   </nav>
   <aside class="aside is-placed-left is-expanded">
@@ -18,7 +18,7 @@
       <div class="level-left">
         <div class="level-item">
           <ul>
-            <li>Admin</li>
+            <li><a href="<%=it.baseUrl%>" class="has-text-dark">Home</a></li>
             <li>Blank page</li>
           </ul>
         </div>

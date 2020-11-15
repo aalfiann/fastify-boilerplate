@@ -1,3 +1,4 @@
+/* (c) 2019-2020 JustBoil.me | MIT License | https://justboil.me */
 "use strict";
 
 /* Aside: submenus toggle */
