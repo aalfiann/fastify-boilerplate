@@ -6,13 +6,10 @@
   <%~ includeFile('partial-head-meta.html', it) %>
 </head>
 <body>
-<div id="app">
-  <nav id="navbar-main" class="navbar is-fixed-top is-dark">
-    <%~ includeFile('partial-menu-navbar.html', it) %>
-  </nav>
-  <aside class="aside is-placed-left is-expanded">
-    <%~ includeFile('partial-menu-aside.html', it) %>
-  </aside>
+  <!-- Menu Navbar -->
+  <%~ includeFile('partial-menu-navbar.html', it) %>
+  <!-- Menu Aside -->
+  <%~ includeFile('partial-menu-aside.html', it) %>
   <section class="section is-title-bar">
     <div class="level">
       <div class="level-left">
@@ -69,11 +66,9 @@
       </div>
     </div>
   </section>
-  <footer class="footer">
-    <%~ includeFile('partial-footer.html', it) %>
-  </footer>
-</div>
-
-<%~ includeFile('partial-js.html', it) %>
+  <!-- Footer -->
+  <%~ includeFile('partial-footer.html', it) %>
+  <!-- Inline JS -->
+  <%~ includeFile('partial-js.html', it) %>
 </body>
 </html>
