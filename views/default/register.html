@@ -61,6 +61,12 @@
           </header>
           <div class="card-content">
             <div class="field">
+              <label class="label">Username</label>
+              <div class="control">
+                <input type="text" autocomplete="on" name="username" class="input" required autofocus>
+              </div>
+            </div>
+            <div class="field">
               <label class="label">E-mail Address</label>
               <div class="control">
                 <input type="email" autocomplete="on" name="email" class="input" required autofocus>
@@ -75,25 +81,44 @@
             <div class="field">
               <label class="b-checkbox checkbox is-thin"><input type="checkbox" value="false">
                 <span class="check is-black"></span>
-                <span class="control-label">Remember me</span>
+                <span class="control-label">I agree to the <a class="jb-modal" href="#" data-target="terms-modal">Terms of Service of <%=it.siteName%></a></span>
               </label>
             </div>
-            <hr>
             <div class="field is-grouped">
               <div class="control">
                 <button type="submit" class="button is-black">
-                  Login
+                  Submit
                 </button>
               </div>
-              <div class="control">
-                <a href="password-recovery.html" class="button is-outlined is-black">
-                  Forgot Password?
-                </a>
-              </div>
             </div>
+            <hr>
+            Already have account? <a href="<%=it.baseUrl%>/login">Login now!</a>
           </div>
         </div>
       </div>
+    </div>
+    <div id="terms-modal" class="modal">
+      <div class="modal-background jb-modal-close"></div>
+      <div class="modal-card">
+        <header class="modal-card-head">
+          <p class="modal-card-title"><b>Terms Of Service</b></p>
+          <button class="delete jb-modal-close" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+          <div class="content">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo. Eu tincidunt tortor aliquam nulla facilisi. In ante metus dictum at tempor. Fringilla urna porttitor rhoncus dolor. Cras tincidunt lobortis feugiat vivamus at augue eget arcu dictum. Sed nisi lacus sed viverra tellus in hac habitasse platea. Vitae tortor condimentum lacinia quis vel. Vitae proin sagittis nisl rhoncus mattis rhoncus. Morbi leo urna molestie at elementum eu facilisis sed odio. Viverra nibh cras pulvinar mattis nunc sed blandit libero volutpat. Lacinia quis vel eros donec ac odio tempor orci. Tellus cras adipiscing enim eu. Varius duis at consectetur lorem donec massa sapien faucibus. Massa placerat duis ultricies lacus. Elit pellentesque habitant morbi tristique senectus et. Malesuada pellentesque elit eget gravida.
+            </p>
+            <p>
+              Lobortis scelerisque fermentum dui faucibus in ornare quam viverra. Pharetra diam sit amet nisl suscipit adipiscing bibendum. A lacus vestibulum sed arcu non odio. Amet facilisis magna etiam tempor orci eu lobortis. Suscipit tellus mauris a diam maecenas sed enim ut. Diam phasellus vestibulum lorem sed risus. Aenean pharetra magna ac placerat vestibulum lectus mauris ultrices eros. Imperdiet dui accumsan sit amet nulla facilisi. Etiam sit amet nisl purus in mollis nunc sed id. In cursus turpis massa tincidunt dui ut ornare lectus sit. Egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium. Duis at consectetur lorem donec massa sapien. In dictum non consectetur a erat nam at.
+            </p>
+          </div>
+        </section>
+        <footer class="modal-card-foot">
+          <button class="button jb-modal-close">Close</button>
+        </footer>
+      </div>
+      <button class="modal-close is-large jb-modal-close" aria-label="close"></button>
     </div>
   </section>
   <!-- Footer -->

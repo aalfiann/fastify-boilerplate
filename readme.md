@@ -48,3 +48,9 @@ npm test
 ### Note
 - If you want to regenerate private and public key, go to here >> [http://travistidwell.com/jsencrypt/demo](http://travistidwell.com/jsencrypt/demo/).
 - If you want to validate the JWT Token, go to here >> [https://jwt.io](https://jwt.io/)
+
+### Credits
+This Fastify Boilerplate is already include 3rd party license properly.
+- [Bulma CSS Framework](https://bulma.io)
+- [Template Admin One](https://justboil.me)
+- [Chart.js](https://www.chartjs.org)
