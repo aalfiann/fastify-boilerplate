@@ -7,7 +7,7 @@ const mongooseHandler = require('../lib/mongoose_handler.js')
 const User = require('../models/user')
 const password = require('../lib/password')
 const schema = require('../schemas/user')
-const hashRole = require('../lib/hash_role')
+const obase64 = require('../lib/obase64')
 
 async function userRoute (server, options) {
   server.post('/api/user/register', { schema: schema.register }, async (request, reply) => {
@@ -56,7 +56,7 @@ async function userRoute (server, options) {
         ]
       }).then(result => {
         if (result.length > 0) {
-          token = server.jwt.sign({ uid: result[0].id, role: hashRole.encode(result[0].role) })
+          token = server.jwt.sign({ uid: result[0].id, role: obase64.encode(result[0].role) })
           return password.compare(request.body.password, result[0].hash)
         } else {
           return false
