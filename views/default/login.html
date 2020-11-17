@@ -60,32 +60,27 @@
             </a>
           </header>
           <div class="card-content">
+            <div id="msg">tester</div>
             <div class="field">
-              <label class="label">E-mail Address</label>
+              <label class="label">Username</label>
               <div class="control">
-                <input type="email" autocomplete="on" name="email" class="input" required autofocus>
+                <input id="username" type="text" autocomplete="on" class="input" placeholder="Username or Email address" required autofocus>
               </div>
             </div>
             <div class="field">
               <label class="label">Password</label>
               <div class="control">
-                <input type="password" autocomplete="on" name="password" class="input" required>
+                <input id="password" type="password" autocomplete="on" class="input" required>
               </div>
-            </div>
-            <div class="field">
-              <label class="b-checkbox checkbox is-thin"><input type="checkbox" value="false">
-                <span class="check is-black"></span>
-                <span class="control-label">Remember me</span>
-              </label>
             </div>
             <div class="field is-grouped">
               <div class="control">
-                <button type="submit" class="button is-black">
+                <button id="btnSubmit" type="submit" class="button is-dark" onclick="submitLogin()">
                   Login
                 </button>
               </div>
               <div class="control">
-                <a href="password-recovery.html" class="button is-outlined is-black">
+                <a href="password-recovery.html" class="button is-outlined is-dark">
                   Forgot Password?
                 </a>
               </div>
@@ -101,5 +96,22 @@
   <%~ includeFile('partial-footer.html', it) %>
   <!-- Inline JS -->
   <%~ includeFile('partial-js.html', it) %>
+  <script>
+    function submitLogin() {
+      Dom.addClass(Dom.id('btnSubmit'), 'is-loading');
+      ajax().post('<%=it.baseUrl%>'+'/api/user/login', {
+        username: Dom.id('username').value,
+        password: Dom.id('password').value
+      }).then(function (response, xhr) {
+        if(response.statusCode === 200) {
+          console.log(response.token);
+        }
+      }).catch(function(response,xhr) {
+        console.log(xhr.responseText);
+      }).always(function(response, xhr) {
+        Dom.removeClass(Dom.id('btnSubmit'), 'is-loading');
+      })
+    }
+  </script>
 </body>
 </html>

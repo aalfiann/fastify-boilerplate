@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/aalfiann/fastify-jwt-skeleton#readme",
   "dependencies": {
+    "base-64": "^1.0.0",
     "bcryptjs": "^2.4.3",
     "eta": "^1.11.0",
     "fastify": "^3.8.0",
@@ -39,6 +40,7 @@
     "moment": "^2.29.1",
     "mongoose": "^5.10.13",
     "point-of-view": "^4.6.0",
+    "text-obfuscator": "^1.0.2",
     "uuid": "^8.3.1"
   },
   "devDependencies": {

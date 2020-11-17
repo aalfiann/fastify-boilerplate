@@ -16,6 +16,7 @@ const userSchema = {
   },
   name: { type: String },
   email: { type: String },
+  role: { type: String },
   hash: { type: String },
   created_at: { type: Number },
   updated_at: { type: Number }

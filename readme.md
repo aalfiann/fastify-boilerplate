@@ -53,4 +53,6 @@ npm test
 This Fastify Boilerplate is already include 3rd party license properly.
 - [Bulma CSS Framework](https://bulma.io)
 - [Template Admin One](https://justboil.me)
+- [Dom.js](https://github.com/aalfiann/dom.js)
+- [Ajax](https://github.com/fdaciuk/ajax)
 - [Chart.js](https://www.chartjs.org)

@@ -7,6 +7,7 @@ const mongooseHandler = require('../lib/mongoose_handler.js')
 const User = require('../models/user')
 const password = require('../lib/password')
 const schema = require('../schemas/user')
+const hashRole = require('../lib/hash_role')
 
 async function userRoute (server, options) {
   server.post('/api/user/register', { schema: schema.register }, async (request, reply) => {
@@ -19,6 +20,15 @@ async function userRoute (server, options) {
       created_at: moment().format('x')
     }
     mongooseHandler.connect().then(done => {
+      return User.estimatedDocumentCount()
+    }).then(result => {
+      if (result === 0) {
+        user.role = 'admin'
+      } else {
+        user.role = 'member'
+      }
+      return result
+    }).then(done => {
       User(user).save().then(done => {
         reply.code(200).send({
           message: 'Register new user success!',
@@ -46,7 +56,7 @@ async function userRoute (server, options) {
         ]
       }).then(result => {
         if (result.length > 0) {
-          token = server.jwt.sign({ uid: result[0].id })
+          token = server.jwt.sign({ uid: result[0].id, role: hashRole.encode(result[0].role) })
           return password.compare(request.body.password, result[0].hash)
         } else {
           return false
