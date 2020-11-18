@@ -6,12 +6,12 @@ const hash = require('../lib/obase64')
 
 describe('obase64 function test', function () {
   it('randomizer', async function () {
-    const result = await hash._randomizer()
+    const result = hash._randomizer()
     assert.strictEqual(result.length, 2)
   })
 
   it('randomizer with size', async function () {
-    const result = await hash._randomizer(2)
+    const result = hash._randomizer(2)
     assert.strictEqual(result.length, 3)
   })
 

@@ -104,7 +104,10 @@
         password: Dom.id('password').value
       }).then(function (response, xhr) {
         if(response.statusCode === 200) {
-          console.log(response.token);
+          var exp = parseJWT(response.token).exp;
+          var now = Math.floor(Date.now()/1000);
+          var ttl = (exp - now) * 1000;
+          setWithExpiry('<%=it.baseUrl%>'+'_tokenize', response.token, ttl);
         }
       }).catch(function(response,xhr) {
         console.log(xhr.responseText);

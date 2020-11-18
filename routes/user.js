@@ -56,7 +56,13 @@ async function userRoute (server, options) {
         ]
       }).then(result => {
         if (result.length > 0) {
-          token = server.jwt.sign({ uid: result[0].id, role: obase64.encode(result[0].role) })
+          token = server.jwt.sign({
+            uid: result[0].id,
+            unm: result[0].username,
+            name: result[0].name,
+            mail: result[0].email,
+            role: obase64.encode(result[0].role)
+          })
           return password.compare(request.body.password, result[0].hash)
         } else {
           return false
