@@ -60,18 +60,20 @@
             </a>
           </header>
           <div class="card-content">
-            <div id="msg">tester</div>
+            <div id="msg"></div>
             <div class="field">
               <label class="label">Username</label>
               <div class="control">
                 <input id="username" type="text" autocomplete="on" class="input" placeholder="Username or Email address" required autofocus>
               </div>
+              <p id="username-error" class="help has-text-left"></p>
             </div>
             <div class="field">
               <label class="label">Password</label>
               <div class="control">
                 <input id="password" type="password" autocomplete="on" class="input" required>
               </div>
+              <p id="password-error" class="help has-text-left"></p>
             </div>
             <div class="field is-grouped">
               <div class="control">
@@ -96,24 +98,65 @@
   <%~ includeFile('partial-footer.html', it) %>
   <!-- Inline JS -->
   <%~ includeFile('partial-js.html', it) %>
+  <script>getToken('<%=it.baseUrl%>', function(token) {
+    if(token) return location = '<%=it.baseUrl%>'+'/dashboard'
+  });</script>
+  });</script>
   <script>
-    function submitLogin() {
-      Dom.addClass(Dom.id('btnSubmit'), 'is-loading');
-      ajax().post('<%=it.baseUrl%>'+'/api/user/login', {
-        username: Dom.id('username').value,
-        password: Dom.id('password').value
-      }).then(function (response, xhr) {
-        if(response.statusCode === 200) {
-          var exp = parseJWT(response.token).exp;
-          var now = Math.floor(Date.now()/1000);
-          var ttl = (exp - now) * 1000;
-          setWithExpiry('<%=it.baseUrl%>'+'_tokenize', response.token, ttl);
+    var form = new FormValidation();
+    form.rules({
+      username: {
+        required: true,
+        message: 'Username / email address is required!',
+        minLength:3,
+        regex: /^[a-zA-Z0-9]/,
+        errorPlace:'username-error',
+        errorAddClass: {
+          username:'is-danger',
+          'username-error': 'is-danger'
         }
-      }).catch(function(response,xhr) {
-        console.log(xhr.responseText);
-      }).always(function(response, xhr) {
-        Dom.removeClass(Dom.id('btnSubmit'), 'is-loading');
-      })
+      },
+      password: {
+        required: true,
+        message: 'Password is required!',
+        minLength: 6,
+        maxLength: 20,
+        errorPlace:'password-error',
+        errorAddClass: {
+          password:'is-danger',
+          'password-error': 'is-danger'
+        }
+      }
+    });
+
+    Dom.id('username').addEventListener("blur", function() {
+      form.element('username').validate();
+    });
+  
+    Dom.id('password').addEventListener("blur", function() {
+      form.element('password').validate();
+    });
+
+    function submitLogin() {
+      if(form.validate().isValid()) {
+        Dom.addClass(Dom.id('btnSubmit'), 'is-loading');
+        ajax().post('<%=it.baseUrl%>'+'/api/user/login', {
+          username: Dom.id('username').value,
+          password: Dom.id('password').value
+        }).then(function (response, xhr) {
+          if(response.statusCode === 200) {
+            var exp = parseJWT(response.token).exp;
+            var now = Math.floor(Date.now()/1000);
+            var ttl = (exp - now) * 1000;
+            setWithExpiry('<%=it.baseUrl%>'+'_tokenize', response.token, ttl);
+            window.location = '<%=it.baseUrl%>'+'/dashboard';
+          }
+        }).catch(function(response, xhr) {
+          console.log(xhr.responseText);
+        }).always(function(response, xhr) {
+          Dom.removeClass(Dom.id('btnSubmit'), 'is-loading');
+        })
+      }
     }
   </script>
 </body>

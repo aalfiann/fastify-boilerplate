@@ -7,7 +7,7 @@ const config = require('./config.js')
 const cluster = require('cluster')
 const numCPUs = require('os').cpus().length
 const nodeMailer = require('fastify-nodemailer')
-const htmlMinifier = require('html-minifier')
+const htmlMinifier = require('html-minifier-terser')
 const jwt = require('fastify-jwt')
 const server = require('fastify')({
   logger: config.logger,

@@ -47,83 +47,257 @@
     </div>
   </section>
   <section class="section is-main-section">
-    <div class="columns">
-      <div class="column is-half is-offset-one-quarter">
-        <div class="card">
-          <header class="card-header">
-            <p class="card-header-title">
-              <span class="icon"><i class="mdi mdi-finance"></i></span>
-              Register Form
-            </p>
-            <a href="#" class="card-header-icon">
-              <span class="icon"><i class="mdi mdi-reload"></i></span>
-            </a>
-          </header>
-          <div class="card-content">
-            <div class="field">
-              <label class="label">Username</label>
-              <div class="control">
-                <input type="text" autocomplete="on" name="username" class="input" required autofocus>
-              </div>
-            </div>
-            <div class="field">
-              <label class="label">E-mail Address</label>
-              <div class="control">
-                <input type="email" autocomplete="on" name="email" class="input" required autofocus>
-              </div>
-            </div>
-            <div class="field">
-              <label class="label">Password</label>
-              <div class="control">
-                <input type="password" autocomplete="on" name="password" class="input" required>
-              </div>
-            </div>
-            <div class="field">
-              <label class="b-checkbox checkbox is-thin"><input type="checkbox" value="false">
-                <span class="check is-black"></span>
-                <span class="control-label">I agree to the <a class="jb-modal" href="#" data-target="terms-modal">Terms of Service of <%=it.siteName%></a></span>
-              </label>
-            </div>
-            <div class="field is-grouped">
-              <div class="control">
-                <button type="submit" class="button is-black">
-                  Submit
-                </button>
-              </div>
-            </div>
-            <hr>
-            Already have account? <a href="<%=it.baseUrl%>/login">Login now!</a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="terms-modal" class="modal">
-      <div class="modal-background jb-modal-close"></div>
-      <div class="modal-card">
-        <header class="modal-card-head">
-          <p class="modal-card-title"><b>Terms Of Service</b></p>
-          <button class="delete jb-modal-close" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-          <div class="content">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo. Eu tincidunt tortor aliquam nulla facilisi. In ante metus dictum at tempor. Fringilla urna porttitor rhoncus dolor. Cras tincidunt lobortis feugiat vivamus at augue eget arcu dictum. Sed nisi lacus sed viverra tellus in hac habitasse platea. Vitae tortor condimentum lacinia quis vel. Vitae proin sagittis nisl rhoncus mattis rhoncus. Morbi leo urna molestie at elementum eu facilisis sed odio. Viverra nibh cras pulvinar mattis nunc sed blandit libero volutpat. Lacinia quis vel eros donec ac odio tempor orci. Tellus cras adipiscing enim eu. Varius duis at consectetur lorem donec massa sapien faucibus. Massa placerat duis ultricies lacus. Elit pellentesque habitant morbi tristique senectus et. Malesuada pellentesque elit eget gravida.
-            </p>
-            <p>
-              Lobortis scelerisque fermentum dui faucibus in ornare quam viverra. Pharetra diam sit amet nisl suscipit adipiscing bibendum. A lacus vestibulum sed arcu non odio. Amet facilisis magna etiam tempor orci eu lobortis. Suscipit tellus mauris a diam maecenas sed enim ut. Diam phasellus vestibulum lorem sed risus. Aenean pharetra magna ac placerat vestibulum lectus mauris ultrices eros. Imperdiet dui accumsan sit amet nulla facilisi. Etiam sit amet nisl purus in mollis nunc sed id. In cursus turpis massa tincidunt dui ut ornare lectus sit. Egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium. Duis at consectetur lorem donec massa sapien. In dictum non consectetur a erat nam at.
-            </p>
-          </div>
-        </section>
-        <footer class="modal-card-foot">
-          <button class="button jb-modal-close">Close</button>
-        </footer>
-      </div>
-      <button class="modal-close is-large jb-modal-close" aria-label="close"></button>
-    </div>
+    <div id="register"></div>
   </section>
   <!-- Footer -->
   <%~ includeFile('partial-footer.html', it) %>
   <!-- Inline JS -->
   <%~ includeFile('partial-js.html', it) %>
+  <script>getToken('<%=it.baseUrl%>', function(token) {
+    if(token) return location = '<%=it.baseUrl%>'+'/dashboard'
+  });
+  // form validation
+  var form = new FormValidation();
+  form.rules({
+    username: {
+      required: true,
+      message: 'Username must be min 3-20 chars!',
+      minLength:3,
+      maxLength:20,
+      regex: /^[a-zA-Z0-9]/,
+      errorPlace:'username-error',
+      errorAddClass: {
+        username:'is-danger',
+        'username-error': 'is-danger'
+      }
+    },
+    email: {
+      required: true,
+      message: 'Email is required and must using valid format!',
+      minLength: 7,
+      regex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      errorPlace:'email-error',
+      errorAddClass: {
+        email:'is-danger',
+        'email-error': 'is-danger'
+      }
+    },
+    password: {
+      required: true,
+      message: 'Password must be 6-20 chars!',
+      minLength: 6,
+      maxLength: 20,
+      errorPlace:'password-error',
+      errorAddClass: {
+        password:'is-danger',
+        'password-error': 'is-danger'
+      }
+    },
+    checkbox: {
+      message: 'You have to agree with our terms of service!',
+      method: function(element) {
+        return element.checked;
+      },
+      errorPlace:'checkbox-error',
+      errorAddClass: {
+        checkbox:'is-danger',
+        'checkbox-error': 'is-danger'
+      }
+    }
+  });
+
+  var register = new Reef('#register', {
+    data: {
+      token: null,
+      baseUrl: '',
+      siteName: '',
+      register: false,
+      message: ''
+    },
+    template: function (props) {
+      if(props.token === null) {
+          return `<div class="columns">
+          <div class="column is-half is-offset-one-quarter">
+            <div class="card">
+              <header class="card-header">
+                <p class="card-header-title">
+                  <span class="icon"><i class="mdi mdi-finance"></i></span>
+                  Register Form
+                </p>
+                <a href="#" class="card-header-icon">
+                  <span class="icon"><i class="mdi mdi-reload"></i></span>
+                </a>
+              </header>
+              <div class="card-content">
+                ${(props.register ? `<article class="message is-success">
+                  <div class="message-body">
+                    ${props.message}
+                  </div>
+                </article>` : (props.message === '') ? '' : `<article class="message is-danger">
+                  <div class="message-body">
+                    ${props.message}
+                  </div>
+                </article>` )}
+                <div class="field">
+                  <label class="label">Username</label>
+                  <div class="control">
+                    <input id="username" type="text" autocomplete="on" class="input" required autofocus>
+                  </div>
+                  <p id="username-error" class="help has-text-left"></p>
+                  <p id="username-info" class="help has-text-left"></p>
+                </div>
+                <div class="field">
+                  <label class="label">E-mail Address</label>
+                  <div class="control">
+                    <input id="email" type="email" autocomplete="on" class="input" required autofocus>
+                  </div>
+                  <p id="email-error" class="help has-text-left"></p>
+                  <p id="email-info" class="help has-text-left"></p>
+                </div>
+                <div class="field">
+                  <label class="label">Password</label>
+                  <div class="control">
+                    <input id="password" type="password" autocomplete="on" class="input" required>
+                    <p id="password-error" class="help has-text-left"></p>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="b-checkbox checkbox is-thin">
+                    <input id="checkbox" type="checkbox" value="false">
+                    <span class="check is-black"></span>
+                    <span class="control-label">I agree to the <a class="jb-modal" href="#" data-target="terms-modal">Terms of Service of ${props.siteName}</a></span>
+                  </label>
+                  <p id="checkbox-error" class="help has-text-left"></p>
+                </div>
+                <div class="field is-grouped">
+                  <div class="control">
+                    <button id="btnSubmit" type="submit" class="button is-black" onclick="submitRegister()">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+                <hr>
+                Already have account? <a href="${props.baseUrl}/login">Login now!</a>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      } else {
+          return '';
+      }
+    }
+  });
+  
+  register.render();
+  register.data.baseUrl = '<%=it.baseUrl%>';
+  register.data.siteName = '<%=it.siteName%>';
+
+  if(Dom.id('username')) {
+    Dom.id('username').addEventListener("blur", function() {
+      form.element('username').validate(function (error) {
+        if (!error) {
+          // call ajax check username
+          isAvailable('username');
+        } else {
+          Dom.id('username-info').innerHTML = '';
+        }
+      });
+    });
+  }
+
+  if(Dom.id('email')) {
+    Dom.id('email').addEventListener("blur", function() {
+      form.element('email').validate(function (error) {
+        if (!error) {
+          // call ajax check email
+          isAvailable('email');
+        } else {
+          Dom.id('email-info').innerHTML = '';
+        }
+      });
+    });
+  }
+
+  if(Dom.id('password')) {
+    Dom.id('password').addEventListener("blur", function() {
+      form.element('password').validate();
+    });
+  }
+
+  if(Dom.id('checkbox')) {
+    Dom.id('checkbox').addEventListener("blur", function() {
+      form.element('checkbox').validate();
+    });
+  }
+
+  function submitRegister() {
+    if(form.validate().isValid()) {
+      register.data.message = '';
+      Dom.addClass(Dom.id('btnSubmit'), 'is-loading');
+      ajax().post('<%=it.baseUrl%>'+'/api/user/register', {
+        username: Dom.id('username').value,
+        email: Dom.id('email').value,
+        password: Dom.id('password').value
+      }).then(function (response, xhr) {
+        if(response.statusCode === 200) {
+          register.data.register = true;
+          register.data.message = response.message;
+          clear();
+        }
+      }).catch(function(response, xhr) {
+        register.data.register = false;
+        register.data.message = response.message;
+        console.log(xhr.responseText);
+      }).always(function(response, xhr) {
+        Dom.removeClass(Dom.id('btnSubmit'), 'is-loading');
+      })
+    }
+  }
+
+  function isAvailable(id) {
+    var value = Dom.id(id).value;
+    var dtype = '';
+    switch(true) {
+      case (id === 'email') :
+        dtype = 'check-email';
+        break;
+      default:
+        dtype = 'check-username';
+    }
+    ajax().get('<%=it.baseUrl%>'+'/api/user/'+dtype+'/'+value).then(function (response, xhr) {
+      if(response.statusCode === 200) {
+        if(response.data.total === 0) {
+          Dom.id(id+'-info').innerHTML = response.message;
+          if(Dom.hasClass(Dom.id(id), 'is-danger')) {
+            Dom.removeClass(Dom.id(id), 'is-danger')
+          }
+          if(Dom.hasClass(Dom.id(id+'-info'), 'is-danger')) {
+            Dom.removeClass(Dom.id(id+'-info'), 'is-danger')
+          }
+          Dom.addClass(Dom.id(id), 'is-success')
+          Dom.addClass(Dom.id(id+'-info'), 'is-success')
+        } else {
+          Dom.id(id+'-info').innerHTML = response.message;
+          if(Dom.hasClass(Dom.id(id), 'is-success')) {
+            Dom.removeClass(Dom.id(id), 'is-success')
+          }
+          if(Dom.hasClass(Dom.id(id+'-info'), 'is-success')) {
+            Dom.removeClass(Dom.id(id+'-info'), 'is-success')
+          }
+          Dom.addClass(Dom.id(id), 'is-danger')
+          Dom.addClass(Dom.id(id+'-info'), 'is-danger')
+        }
+      }
+    }).catch(function(response, xhr) {
+      console.log(xhr.responseText);
+    })
+  }
+  
+  function clear() {
+    Dom.id('username').value = '';
+    Dom.id('email').value = '';
+    Dom.id('password').value = '';
+  }
+  </script>
 </body>
 </html>

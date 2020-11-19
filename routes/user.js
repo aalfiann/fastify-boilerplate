@@ -104,29 +104,45 @@ async function userRoute (server, options) {
     await reply
   })
 
-  // server.register(require('fastify-auth'))
-  // server.decorate('verifyToken', async function (request, reply) {
-  //   console.log('executed 1')
-  // })
+  server.get('/api/user/check-username/:username', { schema: schema.checkUsername }, async (request, reply) => {
+    mongooseHandler.connect().then(done => {
+      return User.find({ username: request.params.username })
+    }).then(result => {
+      reply.code(200).send({
+        message: (result.length > 0) ? 'Username is not available!' : 'Username is OK!',
+        statusCode: 200,
+        data: {
+          total: result.length
+        }
+      })
+    }).catch(err => {
+      reply.code(500).send({
+        message: err.message,
+        statusCode: 500
+      })
+    })
+    await reply
+  })
 
-  // server.ready(err => {
-  //   if (err) throw err
-  //   server.addHook('preHandler', server.auth([server.verifyToken]))
-  // })
-
-  // server.addHook('preHandler', server.auth([server.verifyToken]))
-
-  // server.post('/api/user/verify', {
-  //   schema: schema.auth
-  //   // preHandler: server.auth([
-  //   //   async function (request, reply) { console.log('executed 1') }
-  //   // ], { relation: 'and' })
-  // }, async (request, reply) => {
-  //   await reply.code(200).send({
-  //     message: 'Verify user success!',
-  //     statusCode: 200
-  //   })
-  // })
+  server.get('/api/user/check-email/:email', { schema: schema.checkEmail }, async (request, reply) => {
+    mongooseHandler.connect().then(done => {
+      return User.find({ email: request.params.email })
+    }).then(result => {
+      reply.code(200).send({
+        message: (result.length > 0) ? 'Email address is not available!' : 'Email address is OK!',
+        statusCode: 200,
+        data: {
+          total: result.length
+        }
+      })
+    }).catch(err => {
+      reply.code(500).send({
+        message: err.message,
+        statusCode: 500
+      })
+    })
+    await reply
+  })
 }
 
 module.exports = userRoute

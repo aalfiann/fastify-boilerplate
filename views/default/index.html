@@ -456,7 +456,9 @@
   <%~ includeFile('partial-footer.html', it) %>
   <!-- Inline JS -->
   <%~ includeFile('partial-js.html', it) %>
-  <script>var token = getToken('<%=it.baseUrl%>');</script>
+  <script>getToken('<%=it.baseUrl%>', function(token) {
+    if(!token) return location = '<%=it.baseUrl%>'+'/login';
+  });</script>
   <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/chart-js/2.9.4/Chart.min.js"></script>
   <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/chart.sample.min.js"></script>
 </body>

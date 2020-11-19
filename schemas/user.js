@@ -4,9 +4,9 @@ const register = {
   body: {
     type: 'object',
     properties: {
-      username: { type: 'string' },
-      password: { type: 'string' },
-      email: { type: 'string' }
+      username: { type: 'string', minLength: 3, maxLength: 20 },
+      password: { type: 'string', minLength: 6, maxLength: 20 },
+      email: { type: 'string', minLength: 7 }
     },
     required: ['username', 'password', 'email']
   }
@@ -23,7 +23,27 @@ const login = {
   }
 }
 
+const checkUsername = {
+  params: {
+    type: 'object',
+    properties: {
+      username: { type: 'string', minLength: 3, maxLength: 20 }
+    }
+  }
+}
+
+const checkEmail = {
+  params: {
+    type: 'object',
+    properties: {
+      email: { type: 'string', minLength: 7 }
+    }
+  }
+}
+
 module.exports = {
   register,
-  login
+  login,
+  checkUsername,
+  checkEmail
 }

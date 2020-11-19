@@ -12,12 +12,36 @@ Fastify Boilerplate with JWT, Mongoose and Bulma
 - Admin Dashboard
 - Logout
 
+### Concepts
+Our goal is to create a web application that scales well (horizontal scale), strong in high traffic.
+
+- **Stateless**  
+  Authentication is stateless with JWT Token, this is the important thing to achieve horizontal scale.
+- **No Cookie**  
+  Session is saved to localStorage at client browser.
+- **Built-in API**  
+  Server just render the page and using ajax to get data from API.
+- **MongoDB**  
+  MongoDB is horizontal, scale-out architecture can support huge volumes of both data and traffic.
+
 ### Security
-- JWT Authentication
-- Routes with schema validation
-- Safe from MongoDB Injection
-- Encoded markup to protect from XSS attack
-- Error handler for 4xx and 5xx
+- **JWT Authentication**  
+  JWT Token is using RS256 with private and public key signature (required to use SSL).
+
+- **Routes with schema validation**  
+  Any payload send to the server is validated.
+
+- **Safe from MongoDB Injection**  
+  Any input data already validated by mongoose schemas.
+
+- **Safe from XSS**  
+  Template engine and Reactive UI (Reef) has already encoded the markup.
+
+- **Safe from CSRF**  
+  Any request in admin/user area is required token by JWT.
+
+- **Error handler for 4xx and 5xx**  
+  Any internal error is handled automatically by Fastify.
 
 ### Specs
 - Fastify v3
@@ -51,8 +75,10 @@ npm test
 
 ### Credits
 This Fastify Boilerplate is already include 3rd party license properly.
-- [Bulma CSS Framework](https://bulma.io)
-- [Template Admin One](https://justboil.me)
+- [Bulma CSS Framework](https://github.com/jgthms/bulma)
+- [Template Admin One](https://github.com/vikdiesel/admin-one-bulma-dashboard/)
+- [Reef.js](https://github.com/cferdinandi/reef)
 - [Dom.js](https://github.com/aalfiann/dom.js)
 - [Ajax](https://github.com/fdaciuk/ajax)
-- [Chart.js](https://www.chartjs.org)
+- [Native Form Validation](https://github.com/aalfiann/native-form-validation)
+- [Chart.js](https://github.com/chartjs/Chart.js)

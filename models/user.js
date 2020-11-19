@@ -14,9 +14,17 @@ const userSchema = {
     trim: true,
     unique: true
   },
+  email: {
+    type: String,
+    required: [true, 'email is required'],
+    trim: true,
+    unique: true
+  },
+  role: {
+    type: String,
+    required: [true, 'role is required']
+  },
   name: { type: String },
-  email: { type: String },
-  role: { type: String },
   hash: { type: String },
   created_at: { type: Number },
   updated_at: { type: Number }
