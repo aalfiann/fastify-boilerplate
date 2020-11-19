@@ -55,12 +55,12 @@
               <span class="icon"><i class="mdi mdi-finance"></i></span>
               Login Form
             </p>
-            <a href="#" class="card-header-icon">
+          <a id="reload" href="javascript:void(0)" class="card-header-icon">
               <span class="icon"><i class="mdi mdi-reload"></i></span>
             </a>
           </header>
+          <div id="msg"></div>
           <div class="card-content">
-            <div id="msg"></div>
             <div class="field">
               <label class="label">Username</label>
               <div class="control">
@@ -98,11 +98,11 @@
   <%~ includeFile('partial-footer.html', it) %>
   <!-- Inline JS -->
   <%~ includeFile('partial-js.html', it) %>
-  <script>getToken('<%=it.baseUrl%>', function(token) {
-    if(token) return location = '<%=it.baseUrl%>'+'/dashboard'
-  });</script>
-  });</script>
   <script>
+    getToken('<%=it.baseUrl%>', function(token) {
+      if(token) return location = '<%=it.baseUrl%>'+'/dashboard'
+    });
+
     var form = new FormValidation();
     form.rules({
       username: {
@@ -139,6 +139,7 @@
 
     function submitLogin() {
       if(form.validate().isValid()) {
+        Dom.id('msg').innerHTML = '';
         Dom.addClass(Dom.id('btnSubmit'), 'is-loading');
         ajax().post('<%=it.baseUrl%>'+'/api/user/login', {
           username: Dom.id('username').value,
@@ -152,12 +153,26 @@
             window.location = '<%=it.baseUrl%>'+'/dashboard';
           }
         }).catch(function(response, xhr) {
+          Dom.id('msg').innerHTML = `<article class="message is-danger">
+              <div class="message-body">
+                ${response.message}
+              </div>
+            </article>`;
           console.log(xhr.responseText);
         }).always(function(response, xhr) {
           Dom.removeClass(Dom.id('btnSubmit'), 'is-loading');
         })
       }
     }
+
+    function clear() {
+      Dom.id('username').value = '';
+      Dom.id('password').value = '';
+    }
+
+    Dom.id('reload').addEventListener('click', function(e) {
+      clear();
+    })
   </script>
 </body>
 </html>

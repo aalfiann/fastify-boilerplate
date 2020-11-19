@@ -124,7 +124,7 @@
                   <span class="icon"><i class="mdi mdi-finance"></i></span>
                   Register Form
                 </p>
-                <a href="#" class="card-header-icon">
+                <a id="reload" href="#" class="card-header-icon">
                   <span class="icon"><i class="mdi mdi-reload"></i></span>
                 </a>
               </header>
@@ -298,6 +298,10 @@
     Dom.id('email').value = '';
     Dom.id('password').value = '';
   }
+
+  Dom.id('reload').addEventListener('click', function(e) {
+    clear();
+  })
   </script>
 </body>
 </html>
