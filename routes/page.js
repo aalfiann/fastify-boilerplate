@@ -130,6 +130,33 @@ async function pageRoute (server, options) {
     })
     await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
   })
+
+  server.get('/forgot-password', async (request, reply) => {
+    // EJS view doesn't have browser cache, so we must inject it manually each routes.
+    if (config.isProduction) {
+      const etag = '"' + md5(request.url + helper.autoEtag(config.autoEtagAfterHour)) + '"'
+      if (request.headers['if-none-match'] === etag) {
+        return reply.code(304).send('')
+      }
+      reply.headers(injectResponseHeader(etag))
+    }
+
+    const html = await server.view('forgot-password', {
+      baseUrl: config.baseUrl,
+      baseAssetsUrl: config.baseAssetsUrl,
+      year: helper.copyrightYear(config.startYearCopyright),
+      siteName: config.siteName,
+      siteTitle: config.siteTitle,
+      siteDescription: config.siteDescription,
+      authorName: config.authorName,
+      authorEmail: config.authorEmail,
+      authorWebsite: config.authorWebsite,
+      webmaster: config.webmaster,
+      tracker: config.tracker,
+      version: pjson.version
+    })
+    await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
+  })
 }
 
 module.exports = pageRoute

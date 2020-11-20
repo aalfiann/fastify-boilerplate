@@ -41,9 +41,20 @@ const checkEmail = {
   }
 }
 
+const forgotPassword = {
+  body: {
+    type: 'object',
+    properties: {
+      email: { type: 'string', minLength: 7 }
+    },
+    required: ['email']
+  }
+}
+
 module.exports = {
   register,
   login,
   checkUsername,
-  checkEmail
+  checkEmail,
+  forgotPassword
 }
