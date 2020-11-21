@@ -3,38 +3,16 @@
 const config = require('../config.js')
 const moment = require('moment')
 const helper = require('../lib/helper.js')
-const md5 = require('md5')
 const pjson = require('../package.json')
 const mongooseHandler = require('../lib/mongoose_handler')
 const ForgotPassword = require('../models/forgot_password')
 
-/**
- * Inject Response Header for EJS only
- * We need etag if your website sitting behind proxy server like nginx, haproxy, etc.
- * @param {string} etag this is the etag value in string
- * @returns {object}
- */
-function injectResponseHeader (etag) {
-  return {
-    'Content-Type': 'text/html; charset=utf-8',
-    'Cache-Control': 'public, max-age=' + 86400,
-    Expires: moment().add(86400, 'seconds').utc().format('ddd, DD MMM YYYY HH:mm:ss') + ' GMT',
-    Pragma: 'public',
-    Etag: etag
-  }
-}
-
 async function pageRoute (server, options) {
-  server.get('/', async (request, reply) => {
-    // EJS view doesn't have browser cache, so we must inject it manually each routes.
-    if (config.isProduction) {
-      const etag = '"' + md5(request.url + helper.autoEtag(config.autoEtagAfterHour)) + '"'
-      if (request.headers['if-none-match'] === etag) {
-        return reply.code(304).send('')
-      }
-      reply.headers(injectResponseHeader(etag))
-    }
-
+  /**
+   * Template Engine doesn't have html cache so we need to inject it manually via onRequest hooks.
+   * This server.useHtmlCache will work if you set isProduction to true only.
+   */
+  server.get('/', { onRequest: server.useHtmlCache }, async (request, reply) => {
     const html = await server.view('index', {
       baseUrl: config.baseUrl,
       baseAssetsUrl: config.baseAssetsUrl,
@@ -52,16 +30,7 @@ async function pageRoute (server, options) {
     await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
   })
 
-  server.get('/blank', async (request, reply) => {
-    // EJS view doesn't have browser cache, so we must inject it manually each routes.
-    if (config.isProduction) {
-      const etag = '"' + md5(request.url + helper.autoEtag(config.autoEtagAfterHour)) + '"'
-      if (request.headers['if-none-match'] === etag) {
-        return reply.code(304).send('')
-      }
-      reply.headers(injectResponseHeader(etag))
-    }
-
+  server.get('/blank', { onRequest: server.useHtmlCache }, async (request, reply) => {
     const html = await server.view('blank', {
       baseUrl: config.baseUrl,
       baseAssetsUrl: config.baseAssetsUrl,
@@ -79,16 +48,7 @@ async function pageRoute (server, options) {
     await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
   })
 
-  server.get('/register', async (request, reply) => {
-    // EJS view doesn't have browser cache, so we must inject it manually each routes.
-    if (config.isProduction) {
-      const etag = '"' + md5(request.url + helper.autoEtag(config.autoEtagAfterHour)) + '"'
-      if (request.headers['if-none-match'] === etag) {
-        return reply.code(304).send('')
-      }
-      reply.headers(injectResponseHeader(etag))
-    }
-
+  server.get('/register', { onRequest: server.useHtmlCache }, async (request, reply) => {
     const html = await server.view('register', {
       baseUrl: config.baseUrl,
       baseAssetsUrl: config.baseAssetsUrl,
@@ -106,16 +66,7 @@ async function pageRoute (server, options) {
     await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
   })
 
-  server.get('/login', async (request, reply) => {
-    // EJS view doesn't have browser cache, so we must inject it manually each routes.
-    if (config.isProduction) {
-      const etag = '"' + md5(request.url + helper.autoEtag(config.autoEtagAfterHour)) + '"'
-      if (request.headers['if-none-match'] === etag) {
-        return reply.code(304).send('')
-      }
-      reply.headers(injectResponseHeader(etag))
-    }
-
+  server.get('/login', { onRequest: server.useHtmlCache }, async (request, reply) => {
     const html = await server.view('login', {
       baseUrl: config.baseUrl,
       baseAssetsUrl: config.baseAssetsUrl,
@@ -133,16 +84,7 @@ async function pageRoute (server, options) {
     await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
   })
 
-  server.get('/forgot-password', async (request, reply) => {
-    // EJS view doesn't have browser cache, so we must inject it manually each routes.
-    if (config.isProduction) {
-      const etag = '"' + md5(request.url + helper.autoEtag(config.autoEtagAfterHour)) + '"'
-      if (request.headers['if-none-match'] === etag) {
-        return reply.code(304).send('')
-      }
-      reply.headers(injectResponseHeader(etag))
-    }
-
+  server.get('/forgot-password', { onRequest: server.useHtmlCache }, async (request, reply) => {
     const html = await server.view('forgot-password', {
       baseUrl: config.baseUrl,
       baseAssetsUrl: config.baseAssetsUrl,
@@ -160,16 +102,7 @@ async function pageRoute (server, options) {
     await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
   })
 
-  server.get('/reset-password/:id', async (request, reply) => {
-    // EJS view doesn't have browser cache, so we must inject it manually each routes.
-    if (config.isProduction) {
-      const etag = '"' + md5(request.url + helper.autoEtag(config.autoEtagAfterHour)) + '"'
-      if (request.headers['if-none-match'] === etag) {
-        return reply.code(304).send('')
-      }
-      reply.headers(injectResponseHeader(etag))
-    }
-
+  server.get('/reset-password/:id', { onRequest: server.useHtmlCache }, async (request, reply) => {
     const payload = {
       baseUrl: config.baseUrl,
       baseAssetsUrl: config.baseAssetsUrl,
