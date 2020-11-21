@@ -115,7 +115,8 @@ async function pageRoute (server, options) {
       authorWebsite: config.authorWebsite,
       webmaster: config.webmaster,
       tracker: config.tracker,
-      version: pjson.version
+      version: pjson.version,
+      reset_pass_id: request.params.id
     }
 
     // Check expired request reset password
