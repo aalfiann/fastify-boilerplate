@@ -51,10 +51,22 @@ const forgotPassword = {
   }
 }
 
+const resetPassword = {
+  body: {
+    type: 'object',
+    properties: {
+      id: { type: 'string' },
+      password: { type: 'string', minLength: 6, maxLength: 20 }
+    },
+    required: ['id', 'password']
+  }
+}
+
 module.exports = {
   register,
   login,
   checkUsername,
   checkEmail,
-  forgotPassword
+  forgotPassword,
+  resetPassword
 }

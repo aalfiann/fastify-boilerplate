@@ -227,6 +227,70 @@ async function userRoute (server, options) {
     }
     await reply
   })
+
+  server.post('/api/user/reset-password', { schema: schema.resetPassword }, async (request, reply) => {
+    await mongooseHandler.connect().catch(err => {
+      return reply.code(500).send({
+        message: err.message,
+        statusCode: 500
+      })
+    })
+
+    const result = await ForgotPassword.find({
+      $and: [
+        { id: request.body.id },
+        { status: false }
+      ]
+    }).catch(err => {
+      return reply.code(400).send(mongooseHandler.errorBuilder(err))
+    })
+
+    if (result.length > 0) {
+      // find user and update
+      const done = await User.findOneAndUpdate({ id: result[0].user_id }, {
+        hash: await helper.generate(request.body.password),
+        updated_at: moment().format('x')
+      }, { new: true }).catch(err => {
+        return reply.code(400).send(mongooseHandler.errorBuilder(err))
+      })
+
+      if (done) {
+        // reupdate to make expired this request reset password
+        const reupdate = await ForgotPassword.findOneAndUpdate({ id: request.body.id }, {
+          status: true
+        }, { new: true }).catch(err => {
+          return reply.code(400).send(mongooseHandler.errorBuilder(err))
+        })
+
+        if (reupdate) {
+          reply.code(200).send({
+            message: 'Your password has been succeessfully changed!',
+            statusCode: 200,
+            success: true
+          })
+        } else {
+          reply.code(200).send({
+            message: 'Failed to reset your password! Please contact us, something went wrong and we need more futher information from you.',
+            statusCode: 200,
+            success: false
+          })
+        }
+      } else {
+        reply.code(200).send({
+          message: 'Failed to reset your password! Please contact us, something went wrong and we need more futher information from you.',
+          statusCode: 200,
+          success: false
+        })
+      }
+    } else {
+      reply.code(200).send({
+        message: 'The request to reset password has been expired!',
+        statusCode: 200,
+        success: false
+      })
+    }
+    await reply
+  })
 }
 
 module.exports = userRoute

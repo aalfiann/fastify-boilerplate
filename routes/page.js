@@ -196,7 +196,8 @@ async function pageRoute (server, options) {
         const result = await ForgotPassword.find({
           $and: [
             { id: request.params.id },
-            { expired_at: { $gte: moment().format('x') } }
+            { expired_at: { $gte: moment().format('x') } },
+            { status: false }
           ]
         }).catch(err => {
           payload.valid = false
