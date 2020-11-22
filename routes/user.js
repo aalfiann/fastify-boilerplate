@@ -212,7 +212,8 @@ async function userRoute (server, options) {
           }
           reply.code(200).send({
             statusCode: 200,
-            message: 'Reset password link has already sent to your email.'
+            message: 'Reset password link has already sent to your email.',
+            success: true
           })
         })
       }
@@ -222,7 +223,8 @@ async function userRoute (server, options) {
         message: 'Email address is not exists.',
         data: {
           total: result.length
-        }
+        },
+        success: false
       })
     }
     await reply
