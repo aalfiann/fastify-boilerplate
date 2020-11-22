@@ -55,12 +55,6 @@ const App = async () => {
     })
   })
 
-  // Register routes without authentication at here
-  server.register(require('./routes/api.js'))
-  server.register(require('./routes/db.js'))
-  server.register(require('./routes/page.js'))
-  server.register(require('./routes/user.js'))
-
   // Plugins
 
   // Auth
@@ -88,8 +82,13 @@ const App = async () => {
     })
   })
 
-  // Register routes with authentication at here
+  // Register routes
+  server.register(require('./routes/api.js'))
+  server.register(require('./routes/db.js'))
+  server.register(require('./routes/page.js'))
+  server.register(require('./routes/user.js'))
   server.register(require('./routes/auth.js'))
+  server.register(require('./routes/menu.js'))
 
   // JWT
   server.register(jwt, {

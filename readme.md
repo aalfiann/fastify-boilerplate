@@ -7,6 +7,7 @@ Fastify Boilerplate with JWT, Mongoose and Bulma
 
 ### Features
 - Login
+- Menu Management
 - User Management
 - Forgot Password
 - Admin Dashboard
