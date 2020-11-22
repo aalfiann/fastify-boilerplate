@@ -161,6 +161,7 @@
                     <p id="password-error" class="help has-text-left"></p>
                   </div>
                 </div>
+                <hr>
                 <div class="field">
                   <label class="b-checkbox checkbox is-thin">
                     <input id="checkbox" type="checkbox" value="false">
@@ -301,6 +302,8 @@
 
   Dom.id('reload').addEventListener('click', function(e) {
     clear();
+    register.data.register = false;
+    register.data.message = '';
   })
   </script>
 </body>

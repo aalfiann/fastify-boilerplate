@@ -75,6 +75,7 @@
               </div>
               <p id="password-error" class="help has-text-left"></p>
             </div>
+            <hr>
             <div class="field is-grouped">
               <div class="control">
                 <button id="btnSubmit" type="submit" class="button is-dark" onclick="submitLogin()">
@@ -172,6 +173,7 @@
 
     Dom.id('reload').addEventListener('click', function(e) {
       clear();
+      Dom.id('msg').innerHTML = '';
     })
   </script>
 </body>
