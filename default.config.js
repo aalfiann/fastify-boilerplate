@@ -74,7 +74,7 @@ const config = {
   // - Not all shared hosting will work.
   useHTMLMinifier: false,
   // Options for html minifier (this will work if you set useHTMLMinifier to true)
-  // For more detail, see https://github.com/kangax/html-minifier#options-quick-reference
+  // For more detail, see https://github.com/terser/html-minifier-terser#options-quick-reference
   minifierOptions: {
     removeComments: true,
     removeCommentsFromCDATA: true,
