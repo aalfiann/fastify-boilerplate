@@ -4,17 +4,13 @@
       <span><b><%=it.siteName%></span>
     </div>
   </div>
+  <div class="menu is-menu-main internal">
+    <!-- Menu for internal user will be injected from database to this -->
+    <div id="menu_aside"></div>
+  </div>
+  <!-- Menu for public user have to set manually (no required database for this) -->
   <div class="menu is-menu-main">
-    <p class="menu-label">General</p>
-    <ul class="menu-list">
-      <li>
-        <a href="index.html" class="is-active router-link-active has-icon">
-          <span class="icon"><i class="mdi mdi-desktop-mac"></i></span>
-          <span class="menu-item-label">Dashboard</span>
-        </a>
-      </li>
-    </ul>
-    <p class="menu-label">Examples</p>
+    <p class="menu-label">Menu</p>
     <ul class="menu-list">
       <li>
         <a href="<%=it.baseUrl%>/blank" class="has-icon">
@@ -51,12 +47,12 @@
         <ul>
           <li>
             <a href="#void">
-              <span><i class="mdi mdi-arrow-right mr-2"></i>Sub-item One</span>
+              <span class="ml-4"><i class="mdi mdi-arrow-right mr-2"></i>Sub-item One</span>
             </a>
           </li>
           <li>
             <a href="#void">
-              <span><i class="mdi mdi-arrow-right mr-2"></i>Sub-item Two</span>
+              <span class="ml-4"><i class="mdi mdi-arrow-right mr-2"></i>Sub-item Two</span>
             </a>
           </li>
         </ul>

@@ -2,7 +2,7 @@
 <html lang="en" class="has-aside-left has-aside-mobile-transition has-navbar-fixed-top has-aside-expanded">
 <head>
   <%~ includeFile('partial-head-main.html', it) %>
-  <title>Dashboard - <%=it.siteName%></title>
+  <title>Menu - <%=it.siteName%></title>
   <%~ includeFile('partial-head-meta.html', it) %>
 </head>
 <body>
@@ -16,7 +16,7 @@
         <div class="level-item">
           <ul>
             <li><a href="<%=it.baseUrl%>" class="has-text-dark">Home</a></li>
-            <li>Dashboard</li>
+            <li>Menu</li>
           </ul>
         </div>
       </div>
@@ -37,7 +37,7 @@
       <div class="level">
         <div class="level-left">
           <div class="level-item"><h1 class="title">
-            Dashboard
+            Menu
           </h1></div>
         </div>
         <div class="level-right" style="display: none;">
@@ -456,9 +456,16 @@
   <%~ includeFile('partial-footer.html', it) %>
   <!-- Inline JS -->
   <%~ includeFile('partial-js.html', it) %>
-  <script>getToken('<%=it.baseUrl%>', function(token) {
-    getMenu('<%=it.baseUrl%>', token);
-  });</script>
+  <script>
+    getToken('<%=it.baseUrl%>', function(token) {
+      // If have no token, redirect to login
+      if(!token) return location = '<%=it.baseUrl%>'+'/login';
+      getMenu('<%=it.baseUrl%>', token, function(valid) {
+        // If user have no acces to this url menu link, redirect to dashboard
+        if (!valid) location.href = '/dashboard';
+      });
+    });
+  </script>
   <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/chart-js/2.9.4/Chart.min.js"></script>
   <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/chart.sample.min.js"></script>
 </body>
