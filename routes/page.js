@@ -9,115 +9,57 @@ const ForgotPassword = require('../models/forgot_password')
 
 async function pageRoute (server, options) {
   /**
+   * Default variable for template engine
+   */
+  const templateData = {
+    baseUrl: config.baseUrl,
+    baseAssetsUrl: config.baseAssetsUrl,
+    year: helper.copyrightYear(config.startYearCopyright),
+    siteName: config.siteName,
+    siteDescription: config.siteDescription,
+    authorName: config.authorName,
+    authorEmail: config.authorEmail,
+    authorWebsite: config.authorWebsite,
+    webmaster: config.webmaster,
+    tracker: config.tracker,
+    version: pjson.version
+  }
+
+  /**
    * Template Engine doesn't have html cache so we need to inject it manually via onRequest hooks.
    * This server.useHtmlCache will work if you set isProduction to true only.
    */
   server.get('/', { onRequest: server.useHtmlCache }, async (request, reply) => {
-    const html = await server.view('index', {
-      baseUrl: config.baseUrl,
-      baseAssetsUrl: config.baseAssetsUrl,
-      year: helper.copyrightYear(config.startYearCopyright),
-      siteName: config.siteName,
-      siteTitle: config.siteTitle,
-      siteDescription: config.siteDescription,
-      authorName: config.authorName,
-      authorEmail: config.authorEmail,
-      authorWebsite: config.authorWebsite,
-      webmaster: config.webmaster,
-      tracker: config.tracker,
-      version: pjson.version
-    })
+    // Shallow Clone
+    const newTemplateData = { ...templateData }
+    newTemplateData.siteTitle = config.siteTitle
+    const html = await server.view('index', newTemplateData)
     await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
   })
 
   server.get('/blank', { onRequest: server.useHtmlCache }, async (request, reply) => {
-    const html = await server.view('blank', {
-      baseUrl: config.baseUrl,
-      baseAssetsUrl: config.baseAssetsUrl,
-      year: helper.copyrightYear(config.startYearCopyright),
-      siteName: config.siteName,
-      siteTitle: config.siteTitle,
-      siteDescription: config.siteDescription,
-      authorName: config.authorName,
-      authorEmail: config.authorEmail,
-      authorWebsite: config.authorWebsite,
-      webmaster: config.webmaster,
-      tracker: config.tracker,
-      version: pjson.version
-    })
+    const html = await server.view('blank', templateData)
     await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
   })
 
   server.get('/register', { onRequest: server.useHtmlCache }, async (request, reply) => {
-    const html = await server.view('register', {
-      baseUrl: config.baseUrl,
-      baseAssetsUrl: config.baseAssetsUrl,
-      year: helper.copyrightYear(config.startYearCopyright),
-      siteName: config.siteName,
-      siteTitle: config.siteTitle,
-      siteDescription: config.siteDescription,
-      authorName: config.authorName,
-      authorEmail: config.authorEmail,
-      authorWebsite: config.authorWebsite,
-      webmaster: config.webmaster,
-      tracker: config.tracker,
-      version: pjson.version
-    })
+    const html = await server.view('register', templateData)
     await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
   })
 
   server.get('/login', { onRequest: server.useHtmlCache }, async (request, reply) => {
-    const html = await server.view('login', {
-      baseUrl: config.baseUrl,
-      baseAssetsUrl: config.baseAssetsUrl,
-      year: helper.copyrightYear(config.startYearCopyright),
-      siteName: config.siteName,
-      siteTitle: config.siteTitle,
-      siteDescription: config.siteDescription,
-      authorName: config.authorName,
-      authorEmail: config.authorEmail,
-      authorWebsite: config.authorWebsite,
-      webmaster: config.webmaster,
-      tracker: config.tracker,
-      version: pjson.version
-    })
+    const html = await server.view('login', templateData)
     await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
   })
 
   server.get('/forgot-password', { onRequest: server.useHtmlCache }, async (request, reply) => {
-    const html = await server.view('forgot-password', {
-      baseUrl: config.baseUrl,
-      baseAssetsUrl: config.baseAssetsUrl,
-      year: helper.copyrightYear(config.startYearCopyright),
-      siteName: config.siteName,
-      siteTitle: config.siteTitle,
-      siteDescription: config.siteDescription,
-      authorName: config.authorName,
-      authorEmail: config.authorEmail,
-      authorWebsite: config.authorWebsite,
-      webmaster: config.webmaster,
-      tracker: config.tracker,
-      version: pjson.version
-    })
+    const html = await server.view('forgot-password', templateData)
     await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
   })
 
   server.get('/reset-password/:id', { onRequest: server.useHtmlCache }, async (request, reply) => {
-    const payload = {
-      baseUrl: config.baseUrl,
-      baseAssetsUrl: config.baseAssetsUrl,
-      year: helper.copyrightYear(config.startYearCopyright),
-      siteName: config.siteName,
-      siteTitle: config.siteTitle,
-      siteDescription: config.siteDescription,
-      authorName: config.authorName,
-      authorEmail: config.authorEmail,
-      authorWebsite: config.authorWebsite,
-      webmaster: config.webmaster,
-      tracker: config.tracker,
-      version: pjson.version,
-      reset_pass_id: request.params.id
-    }
+    const payload = { ...templateData }
+    payload.reset_pass_id = request.params.id
 
     // Check expired request reset password
     const conn = await mongooseHandler.connect().catch(err => {
