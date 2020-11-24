@@ -82,4 +82,6 @@ This Fastify Boilerplate is already include 3rd party license properly.
 - [Dom.js](https://github.com/aalfiann/dom.js)
 - [Ajax](https://github.com/fdaciuk/ajax)
 - [Native Form Validation](https://github.com/aalfiann/native-form-validation)
+- [Fly Json ODM](https://github.com/aalfiann/fly-json-odm)
+- [Chunk Handler](https://github.com/aalfiann/chunk-handler)
 - [Chart.js](https://github.com/chartjs/Chart.js)

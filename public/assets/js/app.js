@@ -49,7 +49,8 @@ var profile_nav = new Reef('#profile_nav', {
     template: function (props) {
         if(props.token) {
             var profile = parseJWT(props.token);
-            return `<div class="navbar-item has-dropdown has-dropdown-with-icons has-divider has-user-avatar is-hoverable">
+            return `<div class="navbar-end">
+            <div class="navbar-item has-dropdown has-dropdown-with-icons has-divider has-user-avatar is-hoverable">
             <a class="navbar-link is-arrowless">
               <div class="is-user-avatar">
                 <img src="https://gravatar.com/avatar/${MD5(profile.mail)}" alt="${profile.unm}">
@@ -72,9 +73,23 @@ var profile_nav = new Reef('#profile_nav', {
                 <span>Log Out</span>
               </a>
             </div>
+          </div>
+            <a href="https://justboil.me/bulma-admin-template/one-html" title="About" class="navbar-item has-divider is-desktop-icon-only">
+                <span class="icon"><i class="mdi mdi-help-circle-outline"></i></span>
+                <span>About</span>
+            </a>
           </div>`;
         } else {
-            return '';
+            return `<div class="navbar-end">
+            <a href="${props.baseUrl+'/login'}" title="Login" class="navbar-item has-divider is-desktop-icon-only">
+                <span class="icon"><i class="mdi mdi-login"></i></span>
+                <span>Login</span>
+            </a>
+            <a href="https://justboil.me/bulma-admin-template/one-html" title="About" class="navbar-item has-divider is-desktop-icon-only">
+                <span class="icon"><i class="mdi mdi-help-circle-outline"></i></span>
+                <span>About</span>
+            </a>
+            </div>`;
         }
     }
 });
@@ -174,13 +189,15 @@ function getMenu(baseUrl, token, _cb) {
                 }
             }
             if(_cb && typeof _cb === "function") {
-                _cb(validMenu);
-            } else {
-                return validMenu;
+                _cb(null,validMenu);
             }
         })
         .catch(function(response, xhr) {
-            console.log(xhr.responseText);
+            if(_cb && typeof _cb === "function") {
+                _cb(xhr.responseText,false);
+            } else {
+                console.log(xhr.responseText);
+            }
         })
     }
 }

@@ -47,408 +47,23 @@
     </div>
   </section>
   <section class="section is-main-section">
-    <div class="tile is-ancestor">
-      <div class="tile is-parent">
-        <div class="card tile is-child">
-          <div class="card-content">
-            <div class="level is-mobile">
-              <div class="level-item">
-                <div class="is-widget-label"><h3 class="subtitle is-spaced">
-                  Clients
-                </h3>
-                  <h1 class="title">
-                    512
-                  </h1>
-                </div>
-              </div>
-              <div class="level-item has-widget-icon">
-                <div class="is-widget-icon"><span class="icon has-text-primary is-large"><i
-                    class="mdi mdi-account-multiple mdi-48px"></i></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="tile is-parent">
-        <div class="card tile is-child">
-          <div class="card-content">
-            <div class="level is-mobile">
-              <div class="level-item">
-                <div class="is-widget-label"><h3 class="subtitle is-spaced">
-                  Sales
-                </h3>
-                  <h1 class="title">
-                    $7,770
-                  </h1>
-                </div>
-              </div>
-              <div class="level-item has-widget-icon">
-                <div class="is-widget-icon"><span class="icon has-text-info is-large"><i
-                    class="mdi mdi-cart-outline mdi-48px"></i></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="tile is-parent">
-        <div class="card tile is-child">
-          <div class="card-content">
-            <div class="level is-mobile">
-              <div class="level-item">
-                <div class="is-widget-label"><h3 class="subtitle is-spaced">
-                  Performance
-                </h3>
-                  <h1 class="title">
-                    256%
-                  </h1>
-                </div>
-              </div>
-              <div class="level-item has-widget-icon">
-                <div class="is-widget-icon"><span class="icon has-text-success is-large"><i
-                    class="mdi mdi-finance mdi-48px"></i></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <header class="card-header">
-        <p class="card-header-title">
-          <span class="icon"><i class="mdi mdi-finance"></i></span>
-          Performance
-        </p>
-        <a href="#" class="card-header-icon">
-          <span class="icon"><i class="mdi mdi-reload"></i></span>
-        </a>
-      </header>
-      <div class="card-content">
-        <div class="chart-area">
-          <div style="height: 100%;">
-            <div class="chartjs-size-monitor">
-              <div class="chartjs-size-monitor-expand">
-                <div></div>
-              </div>
-              <div class="chartjs-size-monitor-shrink">
-                <div></div>
-              </div>
-            </div>
-            <canvas id="big-line-chart" width="2992" height="1000" class="chartjs-render-monitor" style="display: block; height: 400px; width: 1197px;"></canvas>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="card has-table has-mobile-sort-spaced">
       <header class="card-header">
         <p class="card-header-title">
-          <span class="icon"><i class="mdi mdi-account-multiple"></i></span>
-          Clients
+          <span class="icon"><i class="mdi mdi-format-list-bulleted"></i></span>
+          Menu List
         </p>
-        <a href="#" class="card-header-icon">
-          <span class="icon"><i class="mdi mdi-reload"></i></span>
-        </a>
+        <div class="card-header-icon field">
+          <p class="control has-icons-right">
+            <input id="search" type="text" class="input" placeholder="Search...">
+            <span class="icon is-small is-right">
+              <i class="mdi mdi-magnify"></i>
+            </span>
+          </p>
+        </div>
       </header>
       <div class="card-content">
-        <div class="b-table has-pagination">
-          <div class="table-wrapper has-mobile-cards">
-            <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
-              <thead>
-              <tr>
-                <th></th>
-                <th>Name</th>
-                <th>Company</th>
-                <th>City</th>
-                <th>Progress</th>
-                <th>Created</th>
-                <th></th>
-              </tr>
-              </thead>
-              <tbody>
-              <tr>
-                <td class="is-image-cell">
-                  <div class="image">
-                    <img src="https://avatars.dicebear.com/v2/initials/rebecca-bauch.svg" class="is-rounded">
-                  </div>
-                </td>
-                <td data-label="Name">Rebecca Bauch</td>
-                <td data-label="Company">Daugherty-Daniel</td>
-                <td data-label="City">South Cory</td>
-                <td data-label="Progress" class="is-progress-cell">
-                  <progress max="100" class="progress is-small is-primary" value="79">79</progress>
-                </td>
-                <td data-label="Created">
-                  <small class="has-text-grey is-abbr-like" title="Oct 25, 2020">Oct 25, 2020</small>
-                </td>
-                <td class="is-actions-cell">
-                  <div class="buttons is-right">
-                    <button class="button is-small is-primary" type="button">
-                      <span class="icon"><i class="mdi mdi-eye"></i></span>
-                    </button>
-                    <button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
-                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td class="is-image-cell">
-                  <div class="image">
-                    <img src="https://avatars.dicebear.com/v2/initials/felicita-yundt.svg" class="is-rounded">
-                  </div>
-                </td>
-                <td data-label="Name">Felicita Yundt</td>
-                <td data-label="Company">Johns-Weissnat</td>
-                <td data-label="City">East Ariel</td>
-                <td data-label="Progress" class="is-progress-cell">
-                  <progress max="100" class="progress is-small is-primary" value="67">67</progress>
-                </td>
-                <td data-label="Created">
-                  <small class="has-text-grey is-abbr-like" title="Jan 8, 2020">Jan 8, 2020</small>
-                </td>
-                <td class="is-actions-cell">
-                  <div class="buttons is-right">
-                    <button class="button is-small is-primary" type="button">
-                      <span class="icon"><i class="mdi mdi-eye"></i></span>
-                    </button>
-                    <button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
-                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td class="is-image-cell">
-                  <div class="image">
-                    <img src="https://avatars.dicebear.com/v2/initials/mr-larry-satterfield-v.svg" class="is-rounded">
-                  </div>
-                </td>
-                <td data-label="Name">Mr. Larry Satterfield V</td>
-                <td data-label="Company">Hyatt Ltd</td>
-                <td data-label="City">Windlerburgh</td>
-                <td data-label="Progress" class="is-progress-cell">
-                  <progress max="100" class="progress is-small is-primary" value="16">16</progress>
-                </td>
-                <td data-label="Created">
-                  <small class="has-text-grey is-abbr-like" title="Dec 18, 2020">Dec 18, 2020</small>
-                </td>
-                <td class="is-actions-cell">
-                  <div class="buttons is-right">
-                    <button class="button is-small is-primary" type="button">
-                      <span class="icon"><i class="mdi mdi-eye"></i></span>
-                    </button>
-                    <button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
-                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td class="is-image-cell">
-                  <div class="image">
-                    <img src="https://avatars.dicebear.com/v2/initials/mr-broderick-kub.svg" class="is-rounded">
-                  </div>
-                </td>
-                <td data-label="Name">Mr. Broderick Kub</td>
-                <td data-label="Company">Kshlerin, Bauch and Ernser</td>
-                <td data-label="City">New Kirstenport</td>
-                <td data-label="Progress" class="is-progress-cell">
-                  <progress max="100" class="progress is-small is-primary" value="71">71</progress>
-                </td>
-                <td data-label="Created">
-                  <small class="has-text-grey is-abbr-like" title="Sep 13, 2020">Sep 13, 2020</small>
-                </td>
-                <td class="is-actions-cell">
-                  <div class="buttons is-right">
-                    <button class="button is-small is-primary" type="button">
-                      <span class="icon"><i class="mdi mdi-eye"></i></span>
-                    </button>
-                    <button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
-                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td class="is-image-cell">
-                  <div class="image">
-                    <img src="https://avatars.dicebear.com/v2/initials/barry-weber.svg" class="is-rounded">
-                  </div>
-                </td>
-                <td data-label="Name">Barry Weber</td>
-                <td data-label="Company">Schulist, Mosciski and Heidenreich</td>
-                <td data-label="City">East Violettestad</td>
-                <td data-label="Progress" class="is-progress-cell">
-                  <progress max="100" class="progress is-small is-primary" value="80">80</progress>
-                </td>
-                <td data-label="Created">
-                  <small class="has-text-grey is-abbr-like" title="Jul 24, 2020">Jul 24, 2020</small>
-                </td>
-                <td class="is-actions-cell">
-                  <div class="buttons is-right">
-                    <button class="button is-small is-primary" type="button">
-                      <span class="icon"><i class="mdi mdi-eye"></i></span>
-                    </button>
-                    <button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
-                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td class="is-image-cell">
-                  <div class="image">
-                    <img src="https://avatars.dicebear.com/v2/initials/bert-kautzer-md.svg" class="is-rounded">
-                  </div>
-                </td>
-                <td data-label="Name">Bert Kautzer MD</td>
-                <td data-label="Company">Gerhold and Sons</td>
-                <td data-label="City">Mayeport</td>
-                <td data-label="Progress" class="is-progress-cell">
-                  <progress max="100" class="progress is-small is-primary" value="62">62</progress>
-                </td>
-                <td data-label="Created">
-                  <small class="has-text-grey is-abbr-like" title="Mar 30, 2020">Mar 30, 2020</small>
-                </td>
-                <td class="is-actions-cell">
-                  <div class="buttons is-right">
-                    <button class="button is-small is-primary" type="button">
-                      <span class="icon"><i class="mdi mdi-eye"></i></span>
-                    </button>
-                    <button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
-                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td class="is-image-cell">
-                  <div class="image">
-                    <img src="https://avatars.dicebear.com/v2/initials/lonzo-steuber.svg" class="is-rounded">
-                  </div>
-                </td>
-                <td data-label="Name">Lonzo Steuber</td>
-                <td data-label="Company">Skiles Ltd</td>
-                <td data-label="City">Marilouville</td>
-                <td data-label="Progress" class="is-progress-cell">
-                  <progress max="100" class="progress is-small is-primary" value="17">17</progress>
-                </td>
-                <td data-label="Created">
-                  <small class="has-text-grey is-abbr-like" title="Feb 12, 2020">Feb 12, 2020</small>
-                </td>
-                <td class="is-actions-cell">
-                  <div class="buttons is-right">
-                    <button class="button is-small is-primary" type="button">
-                      <span class="icon"><i class="mdi mdi-eye"></i></span>
-                    </button>
-                    <button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
-                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td class="is-image-cell">
-                  <div class="image">
-                    <img src="https://avatars.dicebear.com/v2/initials/jonathon-hahn.svg" class="is-rounded">
-                  </div>
-                </td>
-                <td data-label="Name">Jonathon Hahn</td>
-                <td data-label="Company">Flatley Ltd</td>
-                <td data-label="City">Billiemouth</td>
-                <td data-label="Progress" class="is-progress-cell">
-                  <progress max="100" class="progress is-small is-primary" value="74">74</progress>
-                </td>
-                <td data-label="Created">
-                  <small class="has-text-grey is-abbr-like" title="Dec 30, 2020">Dec 30, 2020</small>
-                </td>
-                <td class="is-actions-cell">
-                  <div class="buttons is-right">
-                    <button class="button is-small is-primary" type="button">
-                      <span class="icon"><i class="mdi mdi-eye"></i></span>
-                    </button>
-                    <button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
-                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td class="is-image-cell">
-                  <div class="image">
-                    <img src="https://avatars.dicebear.com/v2/initials/ryley-wuckert.svg" class="is-rounded">
-                  </div>
-                </td>
-                <td data-label="Name">Ryley Wuckert</td>
-                <td data-label="Company">Heller-Little</td>
-                <td data-label="City">Emeraldtown</td>
-                <td data-label="Progress" class="is-progress-cell">
-                  <progress max="100" class="progress is-small is-primary" value="54">54</progress>
-                </td>
-                <td data-label="Created">
-                  <small class="has-text-grey is-abbr-like" title="Jun 28, 2020">Jun 28, 2020</small>
-                </td>
-                <td class="is-actions-cell">
-                  <div class="buttons is-right">
-                    <button class="button is-small is-primary" type="button">
-                      <span class="icon"><i class="mdi mdi-eye"></i></span>
-                    </button>
-                    <button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
-                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td class="is-image-cell">
-                  <div class="image">
-                    <img src="https://avatars.dicebear.com/v2/initials/sienna-hayes.svg" class="is-rounded">
-                  </div>
-                </td>
-                <td data-label="Name">Sienna Hayes</td>
-                <td data-label="Company">Conn, Jerde and Douglas</td>
-                <td data-label="City">Jonathanfort</td>
-                <td data-label="Progress" class="is-progress-cell">
-                  <progress max="100" class="progress is-small is-primary" value="55">55</progress>
-                </td>
-                <td data-label="Created">
-                  <small class="has-text-grey is-abbr-like" title="Mar 7, 2020">Mar 7, 2020</small>
-                </td>
-                <td class="is-actions-cell">
-                  <div class="buttons is-right">
-                    <button class="button is-small is-primary" type="button">
-                      <span class="icon"><i class="mdi mdi-eye"></i></span>
-                    </button>
-                    <button class="button is-small is-danger jb-modal" data-target="sample-modal" type="button">
-                      <span class="icon"><i class="mdi mdi-trash-can"></i></span>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-          </div>
-          <div class="notification">
-            <div class="level">
-              <div class="level-left">
-                <div class="level-item">
-                  <div class="buttons has-addons">
-                    <button type="button" class="button is-active">1</button>
-                    <button type="button" class="button">2</button>
-                    <button type="button" class="button">3</button>
-                  </div>
-                </div>
-              </div>
-              <div class="level-right">
-                <div class="level-item">
-                  <small>Page 1 of 3</small>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div id="datatable"></div>
       </div>
     </div>
   </section>
@@ -456,17 +71,198 @@
   <%~ includeFile('partial-footer.html', it) %>
   <!-- Inline JS -->
   <%~ includeFile('partial-js.html', it) %>
+  <!-- Datatable Pagination and Search -->
+  <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/chunk-handler/chunkhandler.min.js"></script>
+  <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/fly-json-odm/flyjson.min.js"></script>
   <script>
+    var datatable;
+    var dt = [];
+    var pageNow = 1;
+    var itemPerPage = 2;
+    var totalPage = 1;
     getToken('<%=it.baseUrl%>', function(token) {
       // If have no token, redirect to login
       if(!token) return location = '<%=it.baseUrl%>'+'/login';
-      getMenu('<%=it.baseUrl%>', token, function(valid) {
+      
+      getMenu('<%=it.baseUrl%>', token, function(err,valid) {
         // If user have no acces to this url menu link, redirect to dashboard
-        if (!valid) location.href = '/dashboard';
+        if (!err && !valid) return location.href = '/dashboard';
       });
+      
+      loadData('<%=it.baseUrl%>',token, function(err,data) {
+        if(!err) searchData('',pageNow,itemPerPage);
+      });
+
+      datatable = new Reef('#datatable', {
+        data: {
+          table : [],
+          message: '',
+          pageNow: pageNow,
+          totalPage: totalPage
+        },
+        template: function(props) {
+          if(props.table.length > 0) {
+            return `<div class="b-table has-pagination">
+              <div class="table-wrapper has-mobile-cards">
+                <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
+                  <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Scope</th>
+                    <th>Url</th>
+                    <th>Position</th>
+                    <th>Created</th>
+                    <th>Updated</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  ${props.table.map(function(item, index) {
+                    var num = (index+1);
+                    return `<tr>
+                      <td data-label="No">${num+((props.pageNow-1)*itemPerPage)}</td>
+                      <td data-label="ID">${item.id}</td>
+                      <td data-label="Name">${item.name}</td>
+                      <td data-label="Type">${item.type}</td>
+                      <td data-label="Scope">${item.scope}</td>
+                      <td data-label="Url">${item.url}</td>
+                      <td data-label="Position">${item.position}</td>
+                      <td data-label="Created">${item.created_at}</td>
+                      <td data-label="Created">${item.updated_at}</td>
+                      <td class="is-actions-cell">
+                        <div class="buttons is-right">
+                          <button class="button is-small is-primary" type="button" title="Edit Parent Menu">
+                            <span class="icon"><i class="mdi mdi-pencil-outline"></i></span>
+                          </button>
+                          <button class="button is-small is-info" type="button" title="Edit Child Menu">
+                            <span class="icon"><i class="mdi mdi-playlist-edit"></i></span>
+                          </button>
+                          <button class="button is-small is-danger jb-modal" type="button" title="Delete Menu">
+                            <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>`;
+                  }).join('')}
+                  </tbody>
+                </table>
+              </div>
+              <div class="notification">
+                <div class="level">
+                  <div class="level-left">
+                    <div class="level-item">
+                      <div class="buttons has-addons">
+                        <button type="button" class="button" onclick="prevPage()">Prev</button>
+                        <button type="button" class="button" onclick="nextPage()">Next</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="level-right">
+                    <div class="level-item">
+                      <small>Page ${props.pageNow} of ${props.totalPage}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+          } else {
+            return `<article class="message is-danger">
+                <div class="message-body">
+                  ${(props.message) ? props.message : 'Something went wrong!'}
+                </div>
+              </article>`;
+          }
+        }
+      });
+      datatable.render();
     });
+
+    function loadData(baseUrl,token,_cb) {
+      if(dt.length === 0) {
+        ajax({
+          headers: {
+            'x-token': token
+          }
+        })
+        .get(baseUrl+'/api/menu/parent/list')
+        .then(function(response, xhr) {
+          if(response.statusCode === 200) {
+            dt = response.data;
+            if(_cb && typeof _cb === "function") {
+                _cb(null,dt);
+            }
+          }
+          return dt;
+        })
+        .catch(function(response, xhr) {
+          dt = [];
+          if(_cb && typeof _cb === "function") {
+              _cb(xhr.responseText,null);
+          } else {
+              return dt;
+          }
+        })
+      }
+      return dt;
+    }
+
+    function searchData(value,pageNow,itemPerPage) {
+      if(dt.length > 0) {
+        var nosql = new FlyJson();
+        var ch = new ChunkHandler();
+        var result = nosql.set(dt)
+        .begin()
+        .where('id', 'like', value, false)
+        .or()
+        .where('name', 'like', value, false)
+        .or()
+        .where('type', 'like', value, false)
+        .or()
+        .where('scope', 'like', value, false)
+        .end()
+        .distinct()
+        .orderBy('position')
+        .exec();
+        var retotalPage = ch.make(result,itemPerPage).length;
+        var redata = nosql.set(result).paginate(pageNow,itemPerPage).exec();
+        if (redata.length > 0) {
+          datatable.data.table = redata;
+          datatable.data.pageNow = pageNow;
+          datatable.data.totalPage = retotalPage;
+          totalPage = retotalPage;
+        } else {
+          datatable.data.table = [];
+          datatable.data.pageNow = 0;
+          datatable.data.totalPage = 0;
+          totalPage = 0;
+          datatable.data.message = 'Records not found!';
+        }
+      } else {
+        datatable.data.message = 'Records not found!';
+      }
+    }
+
+    function nextPage() {
+      if(pageNow < totalPage) {
+        pageNow = pageNow + 1;
+        searchData(Dom.id('search').value,pageNow,itemPerPage);
+      }
+    }
+
+    function prevPage() {
+      if(pageNow > 1) {
+        pageNow = pageNow - 1;
+        searchData(Dom.id('search').value,pageNow,itemPerPage);
+      }
+    }
+
+    Dom.id('search').addEventListener('keyup', function(e) {
+      if (e.keyCode === 13) {
+        searchData(this.value, 1, itemPerPage);
+      }
+    })
   </script>
-  <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/chart-js/2.9.4/Chart.min.js"></script>
-  <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/chart.sample.min.js"></script>
 </body>
 </html>
