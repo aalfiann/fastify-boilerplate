@@ -76,12 +76,11 @@ npm test
 
 ### Credits
 This Fastify Boilerplate is already include 3rd party license properly.
-- [Bulma CSS Framework](https://github.com/jgthms/bulma)
-- [Template Admin One](https://github.com/vikdiesel/admin-one-bulma-dashboard/)
-- [Reef.js](https://github.com/cferdinandi/reef)
-- [Dom.js](https://github.com/aalfiann/dom.js)
-- [Ajax](https://github.com/fdaciuk/ajax)
-- [Native Form Validation](https://github.com/aalfiann/native-form-validation)
-- [Fly Json ODM](https://github.com/aalfiann/fly-json-odm)
-- [Chunk Handler](https://github.com/aalfiann/chunk-handler)
-- [Chart.js](https://github.com/chartjs/Chart.js)
+- [Template Admin One Bulma (32.3 kB)](https://github.com/vikdiesel/admin-one-bulma-dashboard/)
+- [Reef.js (2.6 kB)](https://github.com/cferdinandi/reef)
+- [Dom.js (5.6 kB)](https://github.com/aalfiann/dom.js)
+- [Ajax (1 kB)](https://github.com/fdaciuk/ajax)
+- [Native Form Validation (1.4 kB)](https://github.com/aalfiann/native-form-validation)
+- [Fly Json ODM (4.7 kB)](https://github.com/aalfiann/fly-json-odm)
+- [Chunk Handler (1.9 kB)](https://github.com/aalfiann/chunk-handler)
+- [Chart.js (52.9 kB)](https://github.com/chartjs/Chart.js)
