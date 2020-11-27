@@ -67,6 +67,25 @@
       </div>
     </div>
   </section>
+  <div id="sample-modal" class="modal">
+    <div class="modal-background jb-modal-close"></div>
+    <div class="modal-card fix-modal">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Confirm action</p>
+        <button class="delete jb-modal-close" aria-label="close"></button>
+      </header>
+      <section class="modal-card-body">
+        <p>This will permanently delete <b>Some Object</b></p>
+        <p>This is sample modal</p>
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-dark">Submit</button>
+        <button class="button jb-modal-close">Cancel</button>
+        <button class="button is-danger jb-modal-close">Delete</button>
+      </footer>
+    </div>
+    <button class="modal-close is-large jb-modal-close" aria-label="close"></button>
+  </div>
   <!-- Footer -->
   <%~ includeFile('partial-footer.html', it) %>
   <!-- Inline JS -->
@@ -74,12 +93,13 @@
   <!-- Datatable Pagination and Search -->
   <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/chunk-handler/chunkhandler.min.js"></script>
   <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/fly-json-odm/flyjson.min.js"></script>
+  <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/moment-js/moment.min.js"></script>
   <script>
     var datatable;
     var dt = [];
     var pageNow = 1;
-    var itemPerPage = 2;
-    var totalPage = 1;
+    var itemPerPage = 5;
+    var totalPage = 0;
     getToken('<%=it.baseUrl%>', function(token) {
       // If have no token, redirect to login
       if(!token) return location = '<%=it.baseUrl%>'+'/login';
@@ -129,8 +149,8 @@
                       <td data-label="Scope">${item.scope}</td>
                       <td data-label="Url">${item.url}</td>
                       <td data-label="Position">${item.position}</td>
-                      <td data-label="Created">${item.created_at}</td>
-                      <td data-label="Created">${item.updated_at}</td>
+                      <td data-label="Created">${moment(item.created_at).format('YYYY-MM-DD HH:mm:ss')}</td>
+                      <td data-label="Created">${(item.updated_at ? moment(item.updated_at).format('YYYY-MM-DD HH:mm:ss') : '')}</td>
                       <td class="is-actions-cell">
                         <div class="buttons is-right">
                           <button class="button is-small is-primary" type="button" title="Edit Parent Menu">
@@ -139,7 +159,7 @@
                           <button class="button is-small is-info" type="button" title="Edit Child Menu">
                             <span class="icon"><i class="mdi mdi-playlist-edit"></i></span>
                           </button>
-                          <button class="button is-small is-danger jb-modal" type="button" title="Delete Menu">
+                          <button class="button is-small is-danger jb-modal" onclick="openModal('sample-modal')" type="button" title="Delete Menu">
                             <span class="icon"><i class="mdi mdi-trash-can"></i></span>
                           </button>
                         </div>
@@ -240,6 +260,10 @@
           datatable.data.message = 'Records not found!';
         }
       } else {
+        datatable.data.table = [];
+        datatable.data.pageNow = 0;
+        datatable.data.totalPage = 0;
+        totalPage = 0;
         datatable.data.message = 'Records not found!';
       }
     }
@@ -263,6 +287,16 @@
         searchData(this.value, 1, itemPerPage);
       }
     })
+
+    function openModal(el) {
+      document.getElementById(el).classList.add('is-active');
+      document.documentElement.classList.add('is-clipped');
+    }
+
+    function closeModal(el) {
+      el.classList.remove('is-active');
+      document.documentElement.classList.remove('is-clipped');
+    }
   </script>
 </body>
 </html>
