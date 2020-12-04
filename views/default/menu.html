@@ -558,12 +558,15 @@
       getToken('<%=it.baseUrl%>', function(token) {
         // If have no token, redirect to login
         if(!token) return location = '<%=it.baseUrl%>'+'/login';
-        Swal.fire({
-          title: 'Are you sure want to delete this?',
-          showCancelButton: true,
-          confirmButtonText: `Delete`,
-        }).then((result) => {
-          if (result.isConfirmed) {
+        swal({
+          title: "Are you sure?",
+          text: "Once deleted, you will not be able to recover this anymore!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
             ajax({
               headers: {
                 'x-token': token
@@ -574,7 +577,9 @@
             })
             .then(function (response, xhr) {
               if (response.statusCode === 200) {
-                Swal.fire('Delete Success!', '', 'success')
+                swal(response.message, {
+                  icon: "success",
+                });
                 Dom.id('msg_new').innerHTML = `<article class="message is-success">
                     <div class="message-body">
                       ${response.message}
@@ -595,7 +600,7 @@
                 </article>`;
             })
           }
-        })
+        });
       });
     }
   </script>
