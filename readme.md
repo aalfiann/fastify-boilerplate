@@ -80,6 +80,7 @@ This Fastify Boilerplate is already include 3rd party license properly.
 - [Reef.js (2.6 kB)](https://github.com/cferdinandi/reef)
 - [Dom.js (5.6 kB)](https://github.com/aalfiann/dom.js)
 - [Ajax (1 kB)](https://github.com/fdaciuk/ajax)
+- [Sweetalert2 (53 kB)](https://github.com/sweetalert2/sweetalert2)
 - [Native Form Validation (1.4 kB)](https://github.com/aalfiann/native-form-validation)
 - [Fly Json ODM (4.7 kB)](https://github.com/aalfiann/fly-json-odm)
 - [Chunk Handler (1.9 kB)](https://github.com/aalfiann/chunk-handler)
