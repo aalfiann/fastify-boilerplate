@@ -30,6 +30,7 @@ const menuSchema = {
     trim: true
   },
   position: { type: Number, required: true },
+  icon: { type: String },
   child: { type: Array },
   status: { type: Boolean },
   created_at: { type: Number },
