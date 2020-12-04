@@ -214,17 +214,47 @@
     <div class="modal-background jb-modal-close"></div>
     <div class="modal-card fix-modal">
       <header class="modal-card-head">
-        <p class="modal-card-title">Confirm action</p>
+        <p class="modal-card-title"><i class="mdi mdi-playlist-edit mr-2"></i>Edit Child Menu</p>
         <button class="delete jb-modal-close" aria-label="close"></button>
       </header>
       <section class="modal-card-body">
-        <p>This will permanently delete <b>Some Object</b></p>
-        <p>This is sample modal</p>
+        <div id="msg_child"></div>
+        <div class="field" hidden>
+          <label class="label">ID</label>
+          <div class="control">
+            <input id="menu_id_child" class="input" type="text" placeholder="Menu ID">
+          </div>
+          <p class="help has-text-left">Create name for your menu</p>
+        </div>
+        <div class="field">
+          <label class="label">Name</label>
+          <div class="control">
+            <input id="menu_name_child" class="input" type="text" placeholder="Menu name">
+          </div>
+          <p class="help has-text-left">Create name for your menu</p>
+        </div>
+        <div class="field">
+          <label class="label">Url</label>
+          <div class="control">
+            <input id="menu_url_child" class="input" type="text" placeholder="Menu url">
+          </div>
+          <p class="help has-text-left">Doesn't need <%=it.baseUrl%>, Example: /dashboard.</p>
+        </div>
+        <div class="field">
+          <label class="label">Position</label>
+          <div class="control">
+            <input id="menu_position_child" class="input" type="text" placeholder="Menu position">
+          </div>
+          <p class="help has-text-left">Set position order for your menu.</p>
+        </div>
+        <button id="btnAddChild" onclick="addChild()" class="button is-dark">Add</button>
+        <button id="btnCancelChild" onclick="cancelChild()" class="button" style="display: none;">Cancel</button>
+        <hr>
+        <div id="childtable"></div>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-dark">Submit</button>
+        <button onclick="saveChild()" class="button is-dark">Save</button>
         <button class="button jb-modal-close">Cancel</button>
-        <button class="button is-danger jb-modal-close">Delete</button>
       </footer>
     </div>
     <button class="modal-close is-large jb-modal-close" aria-label="close"></button>
@@ -291,15 +321,15 @@
                       <td data-label="Scope">${item.scope}</td>
                       <td data-label="Url">${item.url}</td>
                       <td data-label="Position">${item.position}</td>
-                      <td data-label="Position">${(item.status)? '<span class="tag is-success">Activated</span>':'<span class="tag is-danger">Disabled</span>'}</td>
+                      <td data-label="Status">${(item.status)? '<span class="tag is-success">Activated</span>':'<span class="tag is-danger">Disabled</span>'}</td>
                       <td data-label="Created">${moment(item.created_at).format('YYYY-MM-DD HH:mm:ss')}</td>
-                      <td data-label="Created">${(item.updated_at ? moment(item.updated_at).format('YYYY-MM-DD HH:mm:ss') : '')}</td>
+                      <td data-label="Updated">${(item.updated_at ? moment(item.updated_at).format('YYYY-MM-DD HH:mm:ss') : '')}</td>
                       <td class="is-actions-cell">
                         <div class="buttons is-right">
                           <button class="button is-small is-primary" type="button" title="Edit Parent Menu" onclick="openModal('parent-modal','${item.id}')">
                             <span class="icon"><i class="mdi mdi-pencil-outline"></i></span>
                           </button>
-                          ${(item.type === 'colapse' ? `<button class="button is-small is-info" type="button" title="Edit Child Menu" onclick="openModal('child-modal')">
+                          ${(item.type === 'colapse' ? `<button class="button is-small is-info" type="button" title="Edit Child Menu" onclick="openModal('child-modal','${item.id}')">
                             <span class="icon"><i class="mdi mdi-playlist-edit"></i></span>
                           </button>` : '')}
                           <button class="button is-small is-danger" type="button" title="Delete Menu" onclick="submitDelete('${item.id}')">
@@ -445,6 +475,13 @@
           Dom.id('menu_position').value = cdata.position;
           Dom.id('menu_status').value = cdata.status;
           Dom.id('menu_icon').value = cdata.icon;
+          break;
+        case (el === 'child-modal') :
+          refreshChild();
+          Dom.id('msg_child').innerHTML = '';
+          Dom.id('menu_id_child').value = id;
+          var cdata = getData(id)[0];
+          childtable.data.table = cdata.child;
           break;
         default :
           Dom.id('msg_new').innerHTML = '';
@@ -603,6 +640,174 @@
         });
       });
     }
+  
+    var childtable = new Reef('#childtable', {
+      data: {
+        table: []
+      },
+      template: function(props) {
+        if(props.table.length > 0) {
+          return `<div class="b-table has-pagination">
+          <div class="table-wrapper has-mobile-cards">
+            <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
+              <thead>
+              <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Url</th>
+                <th>Position</th>
+              </tr>
+              </thead>
+              <tbody>
+              ${props.table.map(function (item, index) {
+                var num = (index+1);
+                return `<tr>
+                          <td data-label="No">${num}</td>
+                          <td data-label="Name">${item.name}</td>
+                          <td data-label="Url">${item.url}</td>
+                          <td data-label="Position">${item.position}</td>
+                          <td class="is-actions-cell">
+                            <div class="buttons is-right">
+                              <button class="button is-small is-primary" type="button" title="Edit" onclick="editChild('${item.name}')">
+                                <span class="icon"><i class="mdi mdi-pencil-outline"></i></span>
+                              </button>
+                              <button class="button is-small is-danger" type="button" title="Delete" onclick="deleteChild('${item.name}')">
+                                <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                              </button>
+                            </div>
+                          </td>
+                        </tr>`;
+              }).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>`;
+        } else {
+          return `<div class="b-table has-pagination">
+            <div class="table-wrapper has-mobile-cards">
+              <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
+                <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Name</th>
+                  <th>Url</th>
+                  <th>Position</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+          </div>`;
+        }
+      }
+    });
+    childtable.render();
+
+    function editChild(name) {
+      var nosql = new FlyJson();
+      var db = nosql.deepClone(childtable.data.table);
+      var cdata = nosql.set(db).where('name','==',name,false).exec();
+      Dom.id('menu_name_child').value = cdata[0].name;
+      Dom.id('menu_url_child').value = cdata[0].url;
+      Dom.id('menu_position_child').value = cdata[0].position;
+      if(Dom.id('btnAddChild').innerHTML === 'Add') {
+        Dom.id('btnAddChild').innerHTML = 'Update';
+        Dom.id('btnCancelChild').style.display = 'inline';
+        Dom.id('menu_name_child').readOnly = true;
+      }
+    }
+
+    function refreshChild() {
+      Dom.id('btnAddChild').innerHTML = 'Add';
+      Dom.id('menu_name_child').readOnly = false;
+      Dom.id('menu_name_child').value = '';
+      Dom.id('menu_url_child').value = '';
+      Dom.id('menu_position_child').value = '';
+      Dom.id('btnCancelChild').style.display = 'none';
+    }
+
+    function addChild() {
+      Dom.id('msg_child').innerHTML = '';
+      if(Dom.id('btnAddChild').innerHTML === 'Add') {
+        childtable.data.table.push({
+          name: Dom.id('menu_name_child').value,
+          url: Dom.id('menu_url_child').value,
+          position: Dom.id('menu_position_child').value
+        });
+        Dom.id('msg_child').innerHTML = `<article class="message is-success">
+            <div class="message-body">
+              Add Child Menu success!
+            </div>
+          </article>`;
+        refreshChild();
+      } else {
+        var nosql = new FlyJson();
+        var db = nosql.deepClone(childtable.data.table);
+        var cdata = nosql.set(db).delete('name',Dom.id('menu_name_child').value).exec();
+        childtable.data.table = cdata;
+        childtable.data.table.push({
+          name: Dom.id('menu_name_child').value,
+          url: Dom.id('menu_url_child').value,
+          position: Dom.id('menu_position_child').value
+        });
+        Dom.id('msg_child').innerHTML = `<article class="message is-success">
+            <div class="message-body">
+              Update Child Menu success!
+            </div>
+          </article>`;
+        refreshChild();
+      }
+    }
+
+    function deleteChild(name) {
+      var nosql = new FlyJson();
+      var db = nosql.deepClone(childtable.data.table);
+      var cdata = nosql.set(db).delete('name',name).exec();
+      childtable.data.table = cdata;
+    }
+
+    function cancelChild() {
+      refreshChild();
+    }
+
+    function saveChild() {
+      getToken('<%=it.baseUrl%>', function(token) {
+        // If have no token, redirect to login
+        if(!token) return location = '<%=it.baseUrl%>'+'/login'; 
+        console.log(childtable.data.table);
+        ajax({
+          headers: {
+            'x-token': token
+          }
+        }).post('<%=it.baseUrl%>/api/menu/parent/set-menu-child',{
+          id: Dom.id('menu_id_child').value,
+          child: childtable.data.table
+        })
+        .then(function(response,xhr) {
+          if(response.statusCode === 200) {
+            Dom.id('msg_child').innerHTML = `<article class="message is-success">
+              <div class="message-body">
+                ${response.message}
+              </div>
+            </article>`;
+            // Tell the datatables to reload the data
+            Reef.emit(document, 'reload', {
+              success: true
+            });
+          }
+        })
+        .catch(function(response,xhr) {
+          console.log(xhr.responseText);
+          Dom.id('msg_child').innerHTML = `<article class="message is-success">
+              <div class="message-body">
+                ${xhr.responseText}
+              </div>
+            </article>`;
+        })
+      });
+    }
+
   </script>
 </body>
 </html>
