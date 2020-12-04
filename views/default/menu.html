@@ -774,8 +774,7 @@
     function saveChild() {
       getToken('<%=it.baseUrl%>', function(token) {
         // If have no token, redirect to login
-        if(!token) return location = '<%=it.baseUrl%>'+'/login'; 
-        console.log(childtable.data.table);
+        if(!token) return location = '<%=it.baseUrl%>'+'/login';
         ajax({
           headers: {
             'x-token': token
