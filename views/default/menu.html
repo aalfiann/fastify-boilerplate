@@ -52,6 +52,7 @@
         <p class="card-header-title">
           <span class="icon"><i class="mdi mdi-format-list-bulleted"></i></span>
           Menu List
+          <span class="ml-5"><button class="button is-dark" onclick="openModal('new-modal')"><i class="mdi mdi-plus mr-2"></i>New</button></span>
         </p>
         <div class="card-header-icon field">
           <p class="control has-icons-right">
@@ -67,7 +68,149 @@
       </div>
     </div>
   </section>
-  <div id="sample-modal" class="modal">
+
+  <div id="new-modal" class="modal">
+    <div class="modal-background jb-modal-close"></div>
+    <div class="modal-card fix-modal">
+      <header class="modal-card-head">
+        <p class="modal-card-title"><i class="mdi mdi-plus mr-2"></i>Add New Parent Menu</p>
+        <button class="delete jb-modal-close" aria-label="close"></button>
+      </header>
+      <div id="msg_new"></div>
+      <section class="modal-card-body">
+        <div class="field">
+          <label class="label">Name</label>
+          <div class="control">
+            <input id="menu_name_new" class="input" type="text" placeholder="Menu name">
+          </div>
+          <p class="help has-text-left">Create name for your menu</p>
+        </div>
+        <div class="field">
+          <label class="label">Type</label>
+          <div class="control">
+            <select id="menu_type_new" class="input">
+              <option value="link">Link</option>
+              <option value="colapse">Colapse</option>
+            </select>
+          </div>
+          <p class="help has-text-left">There is only two type of menu, link or colapse, choose only one.</p>
+        </div>
+        <div class="field">
+          <label class="label">Scope</label>
+          <div class="control">
+            <input id="menu_scope_new" class="input" type="text" placeholder="admin, member">
+          </div>
+          <p class="help has-text-left">Use commas to separate user scope.</p>
+        </div>
+        <div class="field">
+          <label class="label">Url</label>
+          <div class="control">
+            <input id="menu_url_new" class="input" type="text" placeholder="Menu url">
+          </div>
+          <p class="help has-text-left">Doesn't need <%=it.baseUrl%>, Example: /dashboard.</p>
+        </div>
+        <div class="field">
+          <label class="label">Position</label>
+          <div class="control">
+            <input id="menu_position_new" class="input" type="text" placeholder="Menu position">
+          </div>
+          <p class="help has-text-left">Set position order for your menu.</p>
+        </div>
+        <div class="field">
+          <label class="label">Icon</label>
+          <div class="control">
+            <input id="menu_icon_new" class="input" type="text" placeholder="mdi mdi-desktop-mac">
+          </div>
+          <p class="help has-text-left">Set icon for your menu.</p>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button onclick="submitNew()" class="button is-dark">Submit</button>
+        <button class="button jb-modal-close">Cancel</button>
+      </footer>
+    </div>
+    <button class="modal-close is-large jb-modal-close" aria-label="close"></button>
+  </div>
+
+  <div id="parent-modal" class="modal">
+    <div class="modal-background jb-modal-close"></div>
+    <div class="modal-card fix-modal">
+      <header class="modal-card-head">
+        <p class="modal-card-title"><i class="mdi mdi-pencil-outline mr-2"></i>Edit Parent Menu</p>
+        <button class="delete jb-modal-close" aria-label="close"></button>
+      </header>
+      <div id="msg_parent"></div>
+      <section class="modal-card-body">
+        <div class="field" hidden>
+          <label class="label">ID</label>
+          <div class="control">
+            <input id="menu_id" class="input" type="text" placeholder="Normal input" readonly>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Name</label>
+          <div class="control">
+            <input id="menu_name" class="input" type="text" placeholder="Menu name">
+          </div>
+          <p class="help has-text-left">Create name for your menu</p>
+        </div>
+        <div class="field">
+          <label class="label">Type</label>
+          <div class="control">
+            <select id="menu_type" class="input">
+              <option value="link">Link</option>
+              <option value="colapse">Colapse</option>
+            </select>
+          </div>
+          <p class="help has-text-left">There is only two type of menu, link or colapse, choose only one.</p>
+        </div>
+        <div class="field">
+          <label class="label">Scope</label>
+          <div class="control">
+            <input id="menu_scope" class="input" type="text" placeholder="admin, member">
+          </div>
+          <p class="help has-text-left">Use commas to separate user scope.</p>
+        </div>
+        <div class="field">
+          <label class="label">Url</label>
+          <div class="control">
+            <input id="menu_url" class="input" type="text" placeholder="Menu url">
+          </div>
+          <p class="help has-text-left">Doesn't need <%=it.baseUrl%>, Example: /dashboard.</p>
+        </div>
+        <div class="field">
+          <label class="label">Position</label>
+          <div class="control">
+            <input id="menu_position" class="input" type="text" placeholder="Menu position">
+          </div>
+          <p class="help has-text-left">Set position order for your menu.</p>
+        </div>
+        <div class="field">
+          <label class="label">Icon</label>
+          <div class="control">
+            <input id="menu_icon" class="input" type="text" placeholder="mdi mdi-desktop-mac">
+          </div>
+          <p class="help has-text-left">Set icon for your menu.</p>
+        </div>
+        <div class="field">
+          <label class="label">Status</label>
+          <div class="control">
+            <select id="menu_status" class="input">
+              <option value="true">Activated</option>
+              <option value="false">Disabled</option>
+            </select>
+          </div>
+        </div>
+      </section>
+      <footer class="modal-card-foot">
+        <button onclick="submitParent()" class="button is-dark">Submit</button>
+        <button class="button jb-modal-close">Cancel</button>
+      </footer>
+    </div>
+    <button class="modal-close is-large jb-modal-close" aria-label="close"></button>
+  </div>
+
+  <div id="child-modal" class="modal">
     <div class="modal-background jb-modal-close"></div>
     <div class="modal-card fix-modal">
       <header class="modal-card-head">
@@ -97,9 +240,6 @@
   <script>
     var datatable;
     var dt = [];
-    var pageNow = 1;
-    var itemPerPage = 5;
-    var totalPage = 0;
     getToken('<%=it.baseUrl%>', function(token) {
       // If have no token, redirect to login
       if(!token) return location = '<%=it.baseUrl%>'+'/login';
@@ -110,15 +250,16 @@
       });
       
       loadData('<%=it.baseUrl%>',token, function(err,data) {
-        if(!err) searchData('',pageNow,itemPerPage);
+        if(!err) searchData('',1,10);
       });
 
       datatable = new Reef('#datatable', {
         data: {
           table : [],
           message: '',
-          pageNow: pageNow,
-          totalPage: totalPage
+          pageNow: 1,
+          totalPage: 0,
+          itemPerPage: 5
         },
         template: function(props) {
           if(props.table.length > 0) {
@@ -134,6 +275,7 @@
                     <th>Scope</th>
                     <th>Url</th>
                     <th>Position</th>
+                    <th>Status</th>
                     <th>Created</th>
                     <th>Updated</th>
                   </tr>
@@ -142,24 +284,25 @@
                   ${props.table.map(function(item, index) {
                     var num = (index+1);
                     return `<tr>
-                      <td data-label="No">${num+((props.pageNow-1)*itemPerPage)}</td>
+                      <td data-label="No">${num+((props.pageNow-1)*props.itemPerPage)}</td>
                       <td data-label="ID">${item.id}</td>
                       <td data-label="Name">${item.name}</td>
                       <td data-label="Type">${item.type}</td>
                       <td data-label="Scope">${item.scope}</td>
                       <td data-label="Url">${item.url}</td>
                       <td data-label="Position">${item.position}</td>
+                      <td data-label="Position">${(item.status)? '<span class="tag is-success">Activated</span>':'<span class="tag is-danger">Disabled</span>'}</td>
                       <td data-label="Created">${moment(item.created_at).format('YYYY-MM-DD HH:mm:ss')}</td>
                       <td data-label="Created">${(item.updated_at ? moment(item.updated_at).format('YYYY-MM-DD HH:mm:ss') : '')}</td>
                       <td class="is-actions-cell">
                         <div class="buttons is-right">
-                          <button class="button is-small is-primary" type="button" title="Edit Parent Menu">
+                          <button class="button is-small is-primary" type="button" title="Edit Parent Menu" onclick="openModal('parent-modal','${item.id}')">
                             <span class="icon"><i class="mdi mdi-pencil-outline"></i></span>
                           </button>
-                          <button class="button is-small is-info" type="button" title="Edit Child Menu">
+                          ${(item.type === 'colapse' ? `<button class="button is-small is-info" type="button" title="Edit Child Menu" onclick="openModal('child-modal')">
                             <span class="icon"><i class="mdi mdi-playlist-edit"></i></span>
-                          </button>
-                          <button class="button is-small is-danger jb-modal" onclick="openModal('sample-modal')" type="button" title="Delete Menu">
+                          </button>` : '')}
+                          <button class="button is-small is-danger" type="button" title="Delete Menu" onclick="submitDelete('${item.id}')">
                             <span class="icon"><i class="mdi mdi-trash-can"></i></span>
                           </button>
                         </div>
@@ -174,8 +317,8 @@
                   <div class="level-left">
                     <div class="level-item">
                       <div class="buttons has-addons">
-                        <button type="button" class="button" onclick="prevPage()">Prev</button>
-                        <button type="button" class="button" onclick="nextPage()">Next</button>
+                        <button type="button" class="button" onclick="prevPage()"><i class="mdi mdi-arrow-left mr-2"></i>Prev</button>
+                        <button type="button" class="button" onclick="nextPage()">Next<i class="mdi mdi-arrow-right ml-2"></i></button>
                       </div>
                     </div>
                   </div>
@@ -251,51 +394,209 @@
           datatable.data.table = redata;
           datatable.data.pageNow = pageNow;
           datatable.data.totalPage = retotalPage;
-          totalPage = retotalPage;
+          datatable.data.itemPerPage = itemPerPage;
         } else {
           datatable.data.table = [];
           datatable.data.pageNow = 0;
           datatable.data.totalPage = 0;
-          totalPage = 0;
           datatable.data.message = 'Records not found!';
         }
       } else {
         datatable.data.table = [];
         datatable.data.pageNow = 0;
         datatable.data.totalPage = 0;
-        totalPage = 0;
         datatable.data.message = 'Records not found!';
       }
     }
 
     function nextPage() {
-      if(pageNow < totalPage) {
-        pageNow = pageNow + 1;
-        searchData(Dom.id('search').value,pageNow,itemPerPage);
+      if(datatable.data.pageNow < datatable.data.totalPage) {
+        datatable.data.pageNow = datatable.data.pageNow + 1;
+        searchData(Dom.id('search').value,datatable.data.pageNow,datatable.data.itemPerPage);
       }
     }
 
     function prevPage() {
-      if(pageNow > 1) {
-        pageNow = pageNow - 1;
-        searchData(Dom.id('search').value,pageNow,itemPerPage);
+      if(datatable.data.pageNow > 1) {
+        datatable.data.pageNow = datatable.data.pageNow - 1;
+        searchData(Dom.id('search').value,datatable.data.pageNow,datatable.data.itemPerPage);
       }
     }
 
     Dom.id('search').addEventListener('keyup', function(e) {
       if (e.keyCode === 13) {
-        searchData(this.value, 1, itemPerPage);
+        datatable.data.pageNow = 1;
+        searchData(this.value, datatable.data.pageNow, datatable.data.itemPerPage);
       }
     })
 
-    function openModal(el) {
-      document.getElementById(el).classList.add('is-active');
-      document.documentElement.classList.add('is-clipped');
+    function openModal(el, id) {
+      Dom.addClass(Dom.id(el),'is-active');
+      Dom.addClass(Dom.id(el),'is-clipped');
+      switch(true) {
+        case (el === 'parent-modal') :
+          Dom.id('msg_parent').innerHTML = '';
+          var cdata = getData(id)[0];
+          Dom.id('menu_id').value = id;
+          Dom.id('menu_name').value = cdata.name;
+          Dom.id('menu_type').value = cdata.type;
+          Dom.id('menu_scope').value = cdata.scope;
+          Dom.id('menu_url').value = cdata.url;
+          Dom.id('menu_position').value = cdata.position;
+          Dom.id('menu_status').value = cdata.status;
+          Dom.id('menu_icon').value = cdata.icon;
+          break;
+        default :
+          Dom.id('msg_new').innerHTML = '';
+      }
     }
 
-    function closeModal(el) {
-      el.classList.remove('is-active');
-      document.documentElement.classList.remove('is-clipped');
+    function getData(id) {
+      var nosql = new FlyJson();
+      var db = nosql.deepClone(datatable.data);
+      return nosql.set(db.table).where('id', id).exec();
+    }
+
+    document.addEventListener('reload', function(e) {
+      if (e.detail.success) {
+        dt = [];
+        getToken('<%=it.baseUrl%>', function(token) {
+          // If have no token, redirect to login
+          if(!token) return location = '<%=it.baseUrl%>'+'/login';
+          loadData('<%=it.baseUrl%>',token, function(err,data) {
+            if(!err) searchData(Dom.id('search').value,datatable.data.pageNow,datatable.data.itemPerPage);
+          });
+        });
+      }
+    })
+
+    function submitNew() {
+      getToken('<%=it.baseUrl%>', function(token) {
+        // If have no token, redirect to login
+        if(!token) return location = '<%=it.baseUrl%>'+'/login';
+        ajax({
+          headers: {
+            'x-token': token
+          }
+        })
+        .post('<%=it.baseUrl%>/api/menu/parent/add', {
+          name: Dom.id('menu_name_new').value,
+          url: Dom.id('menu_url_new').value,
+          type: Dom.id('menu_type_new').value,
+          scope: Dom.id('menu_scope_new').value,
+          position: Dom.id('menu_position_new').value,
+          icon: Dom.id('menu_icon_new').value
+        })
+        .then(function (response, xhr) {
+          if (response.statusCode === 200) {
+            Dom.id('msg_new').innerHTML = `<article class="message is-success">
+                <div class="message-body">
+                  ${response.message}
+                </div>
+              </article>`;
+            // Tell the datatables to reload the data
+            Reef.emit(document, 'reload', {
+              success: true
+            });
+          }
+        })
+        .catch(function (response, xhr) {
+          console.log(xhr.responseText);
+          Dom.id('msg_new').innerHTML = `<article class="message is-danger">
+              <div class="message-body">
+                ${xhr.responseText}
+              </div>
+            </article>`;
+        })
+      });
+    }
+
+    function submitParent() {
+      getToken('<%=it.baseUrl%>', function(token) {
+        // If have no token, redirect to login
+        if(!token) return location = '<%=it.baseUrl%>'+'/login';
+        ajax({
+          headers: {
+            'x-token': token
+          }
+        })
+        .post('<%=it.baseUrl%>/api/menu/parent/update', {
+          id: Dom.id('menu_id').value,
+          name: Dom.id('menu_name').value,
+          url: Dom.id('menu_url').value,
+          type: Dom.id('menu_type').value,
+          scope: Dom.id('menu_scope').value,
+          position: Dom.id('menu_position').value,
+          status: Dom.id('menu_status').value,
+          icon: Dom.id('menu_icon').value
+        })
+        .then(function (response, xhr) {
+          if (response.statusCode === 200) {
+            Dom.id('msg_parent').innerHTML = `<article class="message is-success">
+                <div class="message-body">
+                  ${response.message}
+                </div>
+              </article>`;
+            // Tell the datatables to reload the data
+            Reef.emit(document, 'reload', {
+              success: true
+            });
+          }
+        })
+        .catch(function (response, xhr) {
+          console.log(xhr.responseText);
+          Dom.id('msg_parent').innerHTML = `<article class="message is-danger">
+              <div class="message-body">
+                ${xhr.responseText}
+              </div>
+            </article>`;
+        })
+      });
+    }
+
+    function submitDelete(id) {
+      getToken('<%=it.baseUrl%>', function(token) {
+        // If have no token, redirect to login
+        if(!token) return location = '<%=it.baseUrl%>'+'/login';
+        Swal.fire({
+          title: 'Are you sure want to delete this?',
+          showCancelButton: true,
+          confirmButtonText: `Delete`,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            ajax({
+              headers: {
+                'x-token': token
+              }
+            })
+            .post('<%=it.baseUrl%>/api/menu/parent/delete', {
+              id: id
+            })
+            .then(function (response, xhr) {
+              if (response.statusCode === 200) {
+                Swal.fire('Delete Success!', '', 'success')
+                Dom.id('msg_new').innerHTML = `<article class="message is-success">
+                    <div class="message-body">
+                      ${response.message}
+                    </div>
+                  </article>`;
+                // Tell the datatables to reload the data
+                Reef.emit(document, 'reload', {
+                  success: true
+                });
+              }
+            })
+            .catch(function (response, xhr) {
+              console.log(xhr.responseText);
+              Dom.id('msg_new').innerHTML = `<article class="message is-danger">
+                  <div class="message-body">
+                    ${xhr.responseText}
+                  </div>
+                </article>`;
+            })
+          }
+        })
+      });
     }
   </script>
 </body>
