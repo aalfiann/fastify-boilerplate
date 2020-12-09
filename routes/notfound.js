@@ -1,17 +1,14 @@
 'use strict'
 
-const config = require('../config.js')
-const helper = require('../lib/helper.js')
+const config = require('../config')
+const helper = require('../lib/helper')
+const handler = require('../lib/handler')
 const pjson = require('../package.json')
 
 async function handlerNotFound (server, options) {
   server.setNotFoundHandler(async function (request, reply) {
     if (request.raw.url.indexOf('/api/') !== -1) {
-      reply.code(404).send({
-        message: 'Route ' + request.method + ':' + request.url + ' not found!',
-        error: 'Not Found',
-        statusCode: 404
-      })
+      handler.notFound(reply, 'Route ' + request.method + ':' + request.url + ' not found!')
     } else {
       const html = await server.view('404', {
         baseUrl: config.baseUrl,
@@ -24,7 +21,7 @@ async function handlerNotFound (server, options) {
         tracker: config.tracker,
         version: pjson.version
       })
-      reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
+      handler.html(reply, html)
     }
     await reply
   })

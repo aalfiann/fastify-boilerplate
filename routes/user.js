@@ -3,11 +3,13 @@
 const { v4: uuidv4 } = require('uuid')
 const moment = require('moment')
 const helper = require('../lib/password')
-const mongooseHandler = require('../lib/mongoose_handler.js')
+const handler = require('../lib/handler')
+const mongooseHandler = require('../lib/mongoose_handler')
 const User = require('../models/user')
 const ForgotPassword = require('../models/forgot_password')
 const password = require('../lib/password')
 const schema = require('../schemas/user')
+const authSchema = require('../schemas/auth')
 const obase64 = require('../lib/obase64')
 const config = require('../config')
 
@@ -23,14 +25,11 @@ async function userRoute (server, options) {
     }
 
     await mongooseHandler.connect().catch(err => {
-      return reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      return handler.error(reply, err.message)
     })
 
     const result = await User.estimatedDocumentCount().catch(err => {
-      return reply.code(400).send(mongooseHandler.errorBuilder(err))
+      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
     })
 
     if (result === 0) {
@@ -40,12 +39,9 @@ async function userRoute (server, options) {
     }
 
     User(user).save().then(done => {
-      reply.code(200).send({
-        message: 'Register new user success!',
-        statusCode: 200
-      })
+      handler.success(reply, 'Register new user success!')
     }).catch(err => {
-      reply.code(400).send(mongooseHandler.errorBuilder(err))
+      handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
     })
     await reply
   })
@@ -54,10 +50,7 @@ async function userRoute (server, options) {
     let token = ''
 
     await mongooseHandler.connect().catch(err => {
-      return reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      return handler.error(reply, err.message)
     })
 
     const result = await User.find({
@@ -66,7 +59,7 @@ async function userRoute (server, options) {
         { email: request.body.username }
       ]
     }).catch(err => {
-      return reply.code(400).send(mongooseHandler.errorBuilder(err))
+      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
     })
 
     if (result.length > 0) {
@@ -79,61 +72,35 @@ async function userRoute (server, options) {
       })
 
       const pass = await password.compare(request.body.password, result[0].hash).catch(err => {
-        return reply.code(500).send({
-          message: err.message,
-          statusCode: 500
-        })
+        return handler.error(reply, err.message)
       })
 
       if (pass) {
         await server.jwt.verify(token, function (err, decoded) {
           if (err) {
-            return reply.code(403).send({
-              message: err.message,
-              statusCode: 400,
-              success: pass
-            })
+            return handler.badRequest(reply, err.message, { success: pass })
           };
-          reply.code(200).send({
-            message: 'Login user success!',
-            statusCode: 200,
-            success: pass,
-            token: token,
-            expire: decoded.exp
-          })
+          handler.success(reply, 'Login user success!', { success: pass, token: token, expire: decoded.exp })
         })
       } else {
-        return reply.code(403).send({
-          message: 'Wrong username or password!',
-          statusCode: 403,
-          success: false
-        })
+        return handler.forbidden(reply, 'Wrong username or password!', { success: false })
       }
     } else {
-      reply.code(403).send({
-        message: 'Wrong username or password!',
-        statusCode: 403,
-        success: false
-      })
+      handler.forbidden(reply, 'Wrong username or password!', { success: false })
     }
     await reply
   })
 
   server.get('/api/user/check-username/:username', { schema: schema.checkUsername }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
-      return reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      return handler.error(reply, err.message)
     })
 
     const result = await User.find({ username: request.params.username }).catch(err => {
-      return reply.code(400).send(mongooseHandler.errorBuilder(err))
+      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
     })
 
-    reply.code(200).send({
-      message: (result.length > 0) ? 'Username is not available!' : 'Username is OK!',
-      statusCode: 200,
+    handler.success(reply, (result.length > 0) ? 'Username is not available!' : 'Username is OK!', {
       data: {
         total: result.length
       }
@@ -143,19 +110,14 @@ async function userRoute (server, options) {
 
   server.get('/api/user/check-email/:email', { schema: schema.checkEmail }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
-      return reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      return handler.error(reply, err.message)
     })
 
     const result = await User.find({ email: request.params.email }).catch(err => {
-      return reply.code(400).send(mongooseHandler.errorBuilder(err))
+      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
     })
 
-    reply.code(200).send({
-      message: (result.length > 0) ? 'Email address is not available!' : 'Email address is OK!',
-      statusCode: 200,
+    handler.success(reply, (result.length > 0) ? 'Email address is not available!' : 'Email address is OK!', {
       data: {
         total: result.length
       }
@@ -172,20 +134,17 @@ async function userRoute (server, options) {
     }
 
     await mongooseHandler.connect().catch(err => {
-      return reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      return handler.error(reply, err.message)
     })
 
     const result = await User.find({ email: request.body.email }).catch(err => {
-      return reply.code(400).send(mongooseHandler.errorBuilder(err))
+      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
     })
 
     if (result.length > 0) {
       forgotpass.user_id = result[0].id
       const done = await ForgotPassword(forgotpass).save().catch(err => {
-        return reply.code(400).send(mongooseHandler.errorBuilder(err))
+        return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
       })
 
       if (done) {
@@ -204,23 +163,13 @@ async function userRoute (server, options) {
           html: htmlEmail
         }, (err, info) => {
           if (err) {
-            return reply.code(400).send({
-              message: 'Send Message Failed!',
-              error: err,
-              statusCode: 400
-            })
+            return handler.badRequest(reply, 'Send Message Failed!', { error: err })
           }
-          reply.code(200).send({
-            statusCode: 200,
-            message: 'Reset password link has already sent to your email.',
-            success: true
-          })
+          handler.success(reply, 'Reset password link has already sent to your email.', { success: true })
         })
       }
     } else {
-      return reply.code(200).send({
-        statusCode: 200,
-        message: 'Email address is not exists.',
+      return handler.success(reply, 'Email address is not exists.', {
         data: {
           total: result.length
         },
@@ -232,10 +181,7 @@ async function userRoute (server, options) {
 
   server.post('/api/user/reset-password', { schema: schema.resetPassword }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
-      return reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      return handler.error(reply, err.message)
     })
 
     const result = await ForgotPassword.find({
@@ -244,7 +190,7 @@ async function userRoute (server, options) {
         { status: false }
       ]
     }).catch(err => {
-      return reply.code(400).send(mongooseHandler.errorBuilder(err))
+      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
     })
 
     if (result.length > 0) {
@@ -253,7 +199,7 @@ async function userRoute (server, options) {
         hash: await helper.generate(request.body.password),
         updated_at: moment().format('x')
       }, { new: true }).catch(err => {
-        return reply.code(400).send(mongooseHandler.errorBuilder(err))
+        return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
       })
 
       if (done) {
@@ -261,36 +207,109 @@ async function userRoute (server, options) {
         const reupdate = await ForgotPassword.findOneAndUpdate({ id: request.body.id }, {
           status: true
         }, { new: true }).catch(err => {
-          return reply.code(400).send(mongooseHandler.errorBuilder(err))
+          return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
         })
 
         if (reupdate) {
-          reply.code(200).send({
-            message: 'Your password has been succeessfully changed!',
-            statusCode: 200,
-            success: true
-          })
+          handler.success(reply, 'Your password has been successfully changed!', { success: true })
         } else {
-          reply.code(200).send({
-            message: 'Failed to reset your password! Please contact us, something went wrong and we need more futher information from you.',
-            statusCode: 200,
-            success: false
-          })
+          handler.success(reply, 'Failed to reset your password! Please contact us, something went wrong and we need more futher information from you.', { success: false })
         }
       } else {
-        reply.code(200).send({
-          message: 'Failed to reset your password! Please contact us, something went wrong and we need more futher information from you.',
-          statusCode: 200,
-          success: false
-        })
+        handler.success(reply, 'Failed to reset your password! Please contact us, something went wrong and we need more futher information from you.', { success: false })
       }
     } else {
-      reply.code(200).send({
-        message: 'The request to reset password has been expired!',
-        statusCode: 200,
-        success: false
-      })
+      handler.success(reply, 'The request to reset password has been expired!', { success: false })
     }
+    await reply
+  })
+
+  server.post('/api/user/change-password', {
+    schema: {
+      headers: authSchema.auth,
+      body: schema.changePassword
+    },
+    preHandler: server.auth([
+      server.verifyToken
+    ])
+  }, async (request, reply) => {
+    await mongooseHandler.connect().catch(err => {
+      return handler.error(reply, err.message)
+    })
+
+    // get hash
+    const decoded = server.jwt.decode(request.headers['x-token'])
+    const found = await User.find({
+      id: decoded.uid
+    }).catch(err => {
+      return handler.mongooseError(mongooseHandler.errorBuilder(err))
+    })
+
+    if (found) {
+      // compare password
+      const pass = await password.compare(request.body.oldpassword, found[0].hash).catch(err => {
+        return handler.error(reply, err.message)
+      })
+
+      if (pass) {
+        // update password
+        const updated = await User.findOneAndUpdate({
+          id: decoded.uid
+        }, {
+          hash: await password.generate(request.body.newpassword)
+        }, { new: true }).catch(err => {
+          return handler.mongooseError(mongooseHandler.errorBuilder(err))
+        })
+        if (updated) {
+          handler.success(reply, 'Your password successfully changed!', { success: true })
+        } else {
+          handler.success(reply, 'Failed to change your password!', { success: false })
+        }
+      } else {
+        handler.success(reply, 'Your old password is wrong!', { success: false })
+      }
+    } else {
+      handler.forbidden(reply, 'Invalid token!', { success: false })
+    }
+
+    // reply.code(200).send(decoded)
+    // await server.jwt.verify(request.headers['x-token'], function (err, decoded) {
+    //   if (err) return console.log(err)
+    //   reply.code(200).send(decoded)
+    // })
+
+    // const found = await User.find({ username: request.body.username }).catch(err => {
+    //   return reply.code(400).send(mongooseHandler.errorBuilder(err))
+    // })
+
+    // if (found) {
+    //   // reupdate to make expired this request reset password
+    //   const reupdate = await ForgotPassword.findOneAndUpdate({ id: request.body.id }, {
+    //     status: true
+    //   }, { new: true }).catch(err => {
+    //     return reply.code(400).send(mongooseHandler.errorBuilder(err))
+    //   })
+
+    //   if (reupdate) {
+    //     reply.code(200).send({
+    //       message: 'Your password has been succeessfully changed!',
+    //       statusCode: 200,
+    //       success: true
+    //     })
+    //   } else {
+    //     reply.code(200).send({
+    //       message: 'Failed to reset your password! Please contact us, something went wrong and we need more futher information from you.',
+    //       statusCode: 200,
+    //       success: false
+    //     })
+    //   }
+    // } else {
+    //   reply.code(200).send({
+    //     message: 'Failed to reset your password! Please contact us, something went wrong and we need more futher information from you.',
+    //     statusCode: 200,
+    //     success: false
+    //   })
+    // }
     await reply
   })
 }

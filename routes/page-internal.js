@@ -1,7 +1,8 @@
 'use strict'
 
-const config = require('../config.js')
-const helper = require('../lib/helper.js')
+const config = require('../config')
+const helper = require('../lib/helper')
+const handler = require('../lib/handler')
 const pjson = require('../package.json')
 
 async function pageInternalRoute (server, options) {
@@ -31,7 +32,7 @@ async function pageInternalRoute (server, options) {
     const newTemplateData = { ...templateData }
     newTemplateData.siteTitle = config.siteTitle
     const html = await server.view('dashboard-admin', newTemplateData)
-    await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
+    await handler.html(reply, html)
   })
 
   server.get('/dashboard', { onRequest: server.useHtmlCache }, async (request, reply) => {
@@ -39,12 +40,17 @@ async function pageInternalRoute (server, options) {
     const newTemplateData = { ...templateData }
     newTemplateData.siteTitle = config.siteTitle
     const html = await server.view('dashboard', newTemplateData)
-    await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
+    await handler.html(reply, html)
   })
 
   server.get('/setting/menu', { onRequest: server.useHtmlCache }, async (request, reply) => {
     const html = await server.view('menu', templateData)
-    await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
+    await handler.html(reply, html)
+  })
+
+  server.get('/change-password', { onRequest: server.useHtmlCache }, async (request, reply) => {
+    const html = await server.view('change-password', templateData)
+    await handler.html(reply, html)
   })
 }
 

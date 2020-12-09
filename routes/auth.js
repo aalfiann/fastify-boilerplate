@@ -1,6 +1,7 @@
 'use strict'
 
 const schema = require('../schemas/auth')
+const handler = require('../lib/handler')
 
 async function authRoute (server, options) {
   server.post('/api/auth/verify', {
@@ -11,9 +12,7 @@ async function authRoute (server, options) {
       server.verifyToken
     ])
   }, async (request, reply) => {
-    await reply.code(200).send({
-      message: 'Verify authentication success!',
-      statusCode: 200,
+    await handler.success(reply, 'Verify authentication success!', {
       jwt: server.jwt.verify(request.headers['x-token'])
     })
   })

@@ -6,12 +6,15 @@
 Fastify Boilerplate with JWT, Mongoose and Bulma
 
 ### Features
-- Login
-- Menu Management
-- User Management
-- Forgot Password
+- Login             >> done
+- Logout            >> done
+- Forgot Password   >> done
+- Menu Management   >> done
+- Change Password
+- Manage Profile
+- User Management   
 - Admin Dashboard
-- Logout
+
 
 ### Concepts
 Our goal is to create a web application that scales well (horizontal scale), strong in high traffic.

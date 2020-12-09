@@ -2,7 +2,8 @@
 
 const { v4: uuidv4 } = require('uuid')
 const moment = require('moment')
-const mongooseHandler = require('../lib/mongoose_handler.js')
+const handler = require('../lib/handler')
+const mongooseHandler = require('../lib/mongoose_handler')
 const Menu = require('../models/menu')
 const authSchema = require('../schemas/auth')
 const menuSchema = require('../schemas/menu')
@@ -19,10 +20,7 @@ async function apiRoute (server, options) {
     ])
   }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
-      return reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      return handler.error(reply, err.message)
     })
 
     const data = {
@@ -38,14 +36,10 @@ async function apiRoute (server, options) {
     }
 
     const done = await Menu(data).save().catch(err => {
-      return reply.code(400).send(mongooseHandler.errorBuilder(err))
+      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
     })
 
-    await reply.code(200).send({
-      message: 'Add new menu parent success',
-      statusCode: 200,
-      data: done
-    })
+    await handler.success(reply, 'Add new menu parent success!', { data: done })
   })
 
   server.post('/api/menu/parent/update', {
@@ -58,10 +52,7 @@ async function apiRoute (server, options) {
     ])
   }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
-      return reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      return handler.error(reply, err.message)
     })
 
     const done = await Menu.findOneAndUpdate({ id: request.body.id }, {
@@ -74,14 +65,10 @@ async function apiRoute (server, options) {
       icon: request.body.icon,
       updated_at: moment().format('x')
     }, { new: true }).catch(err => {
-      return reply.code(400).send(mongooseHandler.errorBuilder(err))
+      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
     })
 
-    await reply.code(200).send({
-      message: 'Update menu parent success',
-      statusCode: 200,
-      data: done
-    })
+    await handler.success(reply, 'Update menu parent success', { data: done })
   })
 
   server.post('/api/menu/parent/delete', {
@@ -94,21 +81,14 @@ async function apiRoute (server, options) {
     ])
   }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
-      return reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      return handler.error(reply, err.message)
     })
 
     const done = await Menu.findOneAndDelete({ id: request.body.id }).catch(err => {
-      return reply.code(400).send(mongooseHandler.errorBuilder(err))
+      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
     })
 
-    await reply.code(200).send({
-      message: 'Delete menu parent success',
-      statusCode: 200,
-      data: done
-    })
+    await handler.success(reply, 'Delete menu parent success!', { data: done })
   })
 
   server.post('/api/menu/parent/set-menu-child', {
@@ -121,24 +101,17 @@ async function apiRoute (server, options) {
     ])
   }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
-      return reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      return handler.error(reply, err.message)
     })
 
     const done = await Menu.findOneAndUpdate({ id: request.body.id }, {
       child: request.body.child,
       updated_at: moment().format('x')
     }, { new: true }).catch(err => {
-      return reply.code(400).send(mongooseHandler.errorBuilder(err))
+      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
     })
 
-    await reply.code(200).send({
-      message: 'Set menu child success',
-      statusCode: 200,
-      data: done
-    })
+    await handler.success(reply, 'Set menu child success!', { data: done })
   })
 
   server.post('/api/menu/parent/set-status', {
@@ -151,24 +124,17 @@ async function apiRoute (server, options) {
     ])
   }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
-      return reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      return handler.error(reply, err.message)
     })
 
     const done = await Menu.findOneAndUpdate({ id: request.body.id }, {
       status: request.body.status,
       updated_at: moment().format('x')
     }, { new: true }).catch(err => {
-      return reply.code(400).send(mongooseHandler.errorBuilder(err))
+      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
     })
 
-    await reply.code(200).send({
-      message: 'Set status menu parent success',
-      statusCode: 200,
-      data: done
-    })
+    await handler.success(reply, 'Set status menu parent success!', { data: done })
   })
 
   server.get('/api/menu/parent/list', {
@@ -180,21 +146,14 @@ async function apiRoute (server, options) {
     ])
   }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
-      return reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      return handler.error(reply, err.message)
     })
 
     const result = await Menu.find({}).sort({ position: 'asc' }).catch(err => {
-      return reply.code(400).send(mongooseHandler.errorBuilder(err))
+      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
     })
 
-    await reply.code(200).send({
-      message: 'Get list menu parent success',
-      statusCode: 200,
-      data: result
-    })
+    await handler.success(reply, 'Get list menu parent success!', { data: result })
   })
 
   server.get('/api/menu/parent/list-by-role', {
@@ -207,23 +166,16 @@ async function apiRoute (server, options) {
   }, async (request, reply) => {
     const userRole = obase64.decode(server.jwt.verify(request.headers['x-token']).role)
     await mongooseHandler.connect().catch(err => {
-      return reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      return handler.error(reply, err.message)
     })
 
     const result = await Menu.find({
       $where: 'function() { return this.scope.toString().match(/' + userRole + '/i) != null; }'
     }).sort({ position: 'asc' }).catch(err => {
-      return reply.code(400).send(mongooseHandler.errorBuilder(err))
+      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
     })
 
-    await reply.code(200).send({
-      message: 'Get list menu parent by role success',
-      statusCode: 200,
-      data: result
-    })
+    await handler.success(reply, 'Get list menu parent by role success!', { data: result })
   })
 }
 

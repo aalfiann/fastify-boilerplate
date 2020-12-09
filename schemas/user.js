@@ -62,11 +62,21 @@ const resetPassword = {
   }
 }
 
+const changePassword = {
+  type: 'object',
+  properties: {
+    oldpassword: { type: 'string', minLength: 6, maxLength: 20 },
+    newpassword: { type: 'string', minLength: 6, maxLength: 20 }
+  },
+  required: ['oldpassword', 'newpassword']
+}
+
 module.exports = {
   register,
   login,
   checkUsername,
   checkEmail,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  changePassword
 }

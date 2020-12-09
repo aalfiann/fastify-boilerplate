@@ -1,8 +1,9 @@
 'use strict'
 
-const mongooseHandler = require('../lib/mongoose_handler.js')
+const mongooseHandler = require('../lib/mongoose_handler')
 const Contact = require('../models/contact')
 const schema = require('../schemas/contact')
+const handler = require('../lib/handler')
 
 async function dbRoute (server, options) {
   server.post('/db/add-contact', { schema: schema.addContact }, async (request, reply) => {
@@ -13,18 +14,12 @@ async function dbRoute (server, options) {
     }
     mongooseHandler.connect().then(done => {
       Contact(contact).save().then(done => {
-        reply.code(200).send({
-          message: 'Add data user contact success!',
-          statusCode: 200
-        })
+        handler.success(reply, 'Add data user contact success!')
       }).catch(err => {
-        reply.code(400).send(mongooseHandler.errorBuilder(err))
+        handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
       })
     }).catch(err => {
-      reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      handler.error(reply, err.message)
     })
     await reply
   })
@@ -39,19 +34,12 @@ async function dbRoute (server, options) {
       }, {
         new: true
       }).then(done => {
-        reply.code(200).send({
-          message: 'Edit data user contact success!',
-          statusCode: 200,
-          data: done
-        })
+        handler.success(reply, 'Edit data user contact success!', { data: done })
       }).catch(err => {
-        reply.code(400).send(mongooseHandler.errorBuilder(err))
+        handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
       })
     }).catch(err => {
-      reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      handler.error(reply, err.message)
     })
     await reply
   })
@@ -59,19 +47,12 @@ async function dbRoute (server, options) {
   server.get('/db/get-contact/:id', { schema: schema.getContact }, async (request, reply) => {
     mongooseHandler.connect().then(done => {
       Contact.find({ user_id: request.params.id }).sort({ user_id: 'desc' }).then(done => {
-        reply.code(200).send({
-          message: 'Get data user contact success!',
-          statusCode: 200,
-          data: done
-        })
+        handler.success(reply, 'Get data user contact success!', { data: done })
       }).catch(err => {
-        reply.code(400).send(mongooseHandler.errorBuilder(err))
+        handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
       })
     }).catch(err => {
-      reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      handler.error(reply, err.message)
     })
     await reply
   })
@@ -79,19 +60,12 @@ async function dbRoute (server, options) {
   server.get('/db/list-contact', async (request, reply) => {
     mongooseHandler.connect().then(done => {
       Contact.find({}).sort({ user_id: 'desc' }).then(done => {
-        reply.code(200).send({
-          message: 'List data user contact success!',
-          statusCode: 200,
-          data: done
-        })
+        handler.success(reply, 'List data user contact success!', { data: done })
       }).catch(err => {
-        reply.code(400).send(mongooseHandler.errorBuilder(err))
+        handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
       })
     }).catch(err => {
-      reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      handler.error(reply, err.message)
     })
     await reply
   })
@@ -103,19 +77,12 @@ async function dbRoute (server, options) {
       Contact.find({
         $where: 'function() { return (this.name.toString().match(/' + search + '/i) || this.address.toString().match(/' + search + '/i) ) != null; }'
       }).sort({ user_id: 'desc' }).then(done => {
-        reply.code(200).send({
-          message: 'Result search data user contact success!',
-          statusCode: 200,
-          data: done
-        })
+        handler.success(reply, 'Result search data user contact success!', { data: done })
       }).catch(err => {
-        reply.code(400).send(mongooseHandler.errorBuilder(err))
+        handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
       })
     }).catch(err => {
-      reply.code(500).send({
-        message: err.message,
-        statusCode: 500
-      })
+      handler.error(reply, err.message)
     })
     await reply
   })

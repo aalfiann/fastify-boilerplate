@@ -1,8 +1,9 @@
 'use strict'
 
-const config = require('../config.js')
+const config = require('../config')
 const moment = require('moment')
-const helper = require('../lib/helper.js')
+const helper = require('../lib/helper')
+const handler = require('../lib/handler')
 const pjson = require('../package.json')
 const mongooseHandler = require('../lib/mongoose_handler')
 const ForgotPassword = require('../models/forgot_password')
@@ -34,27 +35,27 @@ async function pageRoute (server, options) {
     const newTemplateData = { ...templateData }
     newTemplateData.siteTitle = config.siteTitle
     const html = await server.view('index', newTemplateData)
-    await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
+    await handler.html(reply, html)
   })
 
   server.get('/blank', { onRequest: server.useHtmlCache }, async (request, reply) => {
     const html = await server.view('blank', templateData)
-    await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
+    await handler.html(reply, html)
   })
 
   server.get('/register', { onRequest: server.useHtmlCache }, async (request, reply) => {
     const html = await server.view('register', templateData)
-    await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
+    await handler.html(reply, html)
   })
 
   server.get('/login', { onRequest: server.useHtmlCache }, async (request, reply) => {
     const html = await server.view('login', templateData)
-    await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
+    await handler.html(reply, html)
   })
 
   server.get('/forgot-password', { onRequest: server.useHtmlCache }, async (request, reply) => {
     const html = await server.view('forgot-password', templateData)
-    await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
+    await handler.html(reply, html)
   })
 
   server.get('/reset-password/:id', { onRequest: server.useHtmlCache }, async (request, reply) => {
@@ -91,7 +92,7 @@ async function pageRoute (server, options) {
     }
 
     const html = await server.view('reset-password', payload)
-    await reply.code(200).header('Content-Type', 'text/html; charset=utf-8').send(html)
+    await handler.html(reply, html)
   })
 }
 
