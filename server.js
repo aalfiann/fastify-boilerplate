@@ -148,6 +148,9 @@ const App = async () => {
   // Custom Not Found Handler
   server.register(require('./routes/notfound.js'))
 
+  // Reply Handler
+  server.register(require('./lib/fastify-reply-handler'))
+
   // Custom Error Handler
   server.setErrorHandler(async function (error, request, reply) {
     server.log.error(error)

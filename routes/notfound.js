@@ -2,13 +2,12 @@
 
 const config = require('../config')
 const helper = require('../lib/helper')
-const handler = require('../lib/handler')
 const pjson = require('../package.json')
 
 async function handlerNotFound (server, options) {
   server.setNotFoundHandler(async function (request, reply) {
     if (request.raw.url.indexOf('/api/') !== -1) {
-      handler.notFound(reply, 'Route ' + request.method + ':' + request.url + ' not found!')
+      reply.notFound('Route ' + request.method + ':' + request.url + ' not found!')
     } else {
       const html = await server.view('404', {
         baseUrl: config.baseUrl,
@@ -21,7 +20,7 @@ async function handlerNotFound (server, options) {
         tracker: config.tracker,
         version: pjson.version
       })
-      handler.html(reply, html)
+      reply.html(html, 404)
     }
     await reply
   })

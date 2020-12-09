@@ -2,7 +2,6 @@
 
 const config = require('../config')
 const helper = require('../lib/helper')
-const handler = require('../lib/handler')
 const pjson = require('../package.json')
 
 async function pageInternalRoute (server, options) {
@@ -32,7 +31,7 @@ async function pageInternalRoute (server, options) {
     const newTemplateData = { ...templateData }
     newTemplateData.siteTitle = config.siteTitle
     const html = await server.view('dashboard-admin', newTemplateData)
-    await handler.html(reply, html)
+    await reply.html(html)
   })
 
   server.get('/dashboard', { onRequest: server.useHtmlCache }, async (request, reply) => {
@@ -40,17 +39,17 @@ async function pageInternalRoute (server, options) {
     const newTemplateData = { ...templateData }
     newTemplateData.siteTitle = config.siteTitle
     const html = await server.view('dashboard', newTemplateData)
-    await handler.html(reply, html)
+    await reply.html(html)
   })
 
   server.get('/setting/menu', { onRequest: server.useHtmlCache }, async (request, reply) => {
     const html = await server.view('menu', templateData)
-    await handler.html(reply, html)
+    await reply.html(html)
   })
 
   server.get('/change-password', { onRequest: server.useHtmlCache }, async (request, reply) => {
     const html = await server.view('change-password', templateData)
-    await handler.html(reply, html)
+    await reply.html(html)
   })
 }
 

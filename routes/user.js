@@ -3,7 +3,6 @@
 const { v4: uuidv4 } = require('uuid')
 const moment = require('moment')
 const helper = require('../lib/password')
-const handler = require('../lib/handler')
 const mongooseHandler = require('../lib/mongoose_handler')
 const User = require('../models/user')
 const ForgotPassword = require('../models/forgot_password')
@@ -25,11 +24,11 @@ async function userRoute (server, options) {
     }
 
     await mongooseHandler.connect().catch(err => {
-      return handler.error(reply, err.message)
+      return reply.error(err.message)
     })
 
     const result = await User.estimatedDocumentCount().catch(err => {
-      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 
     if (result === 0) {
@@ -39,9 +38,9 @@ async function userRoute (server, options) {
     }
 
     User(user).save().then(done => {
-      handler.success(reply, 'Register new user success!')
+      reply.success('Register new user success!')
     }).catch(err => {
-      handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
+      reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
     await reply
   })
@@ -50,7 +49,7 @@ async function userRoute (server, options) {
     let token = ''
 
     await mongooseHandler.connect().catch(err => {
-      return handler.error(reply, err.message)
+      return reply.error(err.message)
     })
 
     const result = await User.find({
@@ -59,7 +58,7 @@ async function userRoute (server, options) {
         { email: request.body.username }
       ]
     }).catch(err => {
-      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 
     if (result.length > 0) {
@@ -72,35 +71,35 @@ async function userRoute (server, options) {
       })
 
       const pass = await password.compare(request.body.password, result[0].hash).catch(err => {
-        return handler.error(reply, err.message)
+        return reply.error(err.message)
       })
 
       if (pass) {
         await server.jwt.verify(token, function (err, decoded) {
           if (err) {
-            return handler.badRequest(reply, err.message, { success: pass })
+            return reply.badRequest(err.message, { success: pass })
           };
-          handler.success(reply, 'Login user success!', { success: pass, token: token, expire: decoded.exp })
+          reply.success('Login user success!', { success: pass, token: token, expire: decoded.exp })
         })
       } else {
-        return handler.forbidden(reply, 'Wrong username or password!', { success: false })
+        return reply.forbidden('Wrong username or password!', { success: false })
       }
     } else {
-      handler.forbidden(reply, 'Wrong username or password!', { success: false })
+      reply.forbidden('Wrong username or password!', { success: false })
     }
     await reply
   })
 
   server.get('/api/user/check-username/:username', { schema: schema.checkUsername }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
-      return handler.error(reply, err.message)
+      return reply.error(err.message)
     })
 
     const result = await User.find({ username: request.params.username }).catch(err => {
-      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 
-    handler.success(reply, (result.length > 0) ? 'Username is not available!' : 'Username is OK!', {
+    reply.success((result.length > 0) ? 'Username is not available!' : 'Username is OK!', {
       data: {
         total: result.length
       }
@@ -110,14 +109,14 @@ async function userRoute (server, options) {
 
   server.get('/api/user/check-email/:email', { schema: schema.checkEmail }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
-      return handler.error(reply, err.message)
+      return reply.error(err.message)
     })
 
     const result = await User.find({ email: request.params.email }).catch(err => {
-      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 
-    handler.success(reply, (result.length > 0) ? 'Email address is not available!' : 'Email address is OK!', {
+    reply.success((result.length > 0) ? 'Email address is not available!' : 'Email address is OK!', {
       data: {
         total: result.length
       }
@@ -134,17 +133,17 @@ async function userRoute (server, options) {
     }
 
     await mongooseHandler.connect().catch(err => {
-      return handler.error(reply, err.message)
+      return reply.error(err.message)
     })
 
     const result = await User.find({ email: request.body.email }).catch(err => {
-      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 
     if (result.length > 0) {
       forgotpass.user_id = result[0].id
       const done = await ForgotPassword(forgotpass).save().catch(err => {
-        return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
+        return reply.mongooseError(mongooseHandler.errorBuilder(err))
       })
 
       if (done) {
@@ -163,13 +162,13 @@ async function userRoute (server, options) {
           html: htmlEmail
         }, (err, info) => {
           if (err) {
-            return handler.badRequest(reply, 'Send Message Failed!', { error: err })
+            return reply.badRequest('Send Message Failed!', { error: err })
           }
-          handler.success(reply, 'Reset password link has already sent to your email.', { success: true })
+          reply.success('Reset password link has already sent to your email.', { success: true })
         })
       }
     } else {
-      return handler.success(reply, 'Email address is not exists.', {
+      return reply.success('Email address is not exists.', {
         data: {
           total: result.length
         },
@@ -181,7 +180,7 @@ async function userRoute (server, options) {
 
   server.post('/api/user/reset-password', { schema: schema.resetPassword }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
-      return handler.error(reply, err.message)
+      return reply.error(err.message)
     })
 
     const result = await ForgotPassword.find({
@@ -190,7 +189,7 @@ async function userRoute (server, options) {
         { status: false }
       ]
     }).catch(err => {
-      return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 
     if (result.length > 0) {
@@ -199,7 +198,7 @@ async function userRoute (server, options) {
         hash: await helper.generate(request.body.password),
         updated_at: moment().format('x')
       }, { new: true }).catch(err => {
-        return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
+        return reply.mongooseError(mongooseHandler.errorBuilder(err))
       })
 
       if (done) {
@@ -207,19 +206,19 @@ async function userRoute (server, options) {
         const reupdate = await ForgotPassword.findOneAndUpdate({ id: request.body.id }, {
           status: true
         }, { new: true }).catch(err => {
-          return handler.mongooseError(reply, mongooseHandler.errorBuilder(err))
+          return reply.mongooseError(mongooseHandler.errorBuilder(err))
         })
 
         if (reupdate) {
-          handler.success(reply, 'Your password has been successfully changed!', { success: true })
+          reply.success('Your password has been successfully changed!', { success: true })
         } else {
-          handler.success(reply, 'Failed to reset your password! Please contact us, something went wrong and we need more futher information from you.', { success: false })
+          reply.success('Failed to reset your password! Please contact us, something went wrong and we need more futher information from you.', { success: false })
         }
       } else {
-        handler.success(reply, 'Failed to reset your password! Please contact us, something went wrong and we need more futher information from you.', { success: false })
+        reply.success('Failed to reset your password! Please contact us, something went wrong and we need more futher information from you.', { success: false })
       }
     } else {
-      handler.success(reply, 'The request to reset password has been expired!', { success: false })
+      reply.success('The request to reset password has been expired!', { success: false })
     }
     await reply
   })
@@ -234,7 +233,7 @@ async function userRoute (server, options) {
     ])
   }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
-      return handler.error(reply, err.message)
+      return reply.error(err.message)
     })
 
     // get hash
@@ -242,13 +241,13 @@ async function userRoute (server, options) {
     const found = await User.find({
       id: decoded.uid
     }).catch(err => {
-      return handler.mongooseError(mongooseHandler.errorBuilder(err))
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 
     if (found) {
       // compare password
       const pass = await password.compare(request.body.oldpassword, found[0].hash).catch(err => {
-        return handler.error(reply, err.message)
+        return reply.error(err.message)
       })
 
       if (pass) {
@@ -258,18 +257,18 @@ async function userRoute (server, options) {
         }, {
           hash: await password.generate(request.body.newpassword)
         }, { new: true }).catch(err => {
-          return handler.mongooseError(mongooseHandler.errorBuilder(err))
+          return reply.mongooseError(mongooseHandler.errorBuilder(err))
         })
         if (updated) {
-          handler.success(reply, 'Your password successfully changed!', { success: true })
+          reply.success('Your password successfully changed!', { success: true })
         } else {
-          handler.success(reply, 'Failed to change your password!', { success: false })
+          reply.success('Failed to change your password!', { success: false })
         }
       } else {
-        handler.success(reply, 'Your old password is wrong!', { success: false })
+        reply.success('Your old password is wrong!', { success: false })
       }
     } else {
-      handler.forbidden(reply, 'Invalid token!', { success: false })
+      reply.forbidden('Invalid token!', { success: false })
     }
 
     // reply.code(200).send(decoded)
