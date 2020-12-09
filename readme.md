@@ -55,6 +55,7 @@ Our goal is to create a web application that scales well (horizontal scale), str
 - Material Design Icons v5
 - Asynchronous designed
 - HTML auto minified
+- Reactive UI with Reef
 
 ### Requirement
 - NodeJS v10++
@@ -91,3 +92,7 @@ This Fastify Boilerplate is already include 3rd party license properly.
 
 Note: 
 - The size libraries above is already minified and gzipped.
+
+### Browser Support
+- All latest browser supported.
+- IE 11 not supported.
