@@ -1,5 +1,12 @@
 "use strict";
 
+String.prototype.replaceAll = function(strReplace, strWith) {
+    // See http://stackoverflow.com/a/3561711/556609
+    var esc = strReplace.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+    var reg = new RegExp(esc, 'ig');
+    return this.replace(reg, strWith);
+};
+
 function parseJWT (token) {
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -8,6 +15,29 @@ function parseJWT (token) {
     }).join(''));
     return JSON.parse(jsonPayload);
 };
+
+function htmlDecode(input) {
+    var doc = new DOMParser().parseFromString(input, "text/html");
+    return doc.documentElement.textContent;
+}
+
+function jsonHtmlDecode(obj) {
+    return JSON.parse(htmlDecode(JSON.stringify(obj)));
+}
+
+function gravatar(email) {
+    return 'https://gravatar.com/avatar/'+MD5(email);
+}
+
+function isEmptyObject(obj) {
+    for (var prop in obj) {
+      if (obj.hasOwnProperty(prop)) {
+        return false;
+      }
+    }
+  
+    return JSON.stringify(obj) === JSON.stringify({});
+}
 
 function logout(baseUrl, _cb) {
     localStorage.removeItem(baseUrl+'_tokenize');
@@ -53,7 +83,7 @@ var profile_nav = new Reef('#profile_nav', {
             <div class="navbar-item has-dropdown has-dropdown-with-icons has-divider has-user-avatar is-hoverable">
             <a class="navbar-link is-arrowless">
               <div class="is-user-avatar">
-                <img src="https://gravatar.com/avatar/${MD5(profile.mail)}" alt="${profile.unm}">
+                <img src="${gravatar(profile.mail)} " alt="${profile.unm}">
               </div>
               <div class="is-user-name"><span>${profile.unm}</span></div>
               <span class="icon"><i class="mdi mdi-chevron-down"></i></span>

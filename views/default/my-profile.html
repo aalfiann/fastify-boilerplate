@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en" class="has-aside-left has-aside-mobile-transition has-navbar-fixed-top has-aside-expanded">
+<head>
+  <%~ includeFile('partial-head-main.html', it) %>
+  <title>My Profile - <%=it.siteName%></title>
+  <%~ includeFile('partial-head-meta.html', it) %>
+</head>
+<body>
+  <!-- Menu Navbar -->
+  <%~ includeFile('partial-menu-navbar.html', it) %>
+  <!-- Menu Aside -->
+  <%~ includeFile('partial-menu-aside.html', it) %>
+  <section class="section is-title-bar">
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <ul>
+            <li><a href="<%=it.baseUrl%>" class="has-text-dark">Home</a></li>
+            <li>My Profile</li>
+          </ul>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <div class="buttons is-right">
+            <a href="https://admin-one-html.justboil.me/" target="_blank" class="button is-primary">
+              <span class="icon"><i class="mdi mdi-credit-card-outline"></i></span>
+              <span>Premium Demo</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="hero is-hero-bar">
+    <div class="hero-body">
+      <div class="level">
+        <div class="level-left">
+          <div class="level-item"><h1 class="title">
+            My Profile
+          </h1></div>
+        </div>
+        <div class="level-right" style="display: none;">
+          <div class="level-item"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section is-main-section">
+    <div id="app"></div>
+  </section>
+  <!-- Footer -->
+  <%~ includeFile('partial-footer.html', it) %>
+  <!-- Inline JS -->
+  <%~ includeFile('partial-js.html', it) %>
+  <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/moment-js/moment.min.js"></script>
+  <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/fly-json-odm/flyjson.min.js"></script>
+  <script>
+    var app = new Reef('#app', {
+      data: {
+        token: '',
+        username: '',
+        name: '',
+        email: '',
+        address: '',
+        bio: '',
+        link: [],
+        updated_at: 0
+      },
+      template: function(props) {
+        if(props.token) {
+          var address = props.address.replaceAll('&#10;','<br>');
+          var bio = props.bio.replaceAll('&#10;','<br>');
+          var social = '';
+          var socialmanage = '';
+          for(var i=0; i<props.link.length;i++) {
+            social += socialBuilder(props.link[i].name,props.link[i].link);
+            socialmanage += '<li><a href="javascript:void(0)" title="Remove Link" onclick="removeLink(\''+props.link[i].link+'\')" class="has-text-danger"><b>X</b></a> <b>'+props.link[i].name+'</b>: '+props.link[i].link+'</li>';
+          }
+          return `<div class="columns">
+            <div class="column is-one-third">
+              <div class="card">
+                <div class="card-content">
+                  <div class="is-user-avatar image has-max-width is-aligned-center">
+                    <img src="${gravatar(htmlDecode(props.email))}" alt="${props.username}">
+                  </div>
+                  <hr>
+                  <div class="level">
+                    <div class="level-item has-text-centered">
+                      <div>
+                        <p class="heading">Username</p>
+                        <p><b>${props.username}</b></p>
+                      </div>
+                    </div>
+                    <div class="level-item has-text-centered">
+                      <div>
+                        <p class="heading">Last Updated</p>
+                        <p><b>${moment(props.updated_at).fromNow()}</b></p>
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  <p class="title has-text-centered">
+                    ${social}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="card">
+                <div class="card-content">
+                  <div class="columns">
+                    <div class="column">
+                      <div class="field">
+                        <label class="label">Name</label>
+                        <div class="control is-clearfix">
+                          <input type="text" readonly value="${props.name}" class="input is-static">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="column">
+                      <div class="field">
+                        <label class="label">E-mail</label>
+                        <div class="control is-clearfix">
+                          <input type="text" readonly value="${props.email}" class="input is-static">
+                        </div>
+                        <p class="help has-text-success">Your email is hidden to others.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="field">
+                    <label class="label">Address</label>
+                    <p>
+                      ${address}
+                    </p>
+                  </div>
+                  <hr>
+                  <div class="field">
+                    <label class="label">Bio</label>
+                    <div class="content">
+                      ${bio}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="card">
+            <header class="card-header">
+              <p class="card-header-title">
+                <span class="icon"><i class="mdi mdi-account-circle default"></i></span>
+                Edit My Profile
+              </p>
+            </header>
+            <div class="card-content">
+              <div id="msg" class="mb-2"></div>
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Username</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input id="username" type="text" class="input" value="${props.username}" readonly>
+                    </div>
+                    <p class="help">You can't change your username!</p></div>
+                </div>
+              </div>
+              <hr>
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Name</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input id="name" type="text" class="input" value="${props.name}" required>
+                    </div>
+                    <p class="help">Field name is required!</p></div>
+                </div>
+              </div>
+              <hr>
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Email</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <input id="email" type="email" class="input" value="${props.email}" required>
+                    </div>
+                    <p class="help">Field email is required!</p>
+                  </div>
+                </div>
+              </div>
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Address</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <textarea rows="3" maxlength="250" id="address" class="textarea is-hovered">${props.address}</textarea>
+                    </div>
+                    <p class="help">[Optional] Max 250 chars.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Bio</label>
+                </div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <textarea rows="3" maxlength="500" id="bio" class="textarea is-hovered">${props.bio}</textarea>
+                    </div>
+                    <p class="help">[Optional] Max 500 chars.</p>
+                  </div>
+                </div>
+              </div>
+              <div class="field is-horizontal">
+                <div class="field-label is-normal">
+                  <label class="label">Link</label>
+                </div>
+                <div class="field-body">
+                  <div class="field is-grouped is-grouped-multiline">
+                    <span class="control select">
+                      <select id="linktype">
+                        <option>Link</option>
+                        <option>Facebook</option>
+                        <option>Github</option>
+                        <option>Instagram</option>
+                        <option>Linkedin</option>
+                        <option>Pinterest</option>
+                        <option>Reddit</option>
+                        <option>Twitter</option>
+                        <option>VK</option>
+                        <option>Youtube</option>
+                      </select>
+                    </span>
+                    <span class="control">
+                      <input id="link" class="input" placeholder="https://...">
+                    </span>
+                    <span>
+                      <button onclick="addLink()" type="button" class="button is-success">Add</button>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <br>
+              <div class="field is-horizontal">
+                <div class="field-label is-normal"></div>
+                <div class="field-body">
+                  <div class="field">
+                    <ul>
+                      ${socialmanage}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <hr>
+              <div class="field is-horizontal">
+                <div class="field-label is-normal"></div>
+                <div class="field-body">
+                  <div class="field">
+                    <div class="control">
+                      <button onclick="saveProfile()" type="button" class="button is-primary">
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>`;
+        } else {
+          return '';
+        }
+      }
+    });
+    app.render();
+
+    function getProfile(token) {
+      ajax({
+        headers: {
+          'content-type': 'application/json',
+          'x-token': app.data.token
+        }
+      })
+      .post('<%=it.baseUrl%>/api/user/my-profile', {})
+      .then(function(response, xhr) {
+        if(response.statusCode === 200 && response.success === true) {
+          app.data.username = response.data.username;
+          app.data.name = response.data.name;
+          app.data.email = response.data.email;
+          app.data.updated_at = response.data.updated_at;
+          if(response.data.address) app.data.address = response.data.address;
+          if(response.data.bio) app.data.bio = response.data.bio;
+          if(response.data.link && response.data.link.length > 0) app.data.link = response.data.link;
+        }
+      })
+      .catch(function(response, xhr) {
+        console.log(xhr.responseText);
+      })
+    }
+    
+    getToken('<%=it.baseUrl%>', function(token) {
+      if(!token) return location = '<%=it.baseUrl%>'+'/login';
+      getMenu('<%=it.baseUrl%>', token);
+      app.data.token = token;
+      getProfile();
+    });
+
+    var rendered = 0;
+    document.addEventListener('render', function(e) {
+      // Only run for elements with the #app ID
+    	if (!event.target.matches('#app')) return;
+      if(app.data.username !== '') rendered++;
+      if(rendered === 1) {
+        loadListener();
+      }
+    }, false);
+
+    function loadListener() {
+      Dom.id('name').addEventListener('keyup', function(e) {
+        app.data.name = this.value;
+      });
+      Dom.id('email').addEventListener('keyup', function() {
+        app.data.email = this.value;
+      });
+      Dom.id('address').addEventListener('keyup', function() {
+        app.data.address = this.value;
+      });
+      Dom.id('bio').addEventListener('keyup', function() {
+        app.data.bio = this.value;
+      });
+    }
+
+    function _social(name,link,type) {
+      return `<span class="icon has-text-${type} mr-2">
+                <i class="mdi mdi-${name}" onclick="window.open('${link}', '_blank')" title="See my ${name}" style="cursor:pointer;" rel="nofollow"></i>
+              </span>`;
+    }          
+
+    function socialBuilder(name,link) {
+      name = name.toLowerCase();
+      switch(true) {
+        case (name === 'facebook') :
+          return _social(name,link,'link');
+        case (name === 'twitter') : 
+          return _social(name,link,'info');
+        case (name === 'instagram') :
+          return _social(name,link,'danger');
+        case (name === 'reddit') : 
+          return _social(name,link,'danger');
+        case (name === 'youtube') : 
+          return _social(name,link,'danger');
+        case (name === 'pinterest') : 
+          return _social(name,link,'danger');
+        case (name === 'linkedin') : 
+          return _social(name,link,'link');
+        case (name === 'vk') : 
+          return _social(name,link,'link');
+        default : 
+          return _social(name,link,'dark');
+      }
+    }
+
+    function addLink() {
+      if(Dom.id('link').value.trim() !== '') {
+        app.data.link.push({name:Dom.id('linktype').value, link:Dom.id('link').value});
+        Dom.id('link').value = '';
+      }
+    }
+
+    function removeLink(link) {
+      var nosql = new FlyJson();
+      var result = nosql.set(app.data.link).delete('link',link).exec();
+      app.data.link = result;
+    }
+
+    function saveProfile() {
+      Dom.id('msg').innerHTML = '';
+      ajax({
+        headers: {
+          'x-token': app.data.token,
+          'content-type': 'application/json'
+        }
+      })
+      .post('<%=it.baseUrl%>/api/user/my-profile/update', {
+        name: Dom.id('name').value,
+        email: Dom.id('email').value,
+        address: Dom.id('address').value,
+        bio: Dom.id('bio').value,
+        link: app.data.link
+      })
+      .then(function(response, xhr) {
+        if(response.statusCode === 200 && response.success) {
+          Dom.id('msg').innerHTML = `<article class="message is-success">
+              <div class="message-body">
+                ${response.message}
+              </div>
+            </article>`;
+        } else {
+          Dom.id('msg').innerHTML = `<article class="message is-danger">
+              <div class="message-body">
+                ${response.message}
+              </div>
+            </article>`;
+        }
+      })
+      .catch(function(response, xhr) {
+        console.log(xhr.responseText);
+        Dom.id('msg').innerHTML = `<article class="message is-danger">
+              <div class="message-body">
+                ${response.message}
+              </div>
+            </article>`;
+      })
+    }
+
+  </script>
+</body>
+</html>

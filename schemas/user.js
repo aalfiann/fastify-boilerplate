@@ -71,6 +71,18 @@ const changePassword = {
   required: ['oldpassword', 'newpassword']
 }
 
+const editProfile = {
+  type: 'object',
+  properties: {
+    name: { type: 'string', minLength: 3 },
+    email: { type: 'string', minLength: 7 },
+    address: { type: 'string' },
+    bio: { type: 'string' },
+    link: { type: 'array' }
+  },
+  required: ['name', 'email']
+}
+
 module.exports = {
   register,
   login,
@@ -78,5 +90,6 @@ module.exports = {
   checkEmail,
   forgotPassword,
   resetPassword,
-  changePassword
+  changePassword,
+  editProfile
 }

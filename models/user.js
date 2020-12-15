@@ -25,7 +25,10 @@ const userSchema = {
     required: [true, 'role is required']
   },
   name: { type: String },
+  address: { type: String },
+  bio: { type: String },
   hash: { type: String },
+  link: { type: Array },
   created_at: { type: Number },
   updated_at: { type: Number }
 }

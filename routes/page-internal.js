@@ -51,6 +51,11 @@ async function pageInternalRoute (server, options) {
     const html = await server.view('change-password', templateData)
     await reply.html(html)
   })
+
+  server.get('/my-profile', { onRequest: server.useHtmlCache }, async (request, reply) => {
+    const html = await server.view('my-profile', templateData)
+    await reply.html(html)
+  })
 }
 
 module.exports = pageInternalRoute

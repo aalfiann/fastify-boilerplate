@@ -14,13 +14,15 @@ const config = require('../config')
 
 async function userRoute (server, options) {
   server.post('/api/user/register', { schema: schema.register }, async (request, reply) => {
+    const timeNow = moment().format('x')
     const user = {
       id: uuidv4(),
       username: request.body.username,
       name: request.body.name,
       email: request.body.email,
       hash: await helper.generate(request.body.password),
-      created_at: moment().format('x')
+      created_at: timeNow,
+      updated_at: timeNow
     }
 
     await mongooseHandler.connect().catch(err => {
@@ -255,7 +257,8 @@ async function userRoute (server, options) {
         const updated = await User.findOneAndUpdate({
           id: decoded.uid
         }, {
-          hash: await password.generate(request.body.newpassword)
+          hash: await password.generate(request.body.newpassword),
+          updated_at: moment().format('x')
         }, { new: true }).catch(err => {
           return reply.mongooseError(mongooseHandler.errorBuilder(err))
         })
@@ -271,44 +274,73 @@ async function userRoute (server, options) {
       reply.forbidden('Invalid token!', { success: false })
     }
 
-    // reply.code(200).send(decoded)
-    // await server.jwt.verify(request.headers['x-token'], function (err, decoded) {
-    //   if (err) return console.log(err)
-    //   reply.code(200).send(decoded)
-    // })
+    await reply
+  })
 
-    // const found = await User.find({ username: request.body.username }).catch(err => {
-    //   return reply.code(400).send(mongooseHandler.errorBuilder(err))
-    // })
+  server.post('/api/user/my-profile', {
+    schema: {
+      headers: authSchema.auth
+    },
+    preHandler: server.auth([
+      server.verifyToken
+    ])
+  }, async (request, reply) => {
+    await mongooseHandler.connect().catch(err => {
+      return reply.error(err.message)
+    })
 
-    // if (found) {
-    //   // reupdate to make expired this request reset password
-    //   const reupdate = await ForgotPassword.findOneAndUpdate({ id: request.body.id }, {
-    //     status: true
-    //   }, { new: true }).catch(err => {
-    //     return reply.code(400).send(mongooseHandler.errorBuilder(err))
-    //   })
+    // get hash
+    const decoded = server.jwt.decode(request.headers['x-token'])
+    // update profile
+    const profile = await User.findOne({
+      id: decoded.uid
+    }).catch(err => {
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
+    })
+    if (profile) {
+      profile.hash = undefined
+      reply.success('Get my profile successfully!', { success: true, data: profile })
+    } else {
+      reply.success('Failed to get my profile!', { success: false })
+    }
 
-    //   if (reupdate) {
-    //     reply.code(200).send({
-    //       message: 'Your password has been succeessfully changed!',
-    //       statusCode: 200,
-    //       success: true
-    //     })
-    //   } else {
-    //     reply.code(200).send({
-    //       message: 'Failed to reset your password! Please contact us, something went wrong and we need more futher information from you.',
-    //       statusCode: 200,
-    //       success: false
-    //     })
-    //   }
-    // } else {
-    //   reply.code(200).send({
-    //     message: 'Failed to reset your password! Please contact us, something went wrong and we need more futher information from you.',
-    //     statusCode: 200,
-    //     success: false
-    //   })
-    // }
+    await reply
+  })
+
+  server.post('/api/user/my-profile/update', {
+    schema: {
+      headers: authSchema.auth,
+      body: schema.editProfile
+    },
+    preHandler: server.auth([
+      server.verifyToken
+    ])
+  }, async (request, reply) => {
+    await mongooseHandler.connect().catch(err => {
+      return reply.error(err.message)
+    })
+
+    // get hash
+    const decoded = server.jwt.decode(request.headers['x-token'])
+    // update profile
+    const updated = await User.findOneAndUpdate({
+      id: decoded.uid
+    }, {
+      name: request.body.name,
+      address: request.body.address,
+      bio: request.body.bio,
+      link: request.body.link,
+      updated_at: moment().format('x')
+    }, { new: true }).catch(err => {
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
+    })
+    if (updated) {
+      updated.hash = undefined
+      reply.success('Your profile successfully updated!', { success: true, data: updated })
+    } else {
+      reply.success('Failed to update your profile!', { success: false })
+    }
+
     await reply
   })
 }
