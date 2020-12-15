@@ -13,6 +13,53 @@
   <%~ includeFile('partial-menu-navbar.html', it) %>
   <!-- Menu Aside -->
   <%~ includeFile('partial-menu-aside.html', it) %>
+  <% if (it.breadcrumbs && it.breadcrumbs.length > 0) { %>
+  <section class="section is-title-bar">
+    <div class="level">
+      <div class="level-left">
+        <div class="level-item">
+          <ul>
+            <% 
+              for(var i=0; i<it.breadcrumbs.length; i++) {
+                if(it.breadcrumbs[i].url) { %>
+                  <li><a href="<%=it.breadcrumbs[i].url%>" class="has-text-dark"><%=it.breadcrumbs[i].name%></a></li>
+                <% } else { %>
+                  <li><%=it.breadcrumbs[i].name%></li>
+                <% }
+              } 
+            %>
+          </ul>
+        </div>
+      </div>
+      <div class="level-right">
+        <div class="level-item">
+          <div class="buttons is-right">
+            <a href="https://admin-one-html.justboil.me/" target="_blank" class="button is-primary">
+              <span class="icon"><i class="mdi mdi-credit-card-outline"></i></span>
+              <span>Premium Demo</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <% } %>
+  <% if(it.titlehero) { %>
+  <section class="hero is-hero-bar">
+    <div class="hero-body">
+      <div class="level">
+        <div class="level-left">
+          <div class="level-item"><h1 class="title">
+            <%=it.titlehero%>
+          </h1></div>
+        </div>
+        <div class="level-right" style="display: none;">
+          <div class="level-item"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <% } %>
   <%~ it.body %>
   <!-- To make load performance faster, icons are put at very below here. -->
   <link rel="stylesheet" href="<%=it.baseAssetsUrl%>/assets/fonts/mdi-font/css/materialdesignicons.min.css">
