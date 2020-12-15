@@ -423,7 +423,7 @@
   <!-- JS -->
   <%~ includeFile('partial-js.html', it) %>
   <script>getToken('<%=it.baseUrl%>', function(token) {
-    getMenu('<%=it.baseUrl%>', token);
+    if(token) getMenu('<%=it.baseUrl%>', token);
   });</script>
   <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/chart-js/2.9.4/Chart.min.js"></script>
   <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/chart.sample.min.js"></script>

@@ -23,3 +23,8 @@
 <%~ includeFile('partial-footer.html', it) %>
 <!-- JS -->
 <%~ includeFile('partial-js.html', it) %>
+<script>
+  getToken('<%=it.baseUrl%>', function(token) {
+    if(token) getMenu('<%=it.baseUrl%>', token);
+  });
+</script>
