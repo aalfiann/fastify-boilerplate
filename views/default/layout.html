@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" class="has-aside-left has-aside-mobile-transition has-navbar-fixed-top has-aside-expanded">
+<head>
+  <%~ includeFile('partial-head-main.html', it) %>
+  <title><%=it.title%> - <%=it.siteName%></title>
+  <% if(it.meta_desc) { %>
+  <meta name="description" content="<%=it.meta_desc%>">
+  <% } %>
+  <%~ includeFile('partial-head-meta.html', it) %>
+</head>
+<body>
+  <!-- Menu Navbar -->
+  <%~ includeFile('partial-menu-navbar.html', it) %>
+  <!-- Menu Aside -->
+  <%~ includeFile('partial-menu-aside.html', it) %>
+  <%~ it.body %>
+  <!-- To make load performance faster, icons are put at very below here. -->
+  <link rel="stylesheet" href="<%=it.baseAssetsUrl%>/assets/fonts/mdi-font/css/materialdesignicons.min.css">
+</body>
+</html>

@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html lang="en" class="has-aside-left has-aside-mobile-transition has-navbar-fixed-top has-aside-expanded">
-<head>
-  <%~ includeFile('partial-head-main.html', it) %>
-  <title>404 Not Found - <%=it.siteName%></title>
-  <%~ includeFile('partial-head-meta.html', it) %>
-</head>
-<body>
-  <!-- Menu Navbar -->
-  <%~ includeFile('partial-menu-navbar.html', it) %>
-  <!-- Menu Aside -->
-  <%~ includeFile('partial-menu-aside.html', it) %>
+<% layout('layout.html') %>
+<% it.title = '404 Not Found' %>
+
   <section class="section is-title-bar">
     <div class="level">
       <div class="level-left">
@@ -37,7 +28,7 @@
       <div class="level">
         <div class="level-left">
           <div class="level-item"><h1 class="title">
-            404 Not Found
+            <%=it.title%>
           </h1></div>
         </div>
         <div class="level-right" style="display: none;">
@@ -66,10 +57,9 @@
       </div>
     </div>
   </section>
-  <!-- Footer -->
-  <%~ includeFile('partial-footer.html', it) %>
-  <!-- Inline JS -->
-  <%~ includeFile('partial-js.html', it) %>
-  <script>getToken('<%=it.baseUrl%>');</script>
-</body>
-</html>
+  
+<!-- Footer -->
+<%~ includeFile('partial-footer.html', it) %>
+<!-- JS -->
+<%~ includeFile('partial-js.html', it) %>
+<script>getToken('<%=it.baseUrl%>');</script>

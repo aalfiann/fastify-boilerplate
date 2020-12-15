@@ -1,22 +1,13 @@
-<!DOCTYPE html>
-<html lang="en" class="has-aside-left has-aside-mobile-transition has-navbar-fixed-top has-aside-expanded">
-<head>
-  <%~ includeFile('partial-head-main.html', it) %>
-  <title>Dashboard - <%=it.siteName%></title>
-  <%~ includeFile('partial-head-meta.html', it) %>
-</head>
-<body>
-  <!-- Menu Navbar -->
-  <%~ includeFile('partial-menu-navbar.html', it) %>
-  <!-- Menu Aside -->
-  <%~ includeFile('partial-menu-aside.html', it) %>
+<% layout('layout.html') %>
+<% it.title = 'Dashboard' %>
+
   <section class="section is-title-bar">
     <div class="level">
       <div class="level-left">
         <div class="level-item">
           <ul>
             <li><a href="<%=it.baseUrl%>" class="has-text-dark">Home</a></li>
-            <li>Dashboard</li>
+            <li><%=it.title%></li>
           </ul>
         </div>
       </div>
@@ -37,7 +28,7 @@
       <div class="level">
         <div class="level-left">
           <div class="level-item"><h1 class="title">
-            Dashboard
+            <%=it.title%>
           </h1></div>
         </div>
         <div class="level-right" style="display: none;">
@@ -454,7 +445,7 @@
   </section>
   <!-- Footer -->
   <%~ includeFile('partial-footer.html', it) %>
-  <!-- Inline JS -->
+  <!-- JS -->
   <%~ includeFile('partial-js.html', it) %>
   <script>
     getToken('<%=it.baseUrl%>', function(token) {
@@ -464,5 +455,3 @@
   </script>
   <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/chart-js/2.9.4/Chart.min.js"></script>
   <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/chart.sample.min.js"></script>
-</body>
-</html>
