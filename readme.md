@@ -80,19 +80,28 @@ npm test
 
 ### Credits
 This Fastify Boilerplate is already include 3rd party license properly.
-- [Template Admin One Bulma (32.3 kB)](https://github.com/vikdiesel/admin-one-bulma-dashboard/)
+
+**Main Library**  
+This main library is used to all template pages.
+- [Ajax (1 kB)](https://github.com/fdaciuk/ajax)
 - [Reef.js (2.6 kB)](https://github.com/cferdinandi/reef)
 - [Dom.js (5.6 kB)](https://github.com/aalfiann/dom.js)
-- [Ajax (1 kB)](https://github.com/fdaciuk/ajax)
-- [Sweetalert (29 kB)](https://github.com/t4t5/sweetalert)
+- [Template Admin One Bulma (32.3 kB)](https://github.com/vikdiesel/admin-one-bulma-dashboard)
+
+**Optional Library**  
+This optional libraries is only used to some pages who need it.
 - [Native Form Validation (1.4 kB)](https://github.com/aalfiann/native-form-validation)
-- [Fly Json ODM (4.7 kB)](https://github.com/aalfiann/fly-json-odm)
 - [Chunk Handler (1.9 kB)](https://github.com/aalfiann/chunk-handler)
+- [Fly Json ODM (4.7 kB)](https://github.com/aalfiann/fly-json-odm)
+- [Sweetalert (29 kB)](https://github.com/t4t5/sweetalert)
+- [Moment.js (40 kB)](https://github.com/moment/moment)
 - [Chart.js (52.9 kB)](https://github.com/chartjs/Chart.js)
+- [MDI Icons](https://github.com/Templarian/MaterialDesign)
 
 Note: 
+- All libraries above is used for frontend, for server side libraries, see `package.json`.
 - The size libraries above is already minified and gzipped.
 
 ### Browser Support
-- All latest browser supported.
-- IE 11 not supported.
+- All latest browser supported (Chrome, EDGE, Firefox, Opera, Safari, etc).
+- IE 11 is not supported.
