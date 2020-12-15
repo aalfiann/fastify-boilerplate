@@ -137,7 +137,7 @@ var menu_aside = new Reef('#menu_aside', {
                 ${props.menu.map(function(menus){
                     if(menus.type === 'link') {
                         return `<li>
-                            <a href="${(menus.url.indexOf('://') !== -1 ? menus.url: props.baseUrl + menus.url)}" class="is-active router-link-active has-icon">
+                            <a href="${(menus.url.indexOf('://') !== -1 ? menus.url: props.baseUrl + menus.url)}" class="router-link-active has-icon">
                             <span class="icon"><i class="${menus.icon}"></i></span>
                             <span class="menu-item-label">${menus.name}</span>
                             </a>
@@ -188,6 +188,18 @@ document.addEventListener('render', function (event) {
                 });
             });
         });
+        /* Detect current active menu list */
+        Array.from(document.getElementsByClassName('menu is-menu-main internal')).forEach(function (el) {
+            Array.from(el.getElementsByTagName('li')).forEach(function(eli) {
+                var elia = eli.querySelector('a');
+                if(elia.getAttribute('href') == location.href) {
+                    elia.classList.add('is-active');
+                    if(eli.parentElement.parentElement.querySelector('a').classList.contains('has-dropdown-icon')) {
+                        eli.parentElement.parentElement.classList.add('is-active');
+                    }
+                }
+            });
+        });
     }
 }, false);
 
@@ -231,3 +243,18 @@ function getMenu(baseUrl, token, _cb) {
         })
     }
 }
+
+setTimeout(function(){
+    /* Detect current active menu list */
+    Array.from(document.getElementsByClassName('menu is-menu-main public')).forEach(function (el) {
+        Array.from(el.getElementsByTagName('li')).forEach(function(eli) {
+            var elia = eli.querySelector('a');
+            if(elia.getAttribute('href') == location.href) {
+                elia.classList.add('is-active');
+                if(eli.parentElement.parentElement.querySelector('a').classList.contains('has-dropdown-icon')) {
+                    eli.parentElement.parentElement.classList.add('is-active');
+                }
+            }
+        });
+    });
+},1000);
