@@ -12,6 +12,7 @@ Fastify Boilerplate with JWT, Mongoose and Bulma
 - Menu Management   >> done
 - Change Password   >> done
 - Manage Profile    >> done
+- Public Profile    >> done
 - User Management   
 - Admin Dashboard
 

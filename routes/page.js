@@ -93,6 +93,14 @@ async function pageRoute (server, options) {
     const html = await server.view('reset-password', payload)
     await reply.html(html)
   })
+
+  server.get('/user/:username', { onRequest: server.useHtmlCache }, async (request, reply) => {
+    const payload = { ...templateData }
+    payload.username = request.params.username
+
+    const html = await server.view('view-profile', payload)
+    await reply.html(html)
+  })
 }
 
 module.exports = pageRoute

@@ -83,6 +83,15 @@ const editProfile = {
   required: ['name', 'email']
 }
 
+const getProfile = {
+  params: {
+    type: 'object',
+    properties: {
+      username: { type: 'string' }
+    }
+  }
+}
+
 module.exports = {
   register,
   login,
@@ -91,5 +100,6 @@ module.exports = {
   forgotPassword,
   resetPassword,
   changePassword,
-  editProfile
+  editProfile,
+  getProfile
 }

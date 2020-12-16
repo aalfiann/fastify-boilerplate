@@ -35,6 +35,7 @@
     "fastify-nodemailer": "^5.0.0",
     "fastify-plugin": "^3.0.0",
     "fastify-static": "^3.3.0",
+    "fly-json-odm": "^1.10.3",
     "html-minifier-terser": "^5.1.1",
     "make-promises-safe": "^5.1.0",
     "md5": "^2.3.0",

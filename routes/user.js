@@ -11,6 +11,8 @@ const schema = require('../schemas/user')
 const authSchema = require('../schemas/auth')
 const obase64 = require('../lib/obase64')
 const config = require('../config')
+const FlyJson = require('fly-json-odm')
+const md5 = require('md5')
 
 async function userRoute (server, options) {
   server.post('/api/user/register', { schema: schema.register }, async (request, reply) => {
@@ -339,6 +341,37 @@ async function userRoute (server, options) {
       reply.success('Your profile successfully updated!', { success: true, data: updated })
     } else {
       reply.success('Failed to update your profile!', { success: false })
+    }
+
+    await reply
+  })
+
+  server.get('/api/user/profile/:username', {
+    schema: schema.getProfile
+  }, async (request, reply) => {
+    await mongooseHandler.connect().catch(err => {
+      return reply.error(err.message)
+    })
+
+    // get profile
+    const profile = await User.findOne({
+      username: request.params.username
+    }).catch(err => {
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
+    })
+    if (profile) {
+      const gravatar = 'https://gravatar.com/avatar/' + md5(profile.email)
+      profile.id = undefined
+      profile.__v = undefined
+      profile.hash = undefined
+      profile.email = undefined
+      profile.role = undefined
+      const nosql = new FlyJson()
+      const nprofile = JSON.parse(nosql.safeStringify(profile))
+      nprofile.gravatar = gravatar
+      reply.success('Get user profile successfully!', { success: true, data: nprofile })
+    } else {
+      reply.success('User Not Found!', { success: false })
     }
 
     await reply

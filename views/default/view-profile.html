@@ -1,0 +1,174 @@
+<% layout('layout.html') %>
+<% it.title = (it.username) ? it.username+' Profile' : 'User Not Found' %>
+<% it.titlehero = it.title %>
+<% it.breadcrumbs = [
+    {
+      name: 'Home',
+      url: it.baseUrl
+    },
+    {
+      name: 'User'
+    },
+    {
+      name: (it.username) ? it.username : 'Not Found'
+    }
+  ]
+%>
+
+  <section class="section is-main-section">
+    <div id="app"></div>
+  </section>
+  <!-- Footer -->
+  <%~ includeFile('partial-footer.html', it) %>
+  <!-- Inline JS -->
+  <%~ includeFile('partial-js.html', it) %>
+  <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/moment-js/moment.min.js"></script>
+  <script>
+    var app = new Reef('#app', {
+      data: {
+        username: '<%=it.username%>',
+        gravatar: '',
+        name: 'This user has not set the name',
+        address: 'This user has not set the address',
+        bio: 'This user has not set the bio',
+        link: [],
+        updated_at: 0,
+        found: true,
+        message: ''
+      },
+      template: function(props) {
+        if(props.username && props.found) {
+          var address = props.address.replaceAll('&#10;','<br>');
+          var bio = props.bio.replaceAll('&#10;','<br>');
+          var social = '';
+          var socialmanage = '';
+          for(var i=0; i<props.link.length;i++) {
+            social += socialBuilder(props.link[i].name,props.link[i].link);
+            socialmanage += '<li><a href="javascript:void(0)" title="Remove Link" onclick="removeLink(\''+props.link[i].link+'\')" class="has-text-danger"><b>X</b></a> <b>'+props.link[i].name+'</b>: '+props.link[i].link+'</li>';
+          }
+          return `<div class="columns">
+            <div class="column is-one-third">
+              <div class="card">
+                <div class="card-content">
+                  <div class="is-user-avatar image has-max-width is-aligned-center">
+                    <img src="${props.gravatar}" alt="${props.username}">
+                  </div>
+                  <hr>
+                  <div class="level">
+                    <div class="level-item has-text-centered">
+                      <div>
+                        <p class="heading">Username</p>
+                        <p><b>${props.username}</b></p>
+                      </div>
+                    </div>
+                    <div class="level-item has-text-centered">
+                      <div>
+                        <p class="heading">Last Updated</p>
+                        <p><b>${moment(props.updated_at).fromNow()}</b></p>
+                      </div>
+                    </div>
+                  </div>
+                  <hr>
+                  <p class="title has-text-centered">
+                    ${social}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="column">
+              <div class="card">
+                <div class="card-content">
+                  <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control is-clearfix">
+                      <input type="text" readonly value="${props.name}" class="input is-static">
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="field">
+                    <label class="label">Address</label>
+                    <p>
+                      ${address}
+                    </p>
+                  </div>
+                  <hr>
+                  <div class="field">
+                    <label class="label">Bio</label>
+                    <div class="content">
+                      ${bio}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>`;
+        } else {
+          return (props.message) ? `<article class="message is-danger">
+              <div class="message-body">
+                ${props.message}
+              </div>
+            </article>`: '';
+        }
+      }
+    });
+    app.render();
+
+    function getProfile(token) {
+      ajax().get('<%=it.baseUrl%>/api/user/profile/<%=it.username%>', {})
+      .then(function(response, xhr) {
+        if(response.statusCode === 200 && response.success === true) {
+          app.data.found = true;
+          app.data.message = '';
+          app.data.username = response.data.username;
+          app.data.updated_at = response.data.updated_at;
+          app.data.gravatar = response.data.gravatar;
+          if(response.data.name) app.data.name = response.data.name;
+          if(response.data.address) app.data.address = response.data.address;
+          if(response.data.bio) app.data.bio = response.data.bio;
+          if(response.data.link && response.data.link.length > 0) app.data.link = response.data.link;
+        } else {
+          app.data.found = false;
+          app.data.message = response.message;
+        }
+      })
+      .catch(function(response, xhr) {
+        console.log(xhr.responseText);
+      })
+    }
+
+    getProfile();
+    
+    getToken('<%=it.baseUrl%>', function(token) {
+      if (token) getMenu('<%=it.baseUrl%>', token);
+    });
+
+    function _social(name,link,type) {
+      return `<span class="icon has-text-${type} mr-2">
+                <i class="mdi mdi-${name}" onclick="window.open('${link}', '_blank')" title="See my ${name}" style="cursor:pointer;" rel="nofollow"></i>
+              </span>`;
+    }          
+
+    function socialBuilder(name,link) {
+      name = name.toLowerCase();
+      switch(true) {
+        case (name === 'facebook') :
+          return _social(name,link,'link');
+        case (name === 'twitter') : 
+          return _social(name,link,'info');
+        case (name === 'instagram') :
+          return _social(name,link,'danger');
+        case (name === 'reddit') : 
+          return _social(name,link,'danger');
+        case (name === 'youtube') : 
+          return _social(name,link,'danger');
+        case (name === 'pinterest') : 
+          return _social(name,link,'danger');
+        case (name === 'linkedin') : 
+          return _social(name,link,'link');
+        case (name === 'vk') : 
+          return _social(name,link,'link');
+        default : 
+          return _social(name,link,'dark');
+      }
+    }
+  </script>
