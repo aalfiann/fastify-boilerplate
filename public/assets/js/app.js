@@ -194,8 +194,12 @@ document.addEventListener('render', function (event) {
                 var elia = eli.querySelector('a');
                 if(elia.getAttribute('href') == location.href) {
                     elia.classList.add('is-active');
-                    if(eli.parentElement.parentElement.querySelector('a').classList.contains('has-dropdown-icon')) {
-                        eli.parentElement.parentElement.classList.add('is-active');
+                    var elip = eli.parentElement.parentElement;
+                    if(elip.querySelector('a').classList.contains('has-dropdown-icon')) {
+                        elip.classList.add('is-active');
+                        var ddicon = elip.getElementsByClassName('dropdown-icon')[0].getElementsByClassName('mdi')[0];
+                        ddicon.classList.toggle('mdi-plus');
+                        ddicon.classList.toggle('mdi-minus');
                     }
                 }
             });
@@ -244,17 +248,22 @@ function getMenu(baseUrl, token, _cb) {
     }
 }
 
-setTimeout(function(){
+// Wait for document is ready
+document.addEventListener('DOMContentLoaded', function () {
     /* Detect current active menu list */
     Array.from(document.getElementsByClassName('menu is-menu-main public')).forEach(function (el) {
         Array.from(el.getElementsByTagName('li')).forEach(function(eli) {
             var elia = eli.querySelector('a');
             if(elia.getAttribute('href') == location.href) {
                 elia.classList.add('is-active');
-                if(eli.parentElement.parentElement.querySelector('a').classList.contains('has-dropdown-icon')) {
-                    eli.parentElement.parentElement.classList.add('is-active');
+                var elip = eli.parentElement.parentElement;
+                if(elip.querySelector('a').classList.contains('has-dropdown-icon')) {
+                    elip.classList.add('is-active');
+                    var ddicon = elip.getElementsByClassName('dropdown-icon')[0].getElementsByClassName('mdi')[0];
+                    ddicon.classList.toggle('mdi-plus');
+                    ddicon.classList.toggle('mdi-minus');
                 }
             }
         });
     });
-},1000);
+});
