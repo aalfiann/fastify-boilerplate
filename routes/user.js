@@ -214,6 +214,8 @@ async function userRoute (server, options) {
         })
 
         if (reupdate) {
+          mongooseHandler.clearCache('my-profile-' + done.username)
+          mongooseHandler.clearCache('public-profile-' + done.username)
           reply.success('Your password has been successfully changed!', { success: true })
         } else {
           reply.success('Failed to reset your password! Please contact us, something went wrong and we need more futher information from you.', { success: false })
@@ -265,6 +267,8 @@ async function userRoute (server, options) {
           return reply.mongooseError(mongooseHandler.errorBuilder(err))
         })
         if (updated) {
+          mongooseHandler.clearCache('my-profile-' + decoded.unm)
+          mongooseHandler.clearCache('public-profile-' + decoded.unm)
           reply.success('Your password successfully changed!', { success: true })
         } else {
           reply.success('Failed to change your password!', { success: false })
@@ -296,7 +300,7 @@ async function userRoute (server, options) {
     // update profile
     const profile = await User.findOne({
       id: decoded.uid
-    }).catch(err => {
+    }).cache(0, 'my-profile-' + decoded.unm).catch(err => {
       return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
     if (profile) {
@@ -338,6 +342,8 @@ async function userRoute (server, options) {
     })
     if (updated) {
       updated.hash = undefined
+      mongooseHandler.clearCache('my-profile-' + decoded.unm)
+      mongooseHandler.clearCache('public-profile-' + decoded.unm)
       reply.success('Your profile successfully updated!', { success: true, data: updated })
     } else {
       reply.success('Failed to update your profile!', { success: false })
@@ -356,7 +362,7 @@ async function userRoute (server, options) {
     // get profile
     const profile = await User.findOne({
       username: request.params.username
-    }).catch(err => {
+    }).cache(0, 'public-profile-' + request.params.username).catch(err => {
       return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
     if (profile) {

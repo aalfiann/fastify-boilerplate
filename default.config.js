@@ -15,6 +15,14 @@ const config = {
     useCreateIndex: true,
     useFindAndModify: false
   },
+  mongoCache: {
+    useRedis: false, // If you set this false, then the cache will using in memory (default is false)
+    redisConfig: {
+      engine: 'redis',
+      port: 6379,
+      host: 'localhost'
+    }
+  },
 
   // =========================================
 

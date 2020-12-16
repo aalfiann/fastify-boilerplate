@@ -1,5 +1,5 @@
 <% layout('layout.html') %>
-<% it.title = 'Dashboard' %>
+<% it.title = 'Performance' %>
 <% it.titlehero = it.title %>
 <% it.breadcrumbs = [
     {
@@ -425,7 +425,10 @@
   <script>
     getToken('<%=it.baseUrl%>', function(token) {
       if(!token) return location = '<%=it.baseUrl%>'+'/login';
-      getMenu('<%=it.baseUrl%>', token);
+      getMenu('<%=it.baseUrl%>', token, function(err,valid) {
+        // If user have no acces to this url menu link, redirect to dashboard
+        if (!err && !valid) return location.href = '/dashboard';
+      });
     });
   </script>
   <script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/chart-js/2.9.4/Chart.min.js"></script>

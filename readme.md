@@ -28,6 +28,8 @@ Our goal is to create a web application that scales well (horizontal scale), str
   Server just render the page and using ajax to get data from API.
 - **MongoDB**  
   MongoDB is horizontal, scale-out architecture can support huge volumes of both data and traffic.
+- **Cache in Memory**  
+  Cache in memory (support redis) could make request faster and save the traffic/bandwidth to MongoDB.
 
 ### Security
 - **JWT Authentication**  
@@ -61,6 +63,7 @@ Our goal is to create a web application that scales well (horizontal scale), str
 ### Requirement
 - NodeJS v10++
 - MongoDB v4
+- Redis v4 [Optional]
 
 ### Usage
 1. Download this source code.

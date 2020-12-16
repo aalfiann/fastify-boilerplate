@@ -38,6 +38,9 @@ async function apiRoute (server, options) {
       return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 
+    mongooseHandler.clearCache('list-by-role-admin')
+    mongooseHandler.clearCache('list-by-role-member')
+
     await reply.success('Add new menu parent success!', { data: done })
   })
 
@@ -67,6 +70,9 @@ async function apiRoute (server, options) {
       return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 
+    mongooseHandler.clearCache('list-by-role-admin')
+    mongooseHandler.clearCache('list-by-role-member')
+
     await reply.success('Update menu parent success', { data: done })
   })
 
@@ -86,6 +92,9 @@ async function apiRoute (server, options) {
     const done = await Menu.findOneAndDelete({ id: request.body.id }).catch(err => {
       return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
+
+    mongooseHandler.clearCache('list-by-role-admin')
+    mongooseHandler.clearCache('list-by-role-member')
 
     await reply.success('Delete menu parent success!', { data: done })
   })
@@ -110,6 +119,9 @@ async function apiRoute (server, options) {
       return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 
+    mongooseHandler.clearCache('list-by-role-admin')
+    mongooseHandler.clearCache('list-by-role-member')
+
     await reply.success('Set menu child success!', { data: done })
   })
 
@@ -132,6 +144,9 @@ async function apiRoute (server, options) {
     }, { new: true }).catch(err => {
       return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
+
+    mongooseHandler.clearCache('list-by-role-admin')
+    mongooseHandler.clearCache('list-by-role-member')
 
     await reply.success('Set status menu parent success!', { data: done })
   })
@@ -163,14 +178,14 @@ async function apiRoute (server, options) {
       server.verifyToken
     ])
   }, async (request, reply) => {
-    const userRole = obase64.decode(server.jwt.verify(request.headers['x-token']).role)
+    const userRole = obase64.decode(server.jwt.decode(request.headers['x-token']).role)
     await mongooseHandler.connect().catch(err => {
       return reply.error(err.message)
     })
 
     const result = await Menu.find({
       $where: 'function() { return this.scope.toString().match(/' + userRole + '/i) != null; }'
-    }).sort({ position: 'asc' }).catch(err => {
+    }).sort({ position: 'asc' }).cache(0, 'list-by-role-' + userRole).catch(err => {
       return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 

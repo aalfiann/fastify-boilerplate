@@ -467,6 +467,7 @@
         getToken('<%=it.baseUrl%>', function(token) {
           // If have no token, redirect to login
           if(!token) return location = '<%=it.baseUrl%>'+'/login';
+          getMenu('<%=it.baseUrl%>', token);
           loadData('<%=it.baseUrl%>',token, function(err,data) {
             if(!err) searchData(Dom.id('search').value,datatable.data.pageNow,datatable.data.itemPerPage);
           });

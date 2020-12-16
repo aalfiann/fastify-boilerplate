@@ -26,11 +26,11 @@ async function pageInternalRoute (server, options) {
    * Template Engine doesn't have html cache so we need to inject it manually via onRequest hooks.
    * This server.useHtmlCache will work if you set isProduction to true only.
    */
-  server.get('/dashboard-admin', { onRequest: server.useHtmlCache }, async (request, reply) => {
+  server.get('/performance', { onRequest: server.useHtmlCache }, async (request, reply) => {
     // Shallow Clone
     const newTemplateData = { ...templateData }
     newTemplateData.siteTitle = config.siteTitle
-    const html = await server.view('dashboard-admin', newTemplateData)
+    const html = await server.view('performance', newTemplateData)
     await reply.html(html)
   })
 
