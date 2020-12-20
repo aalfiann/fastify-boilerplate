@@ -8,9 +8,6 @@ const cluster = require('cluster')
 const numCPUs = require('os').cpus().length
 const nodeMailer = require('fastify-nodemailer')
 const htmlMinifier = require('html-minifier-terser')
-const moment = require('moment')
-const helper = require('./lib/helper')
-const md5 = require('md5')
 const jwt = require('fastify-jwt')
 const server = require('fastify')({
   logger: config.logger,
@@ -18,69 +15,17 @@ const server = require('fastify')({
 })
 
 const App = async () => {
-  // Html Cache
-  server.decorate('useHtmlCache', async function (request, reply) {
-    function injectResponseHeader (etag) {
-      return {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'public, max-age=' + 86400,
-        Expires: moment().add(86400, 'seconds').utc().format('ddd, DD MMM YYYY HH:mm:ss') + ' GMT',
-        Pragma: 'public',
-        Etag: etag
-      }
-    }
-    // Template Engine View doesn't have browser cache, so we must inject it manually each routes.
-    if (config.isProduction) {
-      const etag = '"' + md5(request.url + helper.autoEtag(config.autoEtagAfterHour)) + '"'
-      if (request.headers['if-none-match'] === etag) {
-        return reply.code(304).send('')
-      }
-      reply.headers(injectResponseHeader(etag))
-    }
-  })
-
-  // Routes
-  server.decorate('dataRoutes', [])
-  server.addHook('onRoute', (routeOptions) => {
-    server.dataRoutes.push({
-      method: routeOptions.method,
-      schema: routeOptions.schema,
-      url: routeOptions.url,
-      path: routeOptions.path,
-      routePath: routeOptions.routePath,
-      bodyLimit: routeOptions.bodyLimit,
-      logLevel: routeOptions.logLevel,
-      logSerializers: routeOptions.logSerializers,
-      prefix: routeOptions.prefix
-    })
-  })
-
   // Plugins
+
+  // Html Cache
+  server.register(require('./lib/fastify-html-cache'))
+
+  // Data Routes
+  server.register(require('./lib/fastify-data-routes'))
 
   // Auth
   server.register(require('fastify-auth'))
-  server.decorate('verifyToken', async function (request, reply) {
-    if (!request.headers['x-token']) {
-      return reply.code(400).send({
-        message: 'Missing token header',
-        error: 'Bad Request',
-        statusCode: 400
-      })
-    }
-    return new Promise(function (resolve, reject) {
-      server.jwt.verify(request.headers['x-token'], function (err, decoded) {
-        if (err) { return reject(err) };
-        resolve(decoded)
-      })
-    }).catch(function (error) {
-      request.log.error(error)
-      return reply.code(400).send({
-        message: 'Token not valid',
-        error: error.message,
-        statusCode: 400
-      })
-    })
-  })
+  server.register(require('./lib/fastify-auth-condition'))
 
   // Register routes
   server.register(require('./routes/api.js'))
