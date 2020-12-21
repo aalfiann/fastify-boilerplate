@@ -399,7 +399,8 @@ async function userRoute (server, options) {
       body: schema.addUser
     },
     preHandler: server.auth([
-      server.verifyToken
+      server.verifyToken,
+      server.isRoleAdmin
     ])
   }, async (request, reply) => {
     const timeNow = moment().format('x')
@@ -433,7 +434,8 @@ async function userRoute (server, options) {
       body: schema.updateUser
     },
     preHandler: server.auth([
-      server.verifyToken
+      server.verifyToken,
+      server.isRoleAdmin
     ])
   }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
@@ -469,7 +471,8 @@ async function userRoute (server, options) {
       body: schema.deleteUser
     },
     preHandler: server.auth([
-      server.verifyToken
+      server.verifyToken,
+      server.isRoleAdmin
     ])
   }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
