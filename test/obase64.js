@@ -10,9 +10,19 @@ describe('obase64 function test', function () {
     assert.strictEqual(result.length, 2)
   })
 
-  it('randomizer with size', async function () {
+  it('randomizer with size 1', async function () {
+    const result = hash._randomizer(1)
+    assert.strictEqual(result.length, 2)
+  })
+
+  it('randomizer with size 2', async function () {
     const result = hash._randomizer(2)
     assert.strictEqual(result.length, 3)
+  })
+
+  it('randomizer with size 5', async function () {
+    const result = hash._randomizer(5)
+    assert.strictEqual(result.length, 6)
   })
 
   it('encode', async function () {
