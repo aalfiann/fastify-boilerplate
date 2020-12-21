@@ -17,6 +17,7 @@ const config = {
   },
   mongoCache: {
     useRedis: false, // If you set this false, then the cache will using in memory (default is false)
+    defaultMaxAgeCache: 3600, // In memory cache will use this default max age cache to release memory automatically.
     redisConfig: {
       engine: 'redis',
       port: 6379,
