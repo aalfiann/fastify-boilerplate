@@ -6,9 +6,7 @@ const path = require('path')
 const config = require('./config.js')
 const cluster = require('cluster')
 const numCPUs = require('os').cpus().length
-const nodeMailer = require('fastify-nodemailer')
 const htmlMinifier = require('html-minifier-terser')
-const jwt = require('fastify-jwt')
 const server = require('fastify')({
   logger: config.logger,
   maxParamLength: config.maxParamLength
@@ -37,7 +35,7 @@ const App = async () => {
   server.register(require('./routes/page-internal.js'))
 
   // JWT
-  server.register(jwt, {
+  server.register(require('fastify-jwt'), {
     secret: {
       private: readFileSync(`${path.join(__dirname)}/private.key`, 'utf8'),
       public: readFileSync(`${path.join(__dirname)}/public.key`, 'utf8')
@@ -88,7 +86,7 @@ const App = async () => {
   })
 
   // Mailer
-  server.register(nodeMailer, config.nodeMailerTransport)
+  server.register(require('fastify-nodemailer'), config.nodeMailerTransport)
 
   // Custom Not Found Handler
   server.register(require('./routes/notfound.js'))
