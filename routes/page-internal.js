@@ -24,7 +24,7 @@ async function pageInternalRoute (server, options) {
 
   /**
    * Template Engine doesn't have html cache so we need to inject it manually via onRequest hooks.
-   * This server.useHtmlCache will work if you set isProduction to true only.
+   * This server.useHtmlCache will only work if you set isProduction to true.
    */
   server.get('/performance', { onRequest: server.useHtmlCache }, async (request, reply) => {
     // Shallow Clone
@@ -54,6 +54,11 @@ async function pageInternalRoute (server, options) {
 
   server.get('/my-profile', { onRequest: server.useHtmlCache }, async (request, reply) => {
     const html = await server.view('my-profile', templateData)
+    await reply.html(html)
+  })
+
+  server.get('/data-user', { onRequest: server.useHtmlCache }, async (request, reply) => {
+    const html = await server.view('data-user', templateData)
     await reply.html(html)
   })
 }

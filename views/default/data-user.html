@@ -1,0 +1,31 @@
+<% layout('layout.html') %>
+<% it.title = 'Data User' %>
+<% it.titlehero = it.title %>
+<% it.breadcrumbs = [
+    {
+      name: 'Home',
+      url: it.baseUrl
+    },
+    {
+      name: it.title
+    }
+  ]
+%>
+
+<section class="section is-main-section">
+  <!-- content here -->
+</section>
+<!-- Footer -->
+<%~ includeFile('partial-footer.html', it) %>
+<!-- JS -->
+<%~ includeFile('partial-js.html', it) %>
+<script>
+  getToken('<%=it.baseUrl%>', function(token) {
+    // If have no token, redirect to login
+    if(!token) return location = '<%=it.baseUrl%>'+'/login';
+    getMenu('<%=it.baseUrl%>', token, function(err,valid) {
+        // If user have no acces to this url menu link, redirect to dashboard
+        if (!err && !valid) return location.href = '/dashboard';
+      });
+  });
+</script>
