@@ -29,6 +29,7 @@ const userSchema = {
   bio: { type: String },
   hash: { type: String },
   link: { type: Array },
+  status: { type: Boolean },
   created_at: { type: Number },
   updated_at: { type: Number }
 }
