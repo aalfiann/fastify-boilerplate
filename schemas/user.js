@@ -92,6 +92,46 @@ const getProfile = {
   }
 }
 
+const addUser = {
+  type: 'object',
+  properties: {
+    username: { type: 'string', minLength: 3, maxLength: 20 },
+    password: { type: 'string', minLength: 6, maxLength: 20 },
+    role: { type: 'string' },
+    email: { type: 'string', minLength: 7 }
+  },
+  required: ['username', 'email', 'password', 'role']
+}
+
+const updateUser = {
+  type: 'object',
+  properties: {
+    username: { type: 'string', minLength: 3, maxLength: 20 },
+    password: { type: 'string', minLength: 6, maxLength: 20 },
+    role: { type: 'string' },
+    status: { type: 'boolean' },
+    email: { type: 'string', minLength: 7 }
+  },
+  required: ['username', 'email', 'password', 'role', 'status']
+}
+
+const deleteUser = {
+  type: 'object',
+  properties: {
+    username: { type: 'string', minLength: 3, maxLength: 20 }
+  },
+  required: ['username']
+}
+
+const listUser = {
+  type: 'object',
+  properties: {
+    search: { type: 'string' },
+    last_created_at: { type: 'integer' },
+    limit: { type: 'integer' }
+  }
+}
+
 module.exports = {
   register,
   login,
@@ -101,5 +141,9 @@ module.exports = {
   resetPassword,
   changePassword,
   editProfile,
-  getProfile
+  getProfile,
+  addUser,
+  updateUser,
+  deleteUser,
+  listUser
 }

@@ -14,7 +14,15 @@ const config = require('../config')
 const FlyJson = require('fly-json-odm')
 const md5 = require('md5')
 
+// Default cache profile
+const defaultCacheProfile = config.mongoCache.defaultMaxAgeCache
+
 async function userRoute (server, options) {
+  function clearCache (username) {
+    mongooseHandler.clearCache('my-profile-' + username)
+    mongooseHandler.clearCache('public-profile-' + username)
+  }
+
   server.post('/api/user/register', { schema: schema.register }, async (request, reply) => {
     const timeNow = moment().format('x')
     const user = {
@@ -23,6 +31,7 @@ async function userRoute (server, options) {
       name: request.body.name,
       email: request.body.email,
       hash: await helper.generate(request.body.password),
+      status: true,
       created_at: timeNow,
       updated_at: timeNow
     }
@@ -66,27 +75,31 @@ async function userRoute (server, options) {
     })
 
     if (result.length > 0) {
-      token = server.jwt.sign({
-        uid: result[0].id,
-        unm: result[0].username,
-        name: result[0].name,
-        mail: result[0].email,
-        role: obase64.encode(result[0].role)
-      })
-
-      const pass = await password.compare(request.body.password, result[0].hash).catch(err => {
-        return reply.error(err.message)
-      })
-
-      if (pass) {
-        await server.jwt.verify(token, function (err, decoded) {
-          if (err) {
-            return reply.badRequest(err.message, { success: pass })
-          };
-          reply.success('Login user success!', { success: pass, token: token, expire: decoded.exp })
+      if (result[0].status) {
+        token = server.jwt.sign({
+          uid: result[0].id,
+          unm: result[0].username,
+          name: result[0].name,
+          mail: result[0].email,
+          role: obase64.encode(result[0].role)
         })
+
+        const pass = await password.compare(request.body.password, result[0].hash).catch(err => {
+          return reply.error(err.message)
+        })
+
+        if (pass) {
+          await server.jwt.verify(token, function (err, decoded) {
+            if (err) {
+              return reply.badRequest(err.message, { success: pass })
+            };
+            reply.success('Login user success!', { success: pass, token: token, expire: decoded.exp })
+          })
+        } else {
+          return reply.forbidden('Wrong username or password!', { success: false })
+        }
       } else {
-        return reply.forbidden('Wrong username or password!', { success: false })
+        return reply.forbidden('Your account is suspended!', { success: false })
       }
     } else {
       reply.forbidden('Wrong username or password!', { success: false })
@@ -214,8 +227,7 @@ async function userRoute (server, options) {
         })
 
         if (reupdate) {
-          mongooseHandler.clearCache('my-profile-' + done.username)
-          mongooseHandler.clearCache('public-profile-' + done.username)
+          clearCache(done.username)
           reply.success('Your password has been successfully changed!', { success: true })
         } else {
           reply.success('Failed to reset your password! Please contact us, something went wrong and we need more futher information from you.', { success: false })
@@ -267,8 +279,7 @@ async function userRoute (server, options) {
           return reply.mongooseError(mongooseHandler.errorBuilder(err))
         })
         if (updated) {
-          mongooseHandler.clearCache('my-profile-' + decoded.unm)
-          mongooseHandler.clearCache('public-profile-' + decoded.unm)
+          clearCache(decoded.unm)
           reply.success('Your password successfully changed!', { success: true })
         } else {
           reply.success('Failed to change your password!', { success: false })
@@ -300,7 +311,7 @@ async function userRoute (server, options) {
     // update profile
     const profile = await User.findOne({
       id: decoded.uid
-    }).cache(0, 'my-profile-' + decoded.unm).catch(err => {
+    }).cache(defaultCacheProfile, 'my-profile-' + decoded.unm).catch(err => {
       return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
     if (profile) {
@@ -342,8 +353,7 @@ async function userRoute (server, options) {
     })
     if (updated) {
       updated.hash = undefined
-      mongooseHandler.clearCache('my-profile-' + decoded.unm)
-      mongooseHandler.clearCache('public-profile-' + decoded.unm)
+      clearCache(decoded.unm)
       reply.success('Your profile successfully updated!', { success: true, data: updated })
     } else {
       reply.success('Failed to update your profile!', { success: false })
@@ -362,7 +372,7 @@ async function userRoute (server, options) {
     // get profile
     const profile = await User.findOne({
       username: request.params.username
-    }).cache(0, 'public-profile-' + request.params.username).catch(err => {
+    }).cache(defaultCacheProfile, 'public-profile-' + request.params.username).catch(err => {
       return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
     if (profile) {
@@ -378,6 +388,171 @@ async function userRoute (server, options) {
       reply.success('Get user profile successfully!', { success: true, data: nprofile })
     } else {
       reply.success('User Not Found!', { success: false })
+    }
+
+    await reply
+  })
+
+  server.post('/api/user/add', {
+    schema: {
+      headers: authSchema.auth,
+      body: schema.addUser
+    },
+    preHandler: server.auth([
+      server.verifyToken
+    ])
+  }, async (request, reply) => {
+    const timeNow = moment().format('x')
+    const user = {
+      id: uuidv4(),
+      username: request.body.username,
+      email: request.body.email,
+      role: request.body.role,
+      hash: await helper.generate(request.body.password),
+      status: true,
+      created_at: timeNow,
+      updated_at: timeNow
+    }
+
+    await mongooseHandler.connect().catch(err => {
+      return reply.error(err.message)
+    })
+
+    User(user).save().then(done => {
+      reply.success('Add new user success!')
+    }).catch(err => {
+      reply.mongooseError(mongooseHandler.errorBuilder(err))
+    })
+
+    await reply
+  })
+
+  server.post('/api/user/update', {
+    schema: {
+      headers: authSchema.auth,
+      body: schema.updateUser
+    },
+    preHandler: server.auth([
+      server.verifyToken
+    ])
+  }, async (request, reply) => {
+    await mongooseHandler.connect().catch(err => {
+      return reply.error(err.message)
+    })
+
+    // update user
+    const updated = await User.findOneAndUpdate({
+      username: request.body.username
+    }, {
+      role: request.body.role,
+      hash: await helper.generate(request.body.password),
+      status: request.body.status,
+      updated_at: moment().format('x')
+    }, { new: true }).catch(err => {
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
+    })
+
+    if (updated) {
+      updated.hash = undefined
+      clearCache(request.body.username)
+      reply.success('User successfully updated!', { success: true, data: updated })
+    } else {
+      reply.success('Failed to update user!', { success: false })
+    }
+
+    await reply
+  })
+
+  server.post('/api/user/delete', {
+    schema: {
+      headers: authSchema.auth,
+      body: schema.deleteUser
+    },
+    preHandler: server.auth([
+      server.verifyToken
+    ])
+  }, async (request, reply) => {
+    await mongooseHandler.connect().catch(err => {
+      return reply.error(err.message)
+    })
+
+    // delete user
+    const deleted = await User.findOneAndDelete({
+      username: request.body.username
+    }).catch(err => {
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
+    })
+
+    if (deleted) {
+      clearCache(request.body.username)
+      reply.success('User successfully deleted!', { success: true })
+    } else {
+      reply.success('Failed to delete user!', { success: false })
+    }
+
+    await reply
+  })
+
+  server.post('/api/user/list', {
+    schema: {
+      headers: authSchema.auth,
+      body: schema.listUser
+    },
+    preHandler: server.auth([
+      server.verifyToken,
+      server.isRoleAdmin
+    ], { run: 'all' })
+  }, async (request, reply) => {
+    await mongooseHandler.connect().catch(err => {
+      return reply.error(err.message)
+    })
+
+    /**
+     * Assumed that user data will be very huge, so we won't using old pagination style.
+     * This pagination will be like "loadmore" with last_created_at date and limit.
+     */
+
+    const query = {}
+    if (request.body.last_created_at && request.body.last_created_at > 0) {
+      query.created_at = { $lt: request.body.last_created_at }
+    }
+
+    if (request.body.search && request.body.search !== '') {
+      query.$or = [
+        { username: { $regex: request.body.search, $options: 'i' } },
+        { email: { $regex: request.body.search, $options: 'i' } },
+        { role: { $regex: request.body.search, $options: 'i' } }
+      ]
+    }
+
+    // Prevent limit to not more than 100
+    let limit = 10
+    if (request.body.limit && request.body.limit <= 100) {
+      limit = request.body.limit
+    }
+
+    // user list
+    const total = await User.find(query).countDocuments()
+    const list = await User.find(query)
+      .select(['id', 'username', 'email', 'role', 'status', 'created_at', 'updated_at'])
+      .sort({ created_at: 'desc' })
+      .limit(limit)
+      .catch(err => {
+        return reply.mongooseError(mongooseHandler.errorBuilder(err))
+      })
+
+    const isLoadmore = (total > limit)
+    const pagination = {
+      totalRecord: total,
+      limit: limit,
+      loadmore: isLoadmore,
+      last_created_at: (isLoadmore ? list[list.length - 1].created_at : '')
+    }
+
+    if (list) {
+      reply.success('Get user list success!', { success: true, pagination, data: list })
+    } else {
+      reply.success('Failed to get user list!', { success: false, pagination })
     }
 
     await reply
