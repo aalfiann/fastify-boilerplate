@@ -13,19 +13,485 @@
 %>
 
 <section class="section is-main-section">
-  <!-- content here -->
+  <div class="card has-table has-mobile-sort-spaced">
+    <header class="card-header">
+      <p class="card-header-title">
+        <span class="icon"><i class="mdi mdi-format-list-bulleted"></i></span>
+        User List
+        <span class="ml-5"><button class="button is-dark" onclick="openModal(this,'new-modal')"><i class="mdi mdi-plus mr-2"></i>New</button></span>
+      </p>
+      <div class="card-header-icon field">
+        <p class="control has-icons-right">
+          <input id="search" type="text" class="input" placeholder="Search...">
+          <span class="icon is-small is-right">
+            <i class="mdi mdi-magnify"></i>
+          </span>
+        </p>
+      </div>
+    </header>
+    <div class="card-content">
+      <div id="datatable"></div>
+    </div>
+  </div>
 </section>
+
+<div id="new-modal" class="modal">
+  <div class="modal-background jb-modal-close"></div>
+  <div class="modal-card fix-modal">
+    <header class="modal-card-head">
+      <p class="modal-card-title"><i class="mdi mdi-plus mr-2"></i>Add New User</p>
+      <button class="delete jb-modal-close" aria-label="close"></button>
+    </header>
+    <div id="msg_new"></div>
+    <section class="modal-card-body">
+      <div class="field">
+        <label class="label">Username</label>
+        <div class="control">
+          <input id="username_new" class="input" type="text" placeholder="Input username">
+        </div>
+        <p class="help has-text-left">Username can not be edited in the future.</p>
+      </div>
+      <div class="field">
+        <label class="label">Email</label>
+        <div class="control">
+          <input id="email_new" class="input" type="text" placeholder="Input email">
+        </div>
+        <p class="help has-text-left"></p>
+      </div>
+      <div class="field">
+        <label class="label">Role</label>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <select id="role_new">
+              <option value="member">Member</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Password</label>
+        <div class="control">
+          <input id="password_new" class="input" type="password">
+        </div>
+        <p class="help has-text-left"></p>
+      </div>
+      <div class="field">
+        <label class="label">Confirm Password</label>
+        <div class="control">
+          <input id="confirmpassword_new" class="input" type="password">
+        </div>
+        <p class="help has-text-left"></p>
+      </div>
+    </section>
+    <footer class="modal-card-foot">
+      <button id="btnSubmitNew" onclick="submitNew()" class="button is-dark">Submit</button>
+      <button class="button jb-modal-close">Cancel</button>
+    </footer>
+  </div>
+  <button class="modal-close is-large jb-modal-close" aria-label="close"></button>
+</div>
+
+<div id="edit-modal" class="modal">
+  <div class="modal-background jb-modal-close"></div>
+  <div class="modal-card fix-modal">
+    <header class="modal-card-head">
+      <p class="modal-card-title"><i class="mdi mdi-plus mr-2"></i>Edit User</p>
+      <button class="delete jb-modal-close" aria-label="close"></button>
+    </header>
+    <div id="msg_edit"></div>
+    <section class="modal-card-body">
+      <div class="field">
+        <label class="label">Username</label>
+        <div class="control">
+          <input id="username_edit" class="input" type="text" placeholder="Input username">
+        </div>
+        <p class="help has-text-left">Username can not be edited in the future.</p>
+      </div>
+      <div class="field">
+        <label class="label">Email</label>
+        <div class="control">
+          <input id="email_edit" class="input" type="text" placeholder="Input email">
+        </div>
+        <p class="help has-text-left"></p>
+      </div>
+      <div class="field">
+        <label class="label">Role</label>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <select id="role_edit">
+              <option value="member">Member</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label">Status</label>
+        <div class="control">
+          <div class="select is-fullwidth">
+            <select id="status_edit">
+              <option value="true">Activated</option>
+              <option value="false">Disabled</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+    <footer class="modal-card-foot">
+      <button id="btnSubmitEdit" onclick="submitUpdate()" class="button is-dark">Submit</button>
+      <button class="button jb-modal-close">Cancel</button>
+    </footer>
+  </div>
+  <button class="modal-close is-large jb-modal-close" aria-label="close"></button>
+</div>
+
 <!-- Footer -->
 <%~ includeFile('partial-footer.html', it) %>
 <!-- JS -->
 <%~ includeFile('partial-js.html', it) %>
+<script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/moment-js/moment.min.js"></script>
+<script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/sweetalert/sweetalert.min.js"></script>
 <script>
+  var _token = '';
+  var last_created_at = 0;
+  var limit = 2;
   getToken('<%=it.baseUrl%>', function(token) {
     // If have no token, redirect to login
     if(!token) return location = '<%=it.baseUrl%>'+'/login';
+    _token = token;
     getMenu('<%=it.baseUrl%>', token, function(err,valid) {
-        // If user have no acces to this url menu link, redirect to dashboard
-        if (!err && !valid) return location.href = '/dashboard';
-      });
+      // If user have no acces to this url menu link, redirect to dashboard
+      if (!err && !valid) return location.href = '/dashboard';
+      loadData('');
+    });
   });
+
+  var datatable = new Reef('#datatable', {
+    data: {
+      table: [],
+      loadmore: true,
+      message: ''
+    },
+    template: function(props) {
+      if (props.table.length > 0) {
+        return `<div id="table-user" class="b-table has-pagination">
+          <div class="table-wrapper has-mobile-cards">
+            <table class="table is-fullwidth is-striped is-hoverable is-sortable is-fullwidth">
+              <thead>
+              <tr>
+                <th>No</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Updated</th>
+              </tr>
+              </thead>
+              <tbody>
+              ${props.table.map(function(item, index) {
+                return `<tr>
+                  <td data-label="No">${(index+1)}</td>
+                  <td data-label="Username">${item.username}</td>
+                  <td data-label="Email">${item.email}</td>
+                  <td data-label="Role">${item.role}</td>
+                  <td data-label="Status">${(item.status)? '<span class="tag is-success">Activated</span>':'<span class="tag is-danger">Disabled</span>'}</td>
+                  <td data-label="Created">${moment(item.created_at).format('YYYY-MM-DD HH:mm:ss')}</td>
+                  <td data-label="Updated">${(item.updated_at ? moment(item.updated_at).format('YYYY-MM-DD HH:mm:ss') : '')}</td>
+                  <td class="is-actions-cell">
+                    <div class="buttons is-right">
+                      <button class="button is-small is-primary" type="button" title="Edit User" onclick="openModal(this,'edit-modal','${item.username}')">
+                        <span class="icon"><i class="mdi mdi-pencil-outline"></i></span>
+                      </button>
+                      <button class="button is-small is-danger" type="button" title="Delete User" onclick="submitDelete('${item.username}')">
+                        <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>`;
+              }).join('')}
+              </tbody>
+            </table>
+          </div>
+          <div class="notification">
+            <div class="level">
+              <div class="level-item">
+                <div class="buttons has-addons">
+                  ${(props.loadmore ? `<button id="btnLoadmore" type="button" class="button is-dark" onclick="loadmore(Dom.id('search').value)">Loadmore</button>` : '')}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      } else {
+        return ( props.message ? `<article class="message is-danger">
+                <div class="message-body">
+                  ${props.message}
+                </div>
+              </article>` : '' );
+      }
+    }
+  })
+
+  datatable.render();
+
+  function refresh() {
+    datatable.data.table = [];
+    datatable.data.loadmore = true;
+    datatable.data.message = '';
+  }
+
+  function loadData(value) {
+    refresh();
+    ajax({
+      headers: {
+        'x-token': _token,
+        'content-type': 'application/json'
+      }
+    })
+    .post('<%=it.baseUrl%>/api/user/list', {
+      search: value,
+      last_created_at: 0,
+      limit: limit
+    })
+    .then(function(response, xhr) {
+      if(response.statusCode === 200 & response.success) {
+        if(response.data.length>0) {
+          datatable.data.table = response.data;
+          datatable.data.loadmore = response.pagination.loadmore;
+          last_created_at = response.pagination.last_created_at;
+        } else {
+          datatable.data.message = 'Data is not found!';
+        }
+      }
+    })
+    .catch(function(response, xhr) {
+      console.log(xhr.responseText);
+      datatable.data.message = xhr.response.message;
+    })
+  }
+
+  function loadmore(value) {
+    Dom.addClass(Dom.id('btnLoadmore'), 'is-loading');
+    ajax({
+      headers: {
+        'x-token': _token,
+        'content-type': 'application/json'
+      }
+    })
+    .post('<%=it.baseUrl%>/api/user/list', {
+      search: value,
+      last_created_at: last_created_at,
+      limit: limit
+    })
+    .then(function(response, xhr) {
+      if(response.statusCode === 200 & response.success) {
+        if(response.data.length > 0) {
+          last_created_at = response.pagination.last_created_at;
+          var rows = Dom.id('table-user').getElementsByTagName('tbody')[0].rows.length;
+          for(var i =0; i< response.data.length; i++) {
+            rows++;
+            addRow('table-user',rows,response.data[i].username,response.data[i].email,response.data[i].role,response.data[i].status,moment(response.data[i].created_at).format('YYYY-MM-DD HH:mm:ss'),(response.data[i].updated_at ? moment(response.data[i].updated_at).format('YYYY-MM-DD HH:mm:ss'):''));
+          }
+        }
+        if(!response.pagination.loadmore) {
+          Dom.id('btnLoadmore').style.display = 'none';
+        }
+      }
+    })
+    .catch(function(response, xhr) {
+      console.log(xhr.responseText);
+    })
+    .always(function(response, xhr) {
+      Dom.removeClass(Dom.id('btnLoadmore'), 'is-loading');
+    })
+  }
+
+  function addRow(el, num, username, email, role, status, created, updated) {
+    var tableRef = document.getElementById(el).getElementsByTagName('tbody')[0];
+    // Insert a row in the table at row index 0
+    var newRow   = tableRef.insertRow(tableRef.rows.length);
+    // Insert a cell in the row
+    newRow.insertCell(0).innerHTML = num;
+    newRow.cells[0].setAttribute('data-label', '#');
+    newRow.insertCell(1).innerHTML = username;
+    newRow.cells[1].setAttribute('data-label', 'Username');
+    newRow.insertCell(2).innerHTML = email;
+    newRow.cells[2].setAttribute('data-label', 'Email');
+    newRow.insertCell(3).innerHTML = role;
+    newRow.cells[3].setAttribute('data-label', 'Role');
+    newRow.insertCell(4).innerHTML = (status?'<span class="tag is-success">Activated</span>':'<span class="tag is-danger">Disabled</span>');
+    newRow.cells[4].setAttribute('data-label', 'Status');
+    newRow.insertCell(5).innerHTML = created;
+    newRow.cells[5].setAttribute('data-label', 'Created');
+    newRow.insertCell(6).innerHTML = updated;
+    newRow.cells[6].setAttribute('data-label', 'Updated');
+    newRow.insertCell(7).innerHTML =`<div class="buttons is-right">
+                      <button class="button is-small is-primary" type="button" title="Edit User" onclick="openModal(this,'edit-modal','${username}')">
+                        <span class="icon"><i class="mdi mdi-pencil-outline"></i></span>
+                      </button>
+                      <button class="button is-small is-danger" type="button" title="Delete User" onclick="submitDelete('${username}')">
+                        <span class="icon"><i class="mdi mdi-trash-can"></i></span>
+                      </button>
+                    </div>`;
+    newRow.cells[7].setAttribute('class', 'is-actions-cell');
+  }
+
+  Dom.id('search').addEventListener('keyup', function(e) {
+    if (e.keyCode === 13) {
+      loadData(this.value);
+    }
+  })
+
+  function openModal(e, el, id) {
+    Dom.addClass(Dom.id(el),'is-active');
+    Dom.addClass(Dom.id(el),'is-clipped');
+    switch(true) {
+      case (el === 'edit-modal') :
+        var row = e.closest('tr');
+        Dom.id('username_edit').value = row.cells[1].innerHTML;
+        Dom.id('email_edit').value = row.cells[2].innerHTML;
+        Dom.id('role_edit').value = row.cells[3].innerHTML;
+        Dom.id('status_edit').value = (row.cells[4].getElementsByTagName('span')[0].innerHTML == 'Activated' ? 'true': 'false');
+        Dom.id('msg_edit').innerHTML = '';
+      default :
+        Dom.id('msg_new').innerHTML = '';
+    }
+  }
+
+  function submitNew() {
+    Dom.id('msg_new').innerHTML = '';
+    Dom.addClass(Dom.id('btnSubmitNew'), 'is-loading');
+    ajax({
+      headers: {
+        'x-token': _token,
+        'content-type': 'application/json'
+      }
+    })
+    .post('<%=it.baseUrl%>/api/user/add', {
+      username: Dom.id('username_new').value,
+      email: Dom.id('email_new').value,
+      role: Dom.id('role_new').value,
+      password: Dom.id('password_new').value
+    })
+    .then(function(response, xhr) {
+      if(response.statusCode===200 && response.success) {
+        loadData(Dom.id('search').value);
+        Dom.id('msg_new').innerHTML = `<article class="message is-success">
+            <div class="message-body">
+              ${response.message}
+            </div>
+          </article>`;
+      } else {
+        Dom.id('msg_new').innerHTML = `<article class="message is-danger">
+          <div class="message-body">
+            ${response.message}
+          </div>
+        </article>`;  
+      }
+    })
+    .catch(function(response, xhr) {
+      console.log(xhr.responseText);
+      Dom.id('msg_new').innerHTML = `<article class="message is-danger">
+          <div class="message-body">
+            ${response.message}
+          </div>
+        </article>`;
+    })
+    .always(function(response, xhr) {
+      Dom.removeClass(Dom.id('btnSubmitNew'), 'is-loading');
+    })
+  }
+
+  function submitUpdate() {
+    Dom.id('msg_edit').innerHTML = '';
+    Dom.addClass(Dom.id('btnSubmitEdit'), 'is-loading');
+    ajax({
+      headers: {
+        'x-token': _token,
+        'content-type': 'application/json'
+      }
+    })
+    .post('<%=it.baseUrl%>/api/user/update', {
+      username: Dom.id('username_edit').value,
+      email: Dom.id('email_edit').value,
+      role: Dom.id('role_edit').value,
+      status: Dom.id('status_edit').value
+    })
+    .then(function(response, xhr) {
+      if(response.statusCode===200 && response.success) {
+        loadData(Dom.id('search').value);
+        Dom.id('msg_edit').innerHTML = `<article class="message is-success">
+            <div class="message-body">
+              ${response.message}
+            </div>
+          </article>`;
+      } else {
+        Dom.id('msg_edit').innerHTML = `<article class="message is-danger">
+          <div class="message-body">
+            ${response.message}
+          </div>
+        </article>`;  
+      }
+    })
+    .catch(function(response, xhr) {
+      console.log(xhr.responseText);
+      Dom.id('msg_edit').innerHTML = `<article class="message is-danger">
+          <div class="message-body">
+            ${response.message}
+          </div>
+        </article>`;
+    })
+    .always(function(response, xhr) {
+      Dom.removeClass(Dom.id('btnSubmitEdit'), 'is-loading');
+    })
+  }
+
+  function submitDelete(username) {
+    swal({
+      title: "Are you sure?",
+      text: "Once deleted, you will not be able to recover this anymore!",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        ajax({
+          headers: {
+            'x-token': _token,
+            'content-type': 'application/json'
+          }
+        })
+        .post('<%=it.baseUrl%>/api/user/delete', {
+          username: username
+        })
+        .then(function (response, xhr) {
+          if (response.statusCode === 200) {
+            swal(response.message, {
+              icon: "success",
+            });
+            // Tell the datatables to reload the data
+            Reef.emit(document, 'reload', {
+              success: true
+            });
+          }
+        })
+        .catch(function (response, xhr) {
+          console.log(xhr.responseText);
+          swal(response.message, {
+              icon: "error",
+            });
+        })
+      }
+    });
+  }
+
+  document.addEventListener('reload', function(e) {
+    if (e.detail.success) {
+      loadData(Dom.id('search').value);
+    }
+  })
+
 </script>

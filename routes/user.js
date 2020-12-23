@@ -401,7 +401,7 @@ async function userRoute (server, options) {
     preHandler: server.auth([
       server.verifyToken,
       server.isRoleAdmin
-    ])
+    ], { relation: 'and' })
   }, async (request, reply) => {
     const timeNow = moment().format('x')
     const user = {
@@ -420,7 +420,7 @@ async function userRoute (server, options) {
     })
 
     User(user).save().then(done => {
-      reply.success('Add new user success!')
+      reply.success('Add new user success!', { success: true })
     }).catch(err => {
       reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
@@ -436,7 +436,7 @@ async function userRoute (server, options) {
     preHandler: server.auth([
       server.verifyToken,
       server.isRoleAdmin
-    ])
+    ], { relation: 'and' })
   }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
       return reply.error(err.message)
@@ -446,8 +446,8 @@ async function userRoute (server, options) {
     const updated = await User.findOneAndUpdate({
       username: request.body.username
     }, {
+      email: request.body.email,
       role: request.body.role,
-      hash: await helper.generate(request.body.password),
       status: request.body.status,
       updated_at: moment().format('x')
     }, { new: true }).catch(err => {
@@ -473,7 +473,7 @@ async function userRoute (server, options) {
     preHandler: server.auth([
       server.verifyToken,
       server.isRoleAdmin
-    ])
+    ], { relation: 'and' })
   }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
       return reply.error(err.message)
@@ -504,7 +504,7 @@ async function userRoute (server, options) {
     preHandler: server.auth([
       server.verifyToken,
       server.isRoleAdmin
-    ], { run: 'all' })
+    ], { relation: 'and' })
   }, async (request, reply) => {
     await mongooseHandler.connect().catch(err => {
       return reply.error(err.message)

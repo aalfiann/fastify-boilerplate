@@ -107,12 +107,11 @@ const updateUser = {
   type: 'object',
   properties: {
     username: { type: 'string', minLength: 3, maxLength: 20 },
-    password: { type: 'string', minLength: 6, maxLength: 20 },
     role: { type: 'string' },
     status: { type: 'boolean' },
     email: { type: 'string', minLength: 7 }
   },
-  required: ['username', 'email', 'password', 'role', 'status']
+  required: ['username', 'email', 'role', 'status']
 }
 
 const deleteUser = {
