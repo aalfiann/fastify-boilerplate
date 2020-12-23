@@ -54,10 +54,12 @@
         <div class="field">
           <label class="label">Type</label>
           <div class="control">
-            <select id="menu_type_new" class="input">
-              <option value="link">Link</option>
-              <option value="colapse">Colapse</option>
-            </select>
+            <div class="select is-fullwidth">
+              <select id="menu_type_new">
+                <option value="link">Link</option>
+                <option value="colapse">Colapse</option>
+              </select>
+            </div>
           </div>
           <p class="help has-text-left">There is only two type of menu, link or colapse, choose only one.</p>
         </div>
@@ -123,10 +125,12 @@
         <div class="field">
           <label class="label">Type</label>
           <div class="control">
-            <select id="menu_type" class="input">
-              <option value="link">Link</option>
-              <option value="colapse">Colapse</option>
-            </select>
+            <div class="select is-fullwidth">
+              <select id="menu_type">
+                <option value="link">Link</option>
+                <option value="colapse">Colapse</option>
+              </select>
+            </div>
           </div>
           <p class="help has-text-left">There is only two type of menu, link or colapse, choose only one.</p>
         </div>
@@ -161,10 +165,12 @@
         <div class="field">
           <label class="label">Status</label>
           <div class="control">
-            <select id="menu_status" class="input">
-              <option value="true">Activated</option>
-              <option value="false">Disabled</option>
-            </select>
+            <div class="select is-fullwidth">
+              <select id="menu_status">
+                <option value="true">Activated</option>
+                <option value="false">Disabled</option>
+              </select>
+            </div>
           </div>
         </div>
       </section>
@@ -585,11 +591,6 @@
                 swal(response.message, {
                   icon: "success",
                 });
-                Dom.id('msg_new').innerHTML = `<article class="message is-success">
-                    <div class="message-body">
-                      ${response.message}
-                    </div>
-                  </article>`;
                 // Tell the datatables to reload the data
                 Reef.emit(document, 'reload', {
                   success: true
@@ -598,11 +599,9 @@
             })
             .catch(function (response, xhr) {
               console.log(xhr.responseText);
-              Dom.id('msg_new').innerHTML = `<article class="message is-danger">
-                  <div class="message-body">
-                    ${xhr.responseText}
-                  </div>
-                </article>`;
+              swal(response.message, {
+                  icon: "error",
+                });
             })
           }
         });
