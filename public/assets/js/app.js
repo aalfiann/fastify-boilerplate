@@ -194,7 +194,9 @@ document.addEventListener('render', function (event) {
         }
         _menu_aside_rendered++;
     } else {
-        detectMenuList('internal');
+        setTimeout(function() {
+            detectMenuList('internal');
+        },1000);
     }
 }, false);
 
