@@ -95,6 +95,10 @@
     </header>
     <div id="msg_edit"></div>
     <section class="modal-card-body">
+      <div class="is-user-avatar image has-max-width is-aligned-center">
+        <img id="avatar" src="#">
+      </div>
+      <hr>
       <div class="field">
         <label class="label">Username</label>
         <div class="control">
@@ -230,6 +234,7 @@
               <thead>
               <tr>
                 <th>No</th>
+                <th>Avatar</th>
                 <th>Username</th>
                 <th>Email</th>
                 <th>Role</th>
@@ -242,6 +247,7 @@
               ${props.table.map(function(item, index) {
                 return `<tr>
                   <td data-label="No">${(index+1)}</td>
+                  <td data-label="Avatar"><img src="${gravatar(htmlDecode(item.email))}"></td>
                   <td data-label="Username">${item.username}</td>
                   <td data-label="Email">${item.email}</td>
                   <td data-label="Role">${item.role}</td>
@@ -364,19 +370,21 @@
     // Insert a cell in the row
     newRow.insertCell(0).innerHTML = num;
     newRow.cells[0].setAttribute('data-label', '#');
-    newRow.insertCell(1).innerHTML = username;
-    newRow.cells[1].setAttribute('data-label', 'Username');
-    newRow.insertCell(2).innerHTML = email;
-    newRow.cells[2].setAttribute('data-label', 'Email');
-    newRow.insertCell(3).innerHTML = role;
-    newRow.cells[3].setAttribute('data-label', 'Role');
-    newRow.insertCell(4).innerHTML = (status?'<span class="tag is-success">Activated</span>':'<span class="tag is-danger">Disabled</span>');
-    newRow.cells[4].setAttribute('data-label', 'Status');
-    newRow.insertCell(5).innerHTML = created;
-    newRow.cells[5].setAttribute('data-label', 'Created');
-    newRow.insertCell(6).innerHTML = updated;
-    newRow.cells[6].setAttribute('data-label', 'Updated');
-    newRow.insertCell(7).innerHTML =`<div class="buttons is-right">
+    newRow.insertCell(1).innerHTML = '<img src="'+gravatar(email)+'">';
+    newRow.cells[1].setAttribute('data-label', 'Avatar');
+    newRow.insertCell(2).innerHTML = username;
+    newRow.cells[2].setAttribute('data-label', 'Username');
+    newRow.insertCell(3).innerHTML = email;
+    newRow.cells[3].setAttribute('data-label', 'Email');
+    newRow.insertCell(4).innerHTML = role;
+    newRow.cells[4].setAttribute('data-label', 'Role');
+    newRow.insertCell(5).innerHTML = (status?'<span class="tag is-success">Activated</span>':'<span class="tag is-danger">Disabled</span>');
+    newRow.cells[5].setAttribute('data-label', 'Status');
+    newRow.insertCell(6).innerHTML = created;
+    newRow.cells[6].setAttribute('data-label', 'Created');
+    newRow.insertCell(7).innerHTML = updated;
+    newRow.cells[7].setAttribute('data-label', 'Updated');
+    newRow.insertCell(8).innerHTML =`<div class="buttons is-right">
                       <button class="button is-small is-primary" type="button" title="Edit User" onclick="openModal(this,'edit-modal','${username}')">
                         <span class="icon"><i class="mdi mdi-pencil-outline"></i></span>
                       </button>
@@ -384,7 +392,7 @@
                         <span class="icon"><i class="mdi mdi-trash-can"></i></span>
                       </button>
                     </div>`;
-    newRow.cells[7].setAttribute('class', 'is-actions-cell');
+    newRow.cells[8].setAttribute('class', 'is-actions-cell');
   }
 
   Dom.id('search').addEventListener('keyup', function(e) {
@@ -399,10 +407,11 @@
     switch(true) {
       case (el === 'edit-modal') :
         var row = e.closest('tr');
-        Dom.id('username_edit').value = row.cells[1].innerHTML;
-        Dom.id('email_edit').value = row.cells[2].innerHTML;
-        Dom.id('role_edit').value = row.cells[3].innerHTML;
-        Dom.id('status_edit').value = (row.cells[4].getElementsByTagName('span')[0].innerHTML == 'Activated' ? 'true': 'false');
+        Dom.id('avatar').setAttribute('src', gravatar(row.cells[3].innerHTML));
+        Dom.id('username_edit').value = row.cells[2].innerHTML;
+        Dom.id('email_edit').value = row.cells[3].innerHTML;
+        Dom.id('role_edit').value = row.cells[4].innerHTML;
+        Dom.id('status_edit').value = (row.cells[5].getElementsByTagName('span')[0].innerHTML == 'Activated' ? 'true': 'false');
         Dom.id('msg_edit').innerHTML = '';
       default :
         Dom.id('msg_new').innerHTML = '';

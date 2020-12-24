@@ -1,20 +1,16 @@
-> *Still Under Constructions*
-
----
-
 # Fastify Boilerplate
 Fastify Boilerplate with JWT, Mongoose and Bulma
 
 ### Features
-- Login             >> done
-- Logout            >> done
-- Forgot Password   >> done
-- Menu Management   >> done
-- Change Password   >> done
-- Manage Profile    >> done
-- Public Profile    >> done
-- User Management   >> done
-- Admin Dashboard
+- Login
+- Logout
+- Forgot Password
+- Menu Management
+- User Management
+- Change Password
+- Manage Profile
+- Public Profile
+- Dashboard
 
 
 ### Concepts

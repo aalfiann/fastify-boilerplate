@@ -15,6 +15,15 @@ const config = {
     useCreateIndex: true,
     useFindAndModify: false
   },
+  mongoCache: {
+    useRedis: false, // If you set this false, then the cache will using in memory (default is false)
+    defaultMaxAgeCache: 3600, // In memory cache will use this default max age cache to release memory automatically.
+    redisConfig: {
+      engine: 'redis',
+      port: 6379,
+      host: 'localhost'
+    }
+  },
 
   // =========================================
 
@@ -74,7 +83,7 @@ const config = {
   // - Not all shared hosting will work.
   useHTMLMinifier: false,
   // Options for html minifier (this will work if you set useHTMLMinifier to true)
-  // For more detail, see https://github.com/kangax/html-minifier#options-quick-reference
+  // For more detail, see https://github.com/terser/html-minifier-terser#options-quick-reference
   minifierOptions: {
     removeComments: true,
     removeCommentsFromCDATA: true,

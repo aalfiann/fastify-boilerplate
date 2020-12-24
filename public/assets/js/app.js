@@ -89,13 +89,13 @@ var profile_nav = new Reef('#profile_nav', {
               <span class="icon"><i class="mdi mdi-chevron-down"></i></span>
             </a>
             <div class="navbar-dropdown">
-              <a href="${props.baseUrl+'/user/'+profile.unm}" class="navbar-item">
+              <a href="${props.baseUrl}/my-profile" class="navbar-item">
                 <span class="icon"><i class="mdi mdi-account"></i></span>
                 <span>My Profile</span>
               </a>
-              <a class="navbar-item">
-                <span class="icon"><i class="mdi mdi-cog"></i></span>
-                <span>Settings</span>
+              <a href="${props.baseUrl}/change-password" class="navbar-item">
+                <span class="icon"><i class="mdi mdi-key"></i></span>
+                <span>Change Password</span>
               </a>
               <hr class="navbar-divider">
               <a class="navbar-item" onclick="logout('${props.baseUrl}')">
@@ -104,9 +104,9 @@ var profile_nav = new Reef('#profile_nav', {
               </a>
             </div>
           </div>
-            <a href="https://justboil.me/bulma-admin-template/one-html" title="About" class="navbar-item has-divider is-desktop-icon-only">
-                <span class="icon"><i class="mdi mdi-help-circle-outline"></i></span>
-                <span>About</span>
+            <a href="https://github.com/aalfiann/fastify-boilerplate" target="_blank" title="Source Code" class="navbar-item has-divider is-desktop-icon-only">
+                <span class="icon"><i class="mdi mdi-github"></i></span>
+                <span>Source Code</span>
             </a>
           </div>`;
         } else {
@@ -115,9 +115,9 @@ var profile_nav = new Reef('#profile_nav', {
                 <span class="icon"><i class="mdi mdi-login"></i></span>
                 <span>Login</span>
             </a>
-            <a href="https://justboil.me/bulma-admin-template/one-html" title="About" class="navbar-item has-divider is-desktop-icon-only">
-                <span class="icon"><i class="mdi mdi-help-circle-outline"></i></span>
-                <span>About</span>
+            <a href="https://github.com/aalfiann/fastify-boilerplate" target="_blank" title="Source Code" class="navbar-item has-divider is-desktop-icon-only">
+                <span class="icon"><i class="mdi mdi-github"></i></span>
+                <span>Source Code</span>
             </a>
             </div>`;
         }
