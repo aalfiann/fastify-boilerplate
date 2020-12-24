@@ -62,31 +62,31 @@ async function pageRoute (server, options) {
     payload.reset_pass_id = request.params.id
 
     // Check expired request reset password
-    const conn = await mongooseHandler.connect().catch(err => {
+    try {
+      await mongooseHandler.connect()
+    } catch (err) {
       payload.valid = false
       payload.message = err.message
-    })
+    }
 
-    if (conn) {
-      if (!payload.valid) {
-        const result = await ForgotPassword.find({
-          $and: [
-            { id: request.params.id },
-            { expired_at: { $gte: moment().format('x') } },
-            { status: false }
-          ]
-        }).catch(err => {
-          payload.valid = false
-          payload.message = err.message
-        })
+    if (!payload.valid) {
+      const result = await ForgotPassword.find({
+        $and: [
+          { id: request.params.id },
+          { expired_at: { $gte: moment().format('x') } },
+          { status: false }
+        ]
+      }).catch(err => {
+        payload.valid = false
+        payload.message = err.message
+      })
 
-        if (result.length > 0) {
-          payload.valid = true
-          payload.message = ''
-        } else {
-          payload.valid = false
-          payload.message = 'Link to Reset Password already expired.'
-        }
+      if (result.length > 0) {
+        payload.valid = true
+        payload.message = ''
+      } else {
+        payload.valid = false
+        payload.message = 'Link to Reset Password already expired.'
       }
     }
 

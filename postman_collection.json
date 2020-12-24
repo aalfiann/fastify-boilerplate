@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "c4a8700b-a93e-4212-8174-2caa1cd6036b",
-		"name": "Fastify JWT Skeleton",
+		"_postman_id": "8ae9470a-d37b-42d6-aadc-dce0cda6f424",
+		"name": "Fastify Boilerplate",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -131,6 +131,39 @@
 					"response": []
 				},
 				{
+					"name": "Search Contact with Function",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3000/db/search-contact-function?q=",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"db",
+								"search-contact-function"
+							],
+							"query": [
+								{
+									"key": "q",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Contact",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -159,6 +192,538 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Menu",
+			"item": [
+				{
+					"name": "Add Menu Parent",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Token",
+								"type": "text",
+								"value": ""
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\":\"Tester\",\n\t\"url\":\"/tester\",\n\t\"type\":\"colapse\",\n\t\"scope\":\"admin, member\",\n\t\"position\": 1,\n\t\"icon\":\"mdi mdi-magnify\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/menu/parent/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"menu",
+								"parent",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Menu Parent",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Token",
+								"type": "text",
+								"value": ""
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": \"\",\n\t\"name\":\"Tester 2\",\n\t\"url\":\"/tester\",\n\t\"type\":\"link\",\n\t\"scope\":\"admin, member\",\n\t\"position\": 1,\n\t\"status\": true,\n\t\"icon\":\"\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/menu/parent/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"menu",
+								"parent",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Menu Parent",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Token",
+								"type": "text",
+								"value": ""
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\": \"\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/menu/parent/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"menu",
+								"parent",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List Menu Parent",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Token",
+								"type": "text",
+								"value": ""
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/menu/parent/list",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"menu",
+								"parent",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get List Menu Parent by Role",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Token",
+								"type": "text",
+								"value": ""
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/menu/parent/list-by-role",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"menu",
+								"parent",
+								"list-by-role"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set Status Menu Parent",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Token",
+								"type": "text",
+								"value": ""
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\":\"\",\n\t\"status\": false\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/menu/parent/set-status",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"menu",
+								"parent",
+								"set-status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Set Menu Child",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Token",
+								"type": "text",
+								"value": ""
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"id\":\"\",\n\t\"child\": [\n\t\t{\n\t\t\t\"name\": \"My Profile\",\n\t\t\t\"url\": \"/my-profile\",\n\t\t\t\"position\": 1\n\t\t},\n\t\t{\n\t\t\t\"name\": \"Change Password\",\n\t\t\t\"url\": \"/change-password\",\n\t\t\t\"position\": 2\n\t\t}\n\t]\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/menu/parent/set-menu-child",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"menu",
+								"parent",
+								"set-menu-child"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Add User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-Token",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"\",\n\t\"email\": \"\",\n\t\"role\": \"\",\n\t\"password\": \"\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/add",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Token",
+								"type": "text",
+								"value": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"\",\n\t\"email\": \"\",\n\t\"role\": \"\",\n\t\"status\": \"\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Token",
+								"type": "text",
+								"value": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"username\": \"\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User List",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "x-token",
+								"type": "text",
+								"value": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"search\": \"\",\n\t\"last_created_at\": 0,\n\t\"limit\": 2\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/list",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"list"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "Change Password",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Token",
+								"type": "text",
+								"value": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n\t\"oldpassword\": \"\",\n\t\"newpassword\": \"\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/change-password",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"change-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "My Profile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Token",
+								"type": "text",
+								"value": ""
+							}
+						],
+						"url": {
+							"raw": "http://localhost:3000/api/user/my-profile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"my-profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Token",
+								"type": "text",
+								"value": ""
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"M ABD AZIZ ALFIAN\",\n\t\"email\": \"aalfiann@gmail.com\",\n\t\"address\": \"Jakarta Timur DKI Jakarta\",\n\t\"bio\": \"Just ordinary developer\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3000/api/user/my-profile/update",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"user",
+								"my-profile",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Test Connection DB",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/test/connection-database",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"test",
+						"connection-database"
+					]
+				}
+			},
+			"response": []
 		},
 		{
 			"name": "Login User",
@@ -246,6 +811,136 @@
 						"api",
 						"auth",
 						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Username",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/user/check-username/<username>",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"check-username",
+						"<username>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Check Email",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/user/check-email/<email-address>",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"check-email",
+						"<email-address>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate Reset Password",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\":\"\"}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/user/generate-reset-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"generate-reset-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reset Password",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n\t\"id\":\"\",\n\t\"password\": \"\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/user/reset-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"reset-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User Profile",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/user/profile/<username>",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"user",
+						"profile",
+						"<username>"
 					]
 				}
 			},

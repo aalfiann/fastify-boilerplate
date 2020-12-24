@@ -18,33 +18,34 @@ async function apiRoute (server, options) {
       server.verifyToken
     ])
   }, async (request, reply) => {
-    const connect = await mongooseHandler.connect().catch(err => {
+    try {
+      await mongooseHandler.connect()
+    } catch (err) {
       return reply.error(err.message)
+    }
+
+    const data = {
+      id: uuidv4(),
+      name: request.body.name,
+      url: request.body.url,
+      type: request.body.type,
+      scope: request.body.scope,
+      position: request.body.position,
+      icon: request.body.icon,
+      status: true,
+      created_at: moment().format('x')
+    }
+
+    const done = await Menu(data).save().catch(err => {
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 
-    if (connect) {
-      const data = {
-        id: uuidv4(),
-        name: request.body.name,
-        url: request.body.url,
-        type: request.body.type,
-        scope: request.body.scope,
-        position: request.body.position,
-        icon: request.body.icon,
-        status: true,
-        created_at: moment().format('x')
-      }
-
-      const done = await Menu(data).save().catch(err => {
-        return reply.mongooseError(mongooseHandler.errorBuilder(err))
-      })
-
-      if (done) {
-        mongooseHandler.clearCache('list-by-role-admin')
-        mongooseHandler.clearCache('list-by-role-member')
-        reply.success('Add new menu parent success!', { data: done })
-      }
+    if (done) {
+      mongooseHandler.clearCache('list-by-role-admin')
+      mongooseHandler.clearCache('list-by-role-member')
+      reply.success('Add new menu parent success!', { data: done })
     }
+
     await reply
   })
 
@@ -57,31 +58,32 @@ async function apiRoute (server, options) {
       server.verifyToken
     ])
   }, async (request, reply) => {
-    const connect = await mongooseHandler.connect().catch(err => {
+    try {
+      await mongooseHandler.connect()
+    } catch (err) {
       return reply.error(err.message)
+    }
+
+    const done = await Menu.findOneAndUpdate({ id: request.body.id }, {
+      name: request.body.name,
+      url: request.body.url,
+      type: request.body.type,
+      scope: request.body.scope,
+      position: request.body.position,
+      status: request.body.status,
+      icon: request.body.icon,
+      updated_at: moment().format('x')
+    }, { new: true }).catch(err => {
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 
-    if (connect) {
-      const done = await Menu.findOneAndUpdate({ id: request.body.id }, {
-        name: request.body.name,
-        url: request.body.url,
-        type: request.body.type,
-        scope: request.body.scope,
-        position: request.body.position,
-        status: request.body.status,
-        icon: request.body.icon,
-        updated_at: moment().format('x')
-      }, { new: true }).catch(err => {
-        return reply.mongooseError(mongooseHandler.errorBuilder(err))
-      })
+    if (done) {
+      mongooseHandler.clearCache('list-by-role-admin')
+      mongooseHandler.clearCache('list-by-role-member')
 
-      if (done) {
-        mongooseHandler.clearCache('list-by-role-admin')
-        mongooseHandler.clearCache('list-by-role-member')
-
-        reply.success('Update menu parent success', { data: done })
-      }
+      reply.success('Update menu parent success', { data: done })
     }
+
     await reply
   })
 
@@ -94,22 +96,22 @@ async function apiRoute (server, options) {
       server.verifyToken
     ])
   }, async (request, reply) => {
-    const connect = await mongooseHandler.connect().catch(err => {
+    try {
+      await mongooseHandler.connect()
+    } catch (err) {
       return reply.error(err.message)
+    }
+
+    const done = await Menu.findOneAndDelete({ id: request.body.id }).catch(err => {
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 
-    if (connect) {
-      const done = await Menu.findOneAndDelete({ id: request.body.id }).catch(err => {
-        return reply.mongooseError(mongooseHandler.errorBuilder(err))
-      })
-
-      if (done) {
-        mongooseHandler.clearCache('list-by-role-admin')
-        mongooseHandler.clearCache('list-by-role-member')
-
-        reply.success('Delete menu parent success!', { data: done })
-      }
+    if (done) {
+      mongooseHandler.clearCache('list-by-role-admin')
+      mongooseHandler.clearCache('list-by-role-member')
+      reply.success('Delete menu parent success!', { data: done })
     }
+
     await reply
   })
 
@@ -122,25 +124,26 @@ async function apiRoute (server, options) {
       server.verifyToken
     ])
   }, async (request, reply) => {
-    const connect = await mongooseHandler.connect().catch(err => {
+    try {
+      await mongooseHandler.connect()
+    } catch (err) {
       return reply.error(err.message)
+    }
+
+    const done = await Menu.findOneAndUpdate({ id: request.body.id }, {
+      child: request.body.child,
+      updated_at: moment().format('x')
+    }, { new: true }).catch(err => {
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 
-    if (connect) {
-      const done = await Menu.findOneAndUpdate({ id: request.body.id }, {
-        child: request.body.child,
-        updated_at: moment().format('x')
-      }, { new: true }).catch(err => {
-        return reply.mongooseError(mongooseHandler.errorBuilder(err))
-      })
+    if (done) {
+      mongooseHandler.clearCache('list-by-role-admin')
+      mongooseHandler.clearCache('list-by-role-member')
 
-      if (done) {
-        mongooseHandler.clearCache('list-by-role-admin')
-        mongooseHandler.clearCache('list-by-role-member')
-
-        reply.success('Set menu child success!', { data: done })
-      }
+      reply.success('Set menu child success!', { data: done })
     }
+
     await reply
   })
 
@@ -153,24 +156,25 @@ async function apiRoute (server, options) {
       server.verifyToken
     ])
   }, async (request, reply) => {
-    const connect = await mongooseHandler.connect().catch(err => {
+    try {
+      await mongooseHandler.connect()
+    } catch (err) {
       return reply.error(err.message)
+    }
+
+    const done = await Menu.findOneAndUpdate({ id: request.body.id }, {
+      status: request.body.status,
+      updated_at: moment().format('x')
+    }, { new: true }).catch(err => {
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 
-    if (connect) {
-      const done = await Menu.findOneAndUpdate({ id: request.body.id }, {
-        status: request.body.status,
-        updated_at: moment().format('x')
-      }, { new: true }).catch(err => {
-        return reply.mongooseError(mongooseHandler.errorBuilder(err))
-      })
-
-      if (done) {
-        mongooseHandler.clearCache('list-by-role-admin')
-        mongooseHandler.clearCache('list-by-role-member')
-        reply.success('Set status menu parent success!', { data: done })
-      }
+    if (done) {
+      mongooseHandler.clearCache('list-by-role-admin')
+      mongooseHandler.clearCache('list-by-role-member')
+      reply.success('Set status menu parent success!', { data: done })
     }
+
     await reply
   })
 
@@ -182,16 +186,17 @@ async function apiRoute (server, options) {
       server.verifyToken
     ])
   }, async (request, reply) => {
-    const connect = await mongooseHandler.connect().catch(err => {
+    try {
+      await mongooseHandler.connect()
+    } catch (err) {
       return reply.error(err.message)
-    })
-
-    if (connect) {
-      const result = await Menu.find({}).sort({ position: 'asc' }).catch(err => {
-        return reply.mongooseError(mongooseHandler.errorBuilder(err))
-      })
-      if (result) reply.success('Get list menu parent success!', { data: result })
     }
+
+    const result = await Menu.find({}).sort({ position: 'asc' }).catch(err => {
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
+    })
+    if (result) reply.success('Get list menu parent success!', { data: result })
+
     await reply
   })
 
@@ -204,18 +209,20 @@ async function apiRoute (server, options) {
     ])
   }, async (request, reply) => {
     const userRole = obase64.decode(server.jwt.decode(request.headers['x-token']).role)
-    const connect = await mongooseHandler.connect().catch(err => {
-      return reply.error(err.message)
-    })
 
-    if (connect) {
-      const result = await Menu.find({
-        $where: 'function() { return this.scope.toString().match(/' + userRole + '/i) != null; }'
-      }).sort({ position: 'asc' }).cache(0, 'list-by-role-' + userRole).catch(err => {
-        return reply.mongooseError(mongooseHandler.errorBuilder(err))
-      })
-      if (result) reply.success('Get list menu parent by role success!', { data: result })
+    try {
+      await mongooseHandler.connect()
+    } catch (err) {
+      return reply.error(err.message)
     }
+
+    const result = await Menu.find({
+      $where: 'function() { return this.scope.toString().match(/' + userRole + '/i) != null; }'
+    }).sort({ position: 'asc' }).cache(0, 'list-by-role-' + userRole).catch(err => {
+      return reply.mongooseError(mongooseHandler.errorBuilder(err))
+    })
+    if (result) reply.success('Get list menu parent by role success!', { data: result })
+
     await reply
   })
 }

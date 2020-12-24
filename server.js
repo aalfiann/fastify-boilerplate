@@ -27,7 +27,7 @@ const App = async () => {
 
   // Register routes
   server.register(require('./routes/api.js'))
-  server.register(require('./routes/db.js'))
+  server.register(require('./routes/example-crud.js'))
   server.register(require('./routes/page.js'))
   server.register(require('./routes/user.js'))
   server.register(require('./routes/auth.js'))

@@ -16,6 +16,7 @@ Fastify Boilerplate with JWT, Mongoose and Bulma
 - Public Profile
 - Dashboard
 - Backup & Restore Database
+- Rest API
 
 
 ### Concepts
@@ -74,11 +75,23 @@ Our goal is to create a web application that scales well (horizontal scale), str
 5. Run `node server.js`
 6. Done.
 
-### Unit test
-If you want to play unit test
+### Utility
+- **Backup Database**
+```
+npm run backup
+```
+- **Restore Database**
+```
+node db-restore.js -p backup/FOLDER_NAME
+```
+- **Unit Test**
 ```
 npm test
 ```
+
+### Rest API
+If you want to play with Rest API
+- Just import `postman_collection.json` to Postman App.
 
 ### Note
 - If you want to regenerate private and public key, go to here >> [http://travistidwell.com/jsencrypt/demo](http://travistidwell.com/jsencrypt/demo/).
