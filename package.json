@@ -28,11 +28,11 @@
     "base-64": "^1.0.0",
     "bcryptjs": "^2.4.3",
     "cachegoose": "^8.0.0",
-    "eta": "^1.11.0",
-    "fastify": "^3.8.0",
+    "eta": "^1.12.1",
+    "fastify": "^3.9.2",
     "fastify-auth": "^1.0.1",
     "fastify-cors": "^4.1.0",
-    "fastify-jwt": "^2.1.3",
+    "fastify-jwt": "^2.2.0",
     "fastify-nodemailer": "^5.0.0",
     "fastify-plugin": "^3.0.0",
     "fastify-static": "^3.3.0",
@@ -41,17 +41,17 @@
     "make-promises-safe": "^5.1.0",
     "md5": "^2.3.0",
     "moment": "^2.29.1",
-    "mongoose": "^5.10.13",
-    "point-of-view": "^4.6.0",
+    "mongoose": "^5.11.8",
+    "point-of-view": "^4.7.0",
     "text-obfuscator": "^1.0.2",
-    "uuid": "^8.3.1"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "coveralls": "^3.1.0",
     "mocha": "^8.2.1",
     "mocha-lcov-reporter": "^1.3.0",
     "nyc": "^15.1.0",
-    "standard": "^16.0.1"
+    "standard": "^16.0.3"
   },
   "standard": {
     "ignore": [
