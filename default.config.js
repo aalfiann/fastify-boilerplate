@@ -13,7 +13,7 @@ const config = {
     pass: '',
     host: 'localhost',
     port: 27017,
-    database: 'fastify_boilerplate_test'
+    database: 'fastify_boilerplate'
   },
   mongoDBOptions: {
     useNewUrlParser: true,
