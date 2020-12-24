@@ -1,4 +1,8 @@
 # Fastify Boilerplate
+[![Build Status](https://travis-ci.com/aalfiann/fastify-boilerplate.svg?branch=master)](https://travis-ci.com/aalfiann/fastify-boilerplate)
+[![Coverage Status](https://coveralls.io/repos/github/aalfiann/fastify-boilerplate/badge.svg?branch=master)](https://coveralls.io/github/aalfiann/fastify-boilerplate?branch=master)
+[![Known Vulnerabilities](https://snyk.io//test/github/aalfiann/fastify-boilerplate/badge.svg?targetFile=package.json)](https://snyk.io//test/github/aalfiann/fastify-boilerplate?targetFile=package.json)
+![License](https://img.shields.io/github/license/aalfiann/fastify-boilerplate)    
 Fastify Boilerplate with JWT, Mongoose and Bulma
 
 ### Features
