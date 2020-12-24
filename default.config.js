@@ -8,12 +8,23 @@ const config = {
   maxParamLength: 100, // Maximum url parameter query length (default is 100 characters)
   jwtAlgorithm: 'RS256',
   jwtExpiresIn: '1h',
-  mongoDBUrl: 'mongodb://localhost:27017/fastify_boilerplate',
+  mongoDBConn: {
+    user: '',
+    pass: '',
+    host: 'localhost',
+    port: 27017,
+    database: 'fastify_boilerplate_test'
+  },
   mongoDBOptions: {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
     useFindAndModify: false
+  },
+  mongoDBBackup: {
+    removeOldBackup: true,
+    keepLastDaysBackup: 2,
+    autoBackupPath: './backup/'
   },
   mongoCache: {
     useRedis: false, // If you set this false, then the cache will using in memory (default is false)
@@ -62,7 +73,7 @@ const config = {
   // Using smtp gmail will be need oauth2, it's hard to config, so I do recommend to setup no_reply email from your cpanel.
   nodeMailerTransport: {
     pool: true,
-    host: 'mail.yourdomain.com',
+    host: 'smtp.yourdomain.com',
     port: 465,
     secure: true, // secure:true for port 465, secure:false for port 587
     auth: {

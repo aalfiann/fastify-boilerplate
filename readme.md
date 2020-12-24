@@ -15,6 +15,7 @@ Fastify Boilerplate with JWT, Mongoose and Bulma
 - Manage Profile
 - Public Profile
 - Dashboard
+- Backup & Restore Database
 
 
 ### Concepts
@@ -67,10 +68,11 @@ Our goal is to create a web application that scales well (horizontal scale), str
 
 ### Usage
 1. Download this source code.
-2. Extact and go to current directory then run `npm install`
+2. Extract and go to current directory then run `npm install`
 3. Edit the `config.js`
-4. Run `node server.js`
-5. Done.
+4. Run (only once) `npm run first_install`
+5. Run `node server.js`
+6. Done.
 
 ### Unit test
 If you want to play unit test

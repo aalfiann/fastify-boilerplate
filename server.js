@@ -32,6 +32,7 @@ const App = async () => {
   server.register(require('./routes/user.js'))
   server.register(require('./routes/auth.js'))
   server.register(require('./routes/menu.js'))
+  server.register(require('./routes/test.js'))
   server.register(require('./routes/page-internal.js'))
 
   // JWT
