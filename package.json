@@ -29,7 +29,6 @@
   "dependencies": {
     "base-64": "^1.0.0",
     "bcryptjs": "^2.4.3",
-    "cachegoose": "^8.0.0",
     "eta": "^1.12.1",
     "fastify": "3.9.2",
     "fastify-auth": "^1.0.1",
@@ -45,6 +44,8 @@
     "moment": "^2.29.1",
     "mongoose": "^5.11.8",
     "point-of-view": "^4.7.0",
+    "recachegoose": "^8.0.1",
+    "recacheman-redis": "^2.1.0",
     "text-obfuscator": "^1.0.2",
     "uuid": "^8.3.2",
     "yargs": "^16.2.0"
