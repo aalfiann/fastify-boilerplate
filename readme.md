@@ -115,7 +115,7 @@ This optional libraries is only used to some pages who need it.
 - [Sweetalert (29 kB)](https://github.com/t4t5/sweetalert)
 - [Moment.js (40 kB)](https://github.com/moment/moment)
 - [Chart.js (52.9 kB)](https://github.com/chartjs/Chart.js)
-- [MDI Icons](https://github.com/Templarian/MaterialDesign)
+- [MDI Icons (53.2 kB)](https://github.com/Templarian/MaterialDesign)
 
 Note: 
 - All libraries above is used for frontend, for server side libraries, see `package.json`.
