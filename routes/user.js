@@ -578,6 +578,13 @@ async function userRoute (server, options) {
       return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
 
+    const pagination = {
+      totalRecord: total,
+      limit: limit,
+      loadmore: false,
+      last_created_at: 0
+    }
+
     if (total) {
       const list = await User.find(query)
         .select(['id', 'username', 'email', 'role', 'status', 'created_at', 'updated_at'])
@@ -588,12 +595,7 @@ async function userRoute (server, options) {
         })
 
       const isLoadmore = (total > limit)
-      const pagination = {
-        totalRecord: total,
-        limit: limit,
-        loadmore: isLoadmore,
-        last_created_at: 0
-      }
+      pagination.loadmore = isLoadmore
 
       if (list) {
         if (isLoadmore) {
@@ -601,6 +603,8 @@ async function userRoute (server, options) {
         }
         reply.success('Get user list success!', { success: true, pagination, data: list })
       }
+    } else {
+      reply.success('Get user list success!', { success: true, pagination, data: [] })
     }
 
     await reply

@@ -11,7 +11,7 @@ Fastify Boilerplate with JWT, Mongoose and Bulma
 - Forgot Password
 - Menu Management
 - User Management
-- Change Password
+- Reset & Change Password
 - Manage Profile
 - Public Profile
 - Dashboard

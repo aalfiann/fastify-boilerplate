@@ -44,7 +44,7 @@
     "moment": "^2.29.1",
     "mongoose": "^5.11.8",
     "point-of-view": "^4.7.0",
-    "recachegoose": "^8.0.5",
+    "recachegoose": "^8.0.6",
     "text-obfuscator": "^1.0.2",
     "uuid": "^8.3.2",
     "yargs": "^16.2.0"
