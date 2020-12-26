@@ -31,8 +31,7 @@ const config = {
     defaultMaxAgeCache: 3600, // In memory cache will use this default max age cache to release memory automatically.
     redisConfig: {
       engine: 'redis',
-      port: 6379,
-      host: 'localhost'
+      client: require('redis').createClient('redis://localhost:6379')
     }
   },
 
