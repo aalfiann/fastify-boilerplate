@@ -6,7 +6,7 @@
 Fastify Boilerplate with JWT, Mongoose and Bulma
 
 ### Get Started
-Please see the documetations at [here](https://github.com/aalfiann/fastify-boilerplate/wiki).
+Please see the documentations at [here](https://github.com/aalfiann/fastify-boilerplate/wiki).
 
 ### Features
 - Login
