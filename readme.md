@@ -5,6 +5,9 @@
 ![License](https://img.shields.io/github/license/aalfiann/fastify-boilerplate)    
 Fastify Boilerplate with JWT, Mongoose and Bulma
 
+### Get Started
+Please see the documetations at [here](https://github.com/aalfiann/fastify-boilerplate/wiki).
+
 ### Features
 - Login
 - Logout
