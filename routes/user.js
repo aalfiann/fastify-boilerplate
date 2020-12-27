@@ -14,9 +14,6 @@ const config = require('../config')
 const FlyJson = require('fly-json-odm')
 const md5 = require('md5')
 
-// Default cache profile
-const defaultCacheProfile = config.mongoCache.defaultMaxAgeCache
-
 async function userRoute (server, options) {
   function clearCache (username) {
     mongooseHandler.clearCache('my-profile-' + username)
@@ -339,7 +336,7 @@ async function userRoute (server, options) {
     // update profile
     const profile = await User.findOne({
       id: decoded.uid
-    }).cache(defaultCacheProfile, 'my-profile-' + decoded.unm).catch(err => {
+    }).cache(config.appCache.my_profile, 'my-profile-' + decoded.unm).catch(err => {
       return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
     if (profile) {
@@ -404,7 +401,7 @@ async function userRoute (server, options) {
     // get profile
     const profile = await User.findOne({
       username: request.params.username
-    }).cache(defaultCacheProfile, 'public-profile-' + request.params.username).catch(err => {
+    }).cache(config.appCache.public_profile, 'public-profile-' + request.params.username).catch(err => {
       return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
     if (profile) {

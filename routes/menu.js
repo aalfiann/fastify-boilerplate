@@ -7,8 +7,14 @@ const Menu = require('../models/menu')
 const authSchema = require('../schemas/auth')
 const menuSchema = require('../schemas/menu')
 const obase64 = require('../lib/obase64')
+const config = require('../config')
 
 async function apiRoute (server, options) {
+  function clearCache () {
+    mongooseHandler.clearCache('list-by-role-admin')
+    mongooseHandler.clearCache('list-by-role-member')
+  }
+
   server.post('/api/menu/parent/add', {
     schema: {
       headers: authSchema.auth,
@@ -41,8 +47,7 @@ async function apiRoute (server, options) {
     })
 
     if (done) {
-      mongooseHandler.clearCache('list-by-role-admin')
-      mongooseHandler.clearCache('list-by-role-member')
+      clearCache()
       reply.success('Add new menu parent success!', { data: done })
     }
 
@@ -78,9 +83,7 @@ async function apiRoute (server, options) {
     })
 
     if (done) {
-      mongooseHandler.clearCache('list-by-role-admin')
-      mongooseHandler.clearCache('list-by-role-member')
-
+      clearCache()
       reply.success('Update menu parent success', { data: done })
     }
 
@@ -107,8 +110,7 @@ async function apiRoute (server, options) {
     })
 
     if (done) {
-      mongooseHandler.clearCache('list-by-role-admin')
-      mongooseHandler.clearCache('list-by-role-member')
+      clearCache()
       reply.success('Delete menu parent success!', { data: done })
     }
 
@@ -138,9 +140,7 @@ async function apiRoute (server, options) {
     })
 
     if (done) {
-      mongooseHandler.clearCache('list-by-role-admin')
-      mongooseHandler.clearCache('list-by-role-member')
-
+      clearCache()
       reply.success('Set menu child success!', { data: done })
     }
 
@@ -170,8 +170,7 @@ async function apiRoute (server, options) {
     })
 
     if (done) {
-      mongooseHandler.clearCache('list-by-role-admin')
-      mongooseHandler.clearCache('list-by-role-member')
+      clearCache()
       reply.success('Set status menu parent success!', { data: done })
     }
 
@@ -217,8 +216,8 @@ async function apiRoute (server, options) {
     }
 
     const result = await Menu.find({
-      $where: 'function() { return this.scope.toString().match(/' + userRole + '/i) != null; }'
-    }).sort({ position: 'asc' }).cache(0, 'list-by-role-' + userRole).catch(err => {
+      scope: { $regex: userRole, $options: 'i' }
+    }).sort({ position: 'asc' }).cache(config.appCache.menu, 'list-by-role-' + userRole).catch(err => {
       return reply.mongooseError(mongooseHandler.errorBuilder(err))
     })
     if (result) reply.success('Get list menu parent by role success!', { data: result })

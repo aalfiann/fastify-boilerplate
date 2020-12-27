@@ -28,11 +28,21 @@ const config = {
   },
   mongoCache: {
     useRedis: false, // If you set this false, then the cache will using in memory (default is false)
-    defaultMaxAgeCache: 3600, // In memory cache will use this default max age cache to release memory automatically.
     redisConfig: {
       engine: 'redis',
       client: require('redis').createClient('redis://localhost:6379')
     }
+  },
+
+  // =========================================
+
+  // APP CACHE
+  // configuration ttl cache is here (in second)
+  // zero means manual release cache (no auto release)
+  appCache: {
+    menu: 0,
+    my_profile: 3600, // cache will auto release in 1 hour.
+    public_profile: 3600
   },
 
   // =========================================
