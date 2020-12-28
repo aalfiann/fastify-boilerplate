@@ -74,13 +74,13 @@ const changePassword = {
 const editProfile = {
   type: 'object',
   properties: {
-    name: { type: 'string', minLength: 3 },
+    name: { type: 'string', maxLength: 50 },
     email: { type: 'string', minLength: 7 },
     address: { type: 'string' },
     bio: { type: 'string' },
     link: { type: 'array' }
   },
-  required: ['name', 'email']
+  required: ['email']
 }
 
 const getProfile = {

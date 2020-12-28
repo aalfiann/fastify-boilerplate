@@ -143,9 +143,10 @@
                 <div class="field-body">
                   <div class="field">
                     <div class="control">
-                      <input id="name" type="text" class="input" value="${props.name}" required>
+                      <input id="name" type="text" class="input" placeholder="Input your full name here..." value="${props.name}" required>
                     </div>
-                    <p class="help">Field name is required!</p></div>
+                    <p id="name-error" class="help"></p>
+                  </div>
                 </div>
               </div>
               <hr>
@@ -156,9 +157,9 @@
                 <div class="field-body">
                   <div class="field">
                     <div class="control">
-                      <input id="email" type="email" class="input" value="${props.email}" required>
+                      <input id="email" type="email" class="input" placeholder="Input your email address here..." value="${props.email}" required>
                     </div>
-                    <p class="help">Field email is required!</p>
+                    <p id="email-error" class="help"></p>
                   </div>
                 </div>
               </div>
@@ -169,7 +170,7 @@
                 <div class="field-body">
                   <div class="field">
                     <div class="control">
-                      <textarea rows="3" maxlength="250" id="address" class="textarea is-hovered">${props.address}</textarea>
+                      <textarea rows="3" maxlength="250" id="address" placeholder="Input your address here..." class="textarea is-hovered">${props.address}</textarea>
                     </div>
                     <p class="help">[Optional] Max 250 chars.</p>
                   </div>
@@ -182,7 +183,7 @@
                 <div class="field-body">
                   <div class="field">
                     <div class="control">
-                      <textarea rows="3" maxlength="500" id="bio" class="textarea is-hovered">${props.bio}</textarea>
+                      <textarea rows="3" maxlength="500" id="bio" placeholder="Input your bio here..." class="textarea is-hovered">${props.bio}</textarea>
                     </div>
                     <p class="help">[Optional] Max 500 chars.</p>
                   </div>
@@ -264,9 +265,9 @@
       .then(function(response, xhr) {
         if(response.statusCode === 200 && response.success === true) {
           app.data.username = response.data.username;
-          app.data.name = response.data.name;
           app.data.email = response.data.email;
           app.data.updated_at = response.data.updated_at;
+          if(response.data.name) app.data.name = response.data.name;
           if(response.data.address) app.data.address = response.data.address;
           if(response.data.bio) app.data.bio = response.data.bio;
           if(response.data.link && response.data.link.length > 0) app.data.link = response.data.link;
@@ -294,12 +295,39 @@
       }
     }, false);
 
+    var form = new FormValidation();
+    form.rules({
+      name: {
+        maxLength: 50,
+        errorPlace:'name-error',
+        errorAddClass: {
+          name:'is-danger',
+          'name-error': 'is-danger'
+        }
+      },
+      email: {
+        required: true,
+        regex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        errorPlace:'email-error',
+        errorAddClass: {
+          email:'is-danger',
+          'email-error': 'is-danger'
+        }
+      }
+    });
+
     function loadListener() {
       Dom.id('name').addEventListener('keyup', function(e) {
         app.data.name = this.value;
       });
+      Dom.id('name').addEventListener('blur', function() {
+        form.element(this.id).validate();
+      });
       Dom.id('email').addEventListener('keyup', function() {
         app.data.email = this.value;
+      });
+      Dom.id('email').addEventListener('blur', function() {
+        form.element(this.id).validate();
       });
       Dom.id('address').addEventListener('keyup', function() {
         app.data.address = this.value;
@@ -353,43 +381,45 @@
     }
 
     function saveProfile() {
-      Dom.id('msg').innerHTML = '';
-      ajax({
-        headers: {
-          'x-token': app.data.token,
-          'content-type': 'application/json'
-        }
-      })
-      .post('<%=it.baseUrl%>/api/user/my-profile/update', {
-        name: Dom.id('name').value,
-        email: Dom.id('email').value,
-        address: Dom.id('address').value,
-        bio: Dom.id('bio').value,
-        link: app.data.link
-      })
-      .then(function(response, xhr) {
-        if(response.statusCode === 200 && response.success) {
-          Dom.id('msg').innerHTML = `<article class="message is-success">
-              <div class="message-body">
-                ${response.message}
-              </div>
-            </article>`;
-        } else {
+      if(form.validate().isValid()) {
+        Dom.id('msg').innerHTML = '';
+        ajax({
+          headers: {
+            'x-token': app.data.token,
+            'content-type': 'application/json'
+          }
+        })
+        .post('<%=it.baseUrl%>/api/user/my-profile/update', {
+          name: Dom.id('name').value,
+          email: Dom.id('email').value,
+          address: Dom.id('address').value,
+          bio: Dom.id('bio').value,
+          link: app.data.link
+        })
+        .then(function(response, xhr) {
+          if(response.statusCode === 200 && response.success) {
+            Dom.id('msg').innerHTML = `<article class="message is-success">
+                <div class="message-body">
+                  ${response.message}
+                </div>
+              </article>`;
+          } else {
+            Dom.id('msg').innerHTML = `<article class="message is-danger">
+                <div class="message-body">
+                  ${response.message}
+                </div>
+              </article>`;
+          }
+        })
+        .catch(function(response, xhr) {
+          console.log(xhr.responseText);
           Dom.id('msg').innerHTML = `<article class="message is-danger">
-              <div class="message-body">
-                ${response.message}
-              </div>
-            </article>`;
-        }
-      })
-      .catch(function(response, xhr) {
-        console.log(xhr.responseText);
-        Dom.id('msg').innerHTML = `<article class="message is-danger">
-              <div class="message-body">
-                ${response.message}
-              </div>
-            </article>`;
-      })
+                <div class="message-body">
+                  ${response.message}
+                </div>
+              </article>`;
+        })
+      }
     }
 
   </script>
