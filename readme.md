@@ -33,8 +33,8 @@ Our goal is to create a web application that scales well (horizontal scale), str
   Server just render the page and using ajax to get data from API.
 - **MongoDB**  
   MongoDB is horizontal, scale-out architecture can support huge volumes of both data and traffic.
-- **Cache in Memory**  
-  Cache in memory (support redis) could make request faster and save the traffic/bandwidth to MongoDB.
+- **Built-in Cache**  
+  With built-in cache mechanism (support in memory, redis or filebased cache) could make request faster and save the request traffic/bandwidth to MongoDB.
 
 ### Security
 - **JWT Authentication**  

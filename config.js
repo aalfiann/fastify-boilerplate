@@ -27,11 +27,8 @@ const config = {
     autoBackupPath: './backup/'
   },
   mongoCache: {
-    useRedis: false, // If you set this false, then the cache will using in memory (default is false)
-    redisConfig: {
-      engine: 'redis',
-      client: require('redis').createClient('redis://localhost:6379')
-    }
+    engine: 'memory', // You are able to set engine for redis, file or memory. (default is memory)
+    redisConn: '' // If engine is redis then you have to set this redis connection string. Ex: redis://localhost:6379
   },
 
   // =========================================

@@ -160,7 +160,17 @@
   register.data.baseUrl = '<%=it.baseUrl%>';
   register.data.siteName = '<%=it.siteName%>';
 
-  if(Dom.id('username')) {
+  var rendered = 0;
+  document.addEventListener('render', function(e) {
+    // Only run for elements with the #register ID
+    if (!event.target.matches('#register')) return;
+    rendered++;
+    if(rendered === 1) {
+      loadListener();
+    }
+  }, false);
+
+  function loadListener() {
     Dom.id('username').addEventListener("blur", function() {
       form.element('username').validate(function (error) {
         if (!error) {
@@ -171,9 +181,7 @@
         }
       });
     });
-  }
 
-  if(Dom.id('email')) {
     Dom.id('email').addEventListener("blur", function() {
       form.element('email').validate(function (error) {
         if (!error) {
@@ -184,15 +192,11 @@
         }
       });
     });
-  }
 
-  if(Dom.id('password')) {
     Dom.id('password').addEventListener("blur", function() {
       form.element('password').validate();
     });
-  }
 
-  if(Dom.id('checkbox')) {
     Dom.id('checkbox').addEventListener("blur", function() {
       form.element('checkbox').validate();
     });
