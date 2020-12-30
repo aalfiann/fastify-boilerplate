@@ -42,9 +42,9 @@
     "make-promises-safe": "^5.1.0",
     "md5": "^2.3.0",
     "moment": "^2.29.1",
-    "mongoose": "^5.11.8",
+    "mongoose": "^5.11.9",
     "point-of-view": "^4.7.0",
-    "recachegoose": "^8.0.9",
+    "recachegoose": "^8.0.10",
     "text-obfuscator": "^1.0.2",
     "uuid": "^8.3.2",
     "yargs": "^16.2.0"
