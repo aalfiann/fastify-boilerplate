@@ -705,25 +705,51 @@
 			]
 		},
 		{
-			"name": "Test Connection DB",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:3000/api/test/connection-database",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"api",
-						"test",
-						"connection-database"
-					]
+			"name": "Test",
+			"item": [
+				{
+					"name": "Test Connection DB",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/test/connection-database",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"test",
+								"connection-database"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Test Cache",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3000/api/test/cache",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"test",
+								"cache"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
 			"name": "Login User",
@@ -941,6 +967,37 @@
 						"user",
 						"profile",
 						"<username>"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Send Email",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"\",\n\t\"email\":\"\",\n\t\"subject\":\"\",\n\t\"message\":\"\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/sendmail",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"sendmail"
 					]
 				}
 			},
