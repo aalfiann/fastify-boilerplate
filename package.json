@@ -1,6 +1,6 @@
 {
   "name": "fastify-boilerplate",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "Fastify Boilerplate with JWT, Mongoose and Bulma",
   "main": "server.js",
   "scripts": {
