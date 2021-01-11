@@ -317,7 +317,7 @@
     });
 
     function loadListener() {
-      Dom.id('name').addEventListener('keyup', function(e) {
+      Dom.id('name').addEventListener('keyup', function() {
         app.data.name = this.value;
       });
       Dom.id('name').addEventListener('blur', function() {

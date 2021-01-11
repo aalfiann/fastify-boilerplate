@@ -18,6 +18,7 @@ Please see the documentations at [here](https://github.com/aalfiann/fastify-boil
 - Manage Profile
 - Public Profile
 - Dashboard
+- Contact Form
 - Backup & Restore Database
 - Rest API
 
@@ -51,6 +52,9 @@ Our goal is to create a web application that scales well (horizontal scale), str
 
 - **Safe from CSRF**  
   Any request in admin/user area is required token by JWT.
+
+- **Safe from Bad Bots**  
+  Any bots is handled automatically by reCaptcha Google.
 
 - **Error handler for 4xx and 5xx**  
   Any internal error is handled automatically by Fastify.

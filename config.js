@@ -120,7 +120,14 @@ const config = {
 
   // Static Cache
   maxAgeStaticCache: (3600 * 24), // cache for regular static pages (default is 1 day in seconds)
-  maxAgeAssetsCache: (3600 * 24 * 30) // cache for assets ( default is 30 days in seconds)
+  maxAgeAssetsCache: (3600 * 24 * 30), // cache for assets ( default is 30 days in seconds)
+
+  // Anti Spam Google reCaptcha v3
+  // Register at here >> https://www.google.com/recaptcha
+  // Just leave this blank if you don't want to use Google reCaptcha v3
+  recaptchaSiteKey: '',
+  recaptchaSecretKey: '',
+  hideRecaptchaBadge: true
 }
 
 module.exports = config

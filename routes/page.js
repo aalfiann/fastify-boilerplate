@@ -42,6 +42,16 @@ async function pageRoute (server, options) {
     await reply.html(html)
   })
 
+  server.get('/contact', { onRequest: server.useHtmlCache }, async (request, reply) => {
+    const newTemplateData = { ...templateData }
+    newTemplateData.useMailer = config.useMailer
+    newTemplateData.captcha = config.recaptchaSiteKey
+    newTemplateData.hideBadge = config.hideRecaptchaBadge
+
+    const html = await server.view('contact', newTemplateData)
+    await reply.html(html)
+  })
+
   server.get('/register', { onRequest: server.useHtmlCache }, async (request, reply) => {
     const html = await server.view('register', templateData)
     await reply.html(html)

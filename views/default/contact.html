@@ -1,0 +1,237 @@
+<% layout('layout.html') %>
+<% it.title = 'Contact Us' %>
+<% it.titlehero = it.title %>
+<% it.breadcrumbs = [
+    {
+      name: 'Home',
+      url: it.baseUrl
+    },
+    {
+      name: it.title
+    }
+  ]
+%>
+
+<section class="section is-main-section">
+  <div class="card">
+    <header class="card-header">
+      <p class="card-header-title">
+        <span class="icon"><i class="mdi mdi-email"></i></span>
+        Contact Form
+      </p>
+      <a id="reload" href="javascript:void(0)" class="card-header-icon">
+        <span class="icon"><i class="mdi mdi-reload"></i></span>
+      </a>
+    </header>
+    <div class="card-content">
+      <div class="columns">
+        <div class="column is-three-fifths">
+          <div id="msg" class="mb-2"></div>
+          <div class="columns">
+            <div class="column">
+              <div class="field">
+                <label class="label">Name</label>
+                <div class="control">
+                  <input id="name" type="text" autocomplete="on" class="input" placeholder="Your name..." required>
+                </div>
+                <p id="name-error" class="help has-text-left"></p>
+              </div>
+            </div>
+            <div class="column">
+              <div class="field">
+                <label class="label">Email</label>
+                <div class="control">
+                  <input id="email" type="email" autocomplete="on" class="input" placeholder="Your email address..." required>
+                </div>
+                <p id="email-error" class="help has-text-left"></p>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label class="label">Subject</label>
+            <div class="control">
+              <input id="subject" type="text" autocomplete="on" class="input" placeholder="Subject message..." required>
+            </div>
+            <p id="subject-error" class="help has-text-left"></p>
+          </div>
+          <div class="field">
+            <label class="label">Message</label>
+            <div class="control">
+              <textarea rows="3" id="message" placeholder="Input your message here..." class="textarea is-hovered"></textarea>
+            </div>
+            <p id="message-error" class="help"></p>
+          </div>
+          <hr>
+          <div class="field is-grouped">
+            <div class="control">
+              <button id="btnSubmit" type="submit" class="button is-dark" onclick="submitContact()">
+                Send Message
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+            <p class="title">Address</p>
+            <p>121 Rock Sreet, 21 Avenue,<br>
+              New York, NY 92103-9000</p>
+            <br>
+            <p>
+              <b>CALL US</b><br>
+              <ul>
+                <li>1 (234) 567-891</li>
+                <li>1 (234) 987-654</li>
+              </ul>
+              <br>
+            <b>OPENING HOURS</b><br>
+              Monday-Friday …. 10 am – 8 pm<br>
+              Saturday, Sunday ……… Closed
+            </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Footer -->
+<%~ includeFile('partial-footer.html', it) %>
+<!-- JS -->
+<%~ includeFile('partial-js.html', it) %>
+<script type="text/javascript" src="<%=it.baseAssetsUrl%>/assets/js/native-form-validation/formvalidation.min.js"></script>
+<script>
+  getToken('<%=it.baseUrl%>', function(token) {
+    if(token) getMenu('<%=it.baseUrl%>', token);
+  });
+  var form = new FormValidation();
+  // Set the rules
+  form.rules({
+      name: {
+        required: true,
+        message: 'Your name is required!',
+        errorPlace:'name-error',
+        errorAddClass: {
+          name:'is-danger',
+          'name-error': 'is-danger'
+        }
+      },
+      email: {
+        required: true,
+        message: 'Email address is not valid!',
+        regex: /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        errorPlace:'email-error',
+        errorAddClass: {
+            email:'is-danger',
+            'email-error': 'is-danger'
+        }
+      },
+      subject: {
+        required: true,
+        message: 'subject is required! (min 10 characters)',
+        minLength: 10,
+        errorPlace:'subject-error',
+        errorAddClass: {
+          subject:'is-danger',
+          'subject-error': 'is-danger'
+        }
+      },
+      message: {
+        required: true,
+        message: 'message is required! (min 10 characters)',
+        minLength: 10,
+        errorPlace:'message-error',
+        errorAddClass: {
+          message:'is-danger',
+          'message-error': 'is-danger'
+        }
+      }
+  });
+  Dom.id('name').addEventListener("blur", function() {
+      form.element(this.id).validate();
+  });
+  Dom.id('email').addEventListener("blur", function() {
+      form.element(this.id).validate();
+  });
+  Dom.id('subject').addEventListener("blur", function() {
+      form.element(this.id).validate();
+  });
+  Dom.id('message').addEventListener("blur", function() {
+      form.element(this.id).validate();
+  });
+
+  function submitContact() {
+    if (form.validate().isValid()) {
+      Dom.addClass(Dom.id('btnSubmit'), 'is-loading');
+      ajax().post('<%=it.baseUrl%>/api/sendmail', {
+        name: Dom.id('name').value,
+        email: Dom.id('email').value,
+        subject: Dom.id('subject').value,
+        message: Dom.id('message').value
+      }).then(function (response, xhr) {
+        if(response.statusCode === 200) {
+          Dom.id('msg').innerHTML = `<article class="message is-success">
+            <div class="message-body">
+              ${response.message}
+            </div>
+          </article>`;
+          clear();
+        }
+      }).catch(function(response, xhr) {
+        console.log(xhr.responseText);
+        Dom.id('msg').innerHTML = `<article class="message is-danger">
+            <div class="message-body">
+              ${response.message}
+            </div>
+          </article>`;
+      }).always(function(response, xhr) {
+        Dom.removeClass(Dom.id('btnSubmit'), 'is-loading');
+      });
+    }
+  }
+  function clear() {
+    Dom.id('name').value = '';
+    Dom.id('email').value = '';
+    Dom.id('subject').value = '';
+    Dom.id('message').value = '';
+  }
+
+  function reset() {
+    clear();
+    Dom.id('msg').innerHTML = '';
+  }
+
+  function disableFormContact(type, text) {
+    Dom.id("name").disabled = true;
+    Dom.id("email").disabled = true;
+    Dom.id("subject").disabled = true;
+    Dom.id("message").disabled = true;
+    Dom.id("btnSubmit").disabled = true;
+    Dom.id("btnSubmit").removeAttribute("onclick");
+    Dom.id('msg').innerHTML = `<article class="message is-${type}">
+            <div class="message-body">
+              ${text}
+            </div>
+          </article>`;
+}
+
+  Dom.id('reload').addEventListener('click', function(e) {
+    reset();
+  })
+</script>
+<% if (it.useMailer && it.captcha) { %>
+  <script src="<%=it.baseAssetsUrl%>/assets/js/recaptcha.min.js"></script>
+  <%if (it.hideBadge) { %><script>hideBadge();</script><% } %>
+  <script>
+      refreshCaptcha("/contact","<%=it.captcha%>", function(error, response) { 
+          if(error) return disableFormContact("danger", error);
+          if(error) console.log(error);
+          verifyCaptcha("<%=it.baseUrl%>", function (error, response) {
+              if(error) return disableFormContact("danger", error);
+              if(response.data.score < 0.4) {
+                  disableFormContact("danger", "Sorry, your connection is not secure! Are you a human?<br>If not, Please try again by reload this page!");
+              }
+              if(error) console.log(error);
+          });
+      });
+  </script>
+<% } %>
+<% if(it.useMailer === false) { %>
+  <script>disableFormContact("warning", "Sorry, Currently we disabled this contact form for temporary.");</script>
+<% } %>

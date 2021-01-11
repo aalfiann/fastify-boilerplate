@@ -172,7 +172,7 @@
 
   function loadListener() {
     Dom.id('username').addEventListener("blur", function() {
-      form.element('username').validate(function (error) {
+      form.element(this.id).validate(function (error) {
         if (!error) {
           // call ajax check username
           isAvailable('username');
@@ -183,7 +183,7 @@
     });
 
     Dom.id('email').addEventListener("blur", function() {
-      form.element('email').validate(function (error) {
+      form.element(this.id).validate(function (error) {
         if (!error) {
           // call ajax check email
           isAvailable('email');
@@ -194,11 +194,11 @@
     });
 
     Dom.id('password').addEventListener("blur", function() {
-      form.element('password').validate();
+      form.element(this.id).validate();
     });
 
     Dom.id('checkbox').addEventListener("blur", function() {
-      form.element('checkbox').validate();
+      form.element(this.id).validate();
     });
   }
 

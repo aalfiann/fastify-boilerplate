@@ -1,6 +1,6 @@
 {
   "name": "fastify-boilerplate",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Fastify Boilerplate with JWT, Mongoose and Bulma",
   "main": "server.js",
   "scripts": {
@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/aalfiann/fastify-jwt-skeleton#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "base-64": "^1.0.0",
     "bcryptjs": "^2.4.3",
     "eta": "^1.12.1",
@@ -36,14 +37,14 @@
     "fastify-jwt": "^2.2.0",
     "fastify-nodemailer": "^5.0.0",
     "fastify-plugin": "^3.0.0",
-    "fastify-static": "^3.3.0",
+    "fastify-static": "^3.3.1",
     "fly-json-odm": "^1.10.3",
     "html-minifier-terser": "^5.1.1",
     "make-promises-safe": "^5.1.0",
     "md5": "^2.3.0",
     "moment": "^2.29.1",
-    "mongoose": "^5.11.9",
-    "point-of-view": "^4.7.0",
+    "mongoose": "^5.11.11",
+    "point-of-view": "^4.8.0",
     "recachegoose": "^8.1.0",
     "text-obfuscator": "^1.0.2",
     "uuid": "^8.3.2",

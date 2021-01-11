@@ -21,7 +21,7 @@
               <span class="icon"><i class="mdi mdi-account"></i></span>
               Login Form
             </p>
-          <a id="reload" href="javascript:void(0)" class="card-header-icon">
+            <a id="reload" href="javascript:void(0)" class="card-header-icon">
               <span class="icon"><i class="mdi mdi-reload"></i></span>
             </a>
           </header>
@@ -98,11 +98,11 @@
     });
 
     Dom.id('username').addEventListener("blur", function() {
-      form.element('username').validate();
+      form.element(this.id).validate();
     });
   
     Dom.id('password').addEventListener("blur", function() {
-      form.element('password').validate();
+      form.element(this.id).validate();
     });
 
     function submitLogin() {

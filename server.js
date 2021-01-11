@@ -25,16 +25,6 @@ const App = async () => {
   server.register(require('fastify-auth'))
   server.register(require('./lib/fastify-auth-condition'))
 
-  // Register routes
-  server.register(require('./routes/api.js'))
-  server.register(require('./routes/example-crud.js'))
-  server.register(require('./routes/page.js'))
-  server.register(require('./routes/user.js'))
-  server.register(require('./routes/auth.js'))
-  server.register(require('./routes/menu.js'))
-  server.register(require('./routes/test.js'))
-  server.register(require('./routes/page-internal.js'))
-
   // JWT
   server.register(require('fastify-jwt'), {
     secret: {
@@ -107,6 +97,17 @@ const App = async () => {
       statusCode: 500
     })
   })
+
+  // Register routes
+  server.register(require('./routes/api.js'))
+  server.register(require('./routes/example-crud.js'))
+  server.register(require('./routes/page.js'))
+  server.register(require('./routes/user.js'))
+  server.register(require('./routes/auth.js'))
+  server.register(require('./routes/menu.js'))
+  server.register(require('./routes/test.js'))
+  server.register(require('./routes/page-internal.js'))
+  server.register(require('./routes/verify.js'))
 
   const start = async () => {
     try {

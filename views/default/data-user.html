@@ -557,15 +557,15 @@
   })
 
   Dom.id('username_new').addEventListener('blur', function() {
-    form.element('username_new').validate();
+    form.element(this.id).validate();
   });
   Dom.id('email_new').addEventListener('blur', function() {
-    form.element('email_new').validate();
+    form.element(this.id).validate();
   });
   Dom.id('password_new').addEventListener('blur', function() {
-    form.element('password_new').validate();
+    form.element(this.id).validate();
   });
   Dom.id('email_edit').addEventListener('blur', function() {
-    form2.element('email_edit').validate();
+    form2.element(this.id).validate();
   });
 </script>

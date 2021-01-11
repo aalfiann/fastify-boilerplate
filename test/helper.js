@@ -17,7 +17,8 @@ describe('helper function test', function () {
   })
 
   it('copyright year format', function () {
-    assert.strictEqual(helper.copyrightYear(2020), 2020)
-    assert.strictEqual(helper.copyrightYear(2019), '2019 - 2020')
+    const yearnow = new Date().getFullYear()
+    assert.strictEqual(helper.copyrightYear(yearnow), yearnow)
+    assert.strictEqual(helper.copyrightYear(2019), '2019 - ' + yearnow)
   })
 })
